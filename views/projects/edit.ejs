@@ -1,0 +1,114 @@
+<% layout('layouts/boilerplate') %>
+<div class="row">
+    <h1 class="text-center">Edit Project</h1>
+    <div class="col-6 offset-3">
+        <form
+            method="POST"
+            action="/projects/<%= project._id %>?_method=PUT"
+            novalidate
+            class="validated-form"
+            enctype="multipart/form-data"
+        >
+            <div class="mb-3">
+                <label class="form-label" for="title">Title</label>
+                <input
+                    class="form-control"
+                    type="text"
+                    id="title"
+                    name="project[title]"
+                    value="<%=
+                    project.title %>"
+                    required
+                />
+                <div class="valid-feedback">Looks good!</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="location">Location</label>
+                <input
+                    class="form-control"
+                    type="text"
+                    id="location"
+                    name="project[location]"
+                    value="<%=project.location %>"
+                    required
+                />
+                <div class="valid-feedback">Looks good!</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="image">Add Images</label>
+                <input type="file" name="image" id="image" multiple />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="description">Description</label>
+                <textarea
+                    class="form-control"
+                    id="description"
+                    name="project[description]"
+                    required
+                >
+<%= project.description %></textarea
+                >
+                <div class="valid-feedback">Looks good!</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="fundingGoal">Funding Goal</label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="fundingGoal">$</span>
+                    <input
+                        class="form-control"
+                        type="number"
+                        id="fundingGoal"
+                        name="project[fundingGoal]"
+                        aria-describedby="fundingGoal"
+                        placeholder="0.00"
+                        value="<%= project.fundingGoal %>"
+                        required
+                    />
+                    <div class="valid-feedback">Looks good!</div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="deadline">Deadline</label>
+                <input
+                    class="form-control"
+                    type="date"
+                    id="deadline"
+                    name="project[deadline]"
+                    value="<%= project.deadline.toISOString().split('T')[0] %>"
+                    required
+                />
+                <div class="valid-feedback">Looks good!</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="status">Status</label>
+                <input
+                    class="form-control"
+                    type="text"
+                    id="status"
+                    name="project[status]"
+                    value="<%= project.status %>"
+                    required
+                />
+                <div class="valid-feedback">Looks good!</div>
+            </div>
+            <div class="mb-3">
+                <% project.images.forEach(function(img,i){ %>
+                <img src="<%= img.thumbnail %>" class="img-thumbnail" alt="" />
+                <div class="form-check-inline">
+                    <input
+                        type="checkbox"
+                        id="image-<%= i%>"
+                        name="deleteImages[]"
+                        value="<%= img.filename %>"
+                    />
+                </div>
+                <label for="image-<%= i%>">Delete?</label>
+                <% }) %>
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-info">Update A Project</button>
+            </div>
+        </form>
+        <a href="/projects/<%= project._id %>">Back To Projects</a>
+    </div>
+</div>

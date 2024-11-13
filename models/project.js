@@ -58,6 +58,9 @@ const ProjectSchema = new Schema(
     opts
 );
 
+// Add text index for title and description to enable full-text search
+ProjectSchema.index({ title: "text", description: "text" });
+
 ProjectSchema.virtual("properties.popUpMarkup").get(function () {
     return `<strong><a href="/projects/${this._id}">${this.title}</a></strong>`;
 });

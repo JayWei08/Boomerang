@@ -17,6 +17,7 @@ const User = require("./models/user");
 const usersRoutes = require("./routes/users");
 const projectsRoutes = require("./routes/projects");
 const commentsRoutes = require("./routes/comments");
+const searchRoute = require("./routes/search");
 
 mongoose
     .connect("mongodb://localhost:27017/boomerang") // Ensure the connection string is correct
@@ -73,6 +74,9 @@ app.use("/projects/:id/comments", commentsRoutes);
 app.get("/", (req, res) => {
     res.render("home");
 });
+
+// Register the search route
+app.use("/", searchRoute);
 
 app.all("*", (req, res, next) => {
     next(new ExpressError("Page Not Found", 404));

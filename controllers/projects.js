@@ -5,7 +5,18 @@ const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
 const { cloudinary } = require("../cloudinary");
 
 module.exports.index = async (req, res) => {
-    const projects = await Project.find();
+    const projects = await Project.find({});
+
+    // Log each project's data to confirm the required fields
+    projects.forEach((project) => {
+        console.log({
+            title: project.title,
+            description: project.description,
+            coordinates: project.geometry.coordinates, // Confirm coordinates format
+            id: project._id,
+        });
+    });
+
     res.render("projects/index", { projects });
 };
 

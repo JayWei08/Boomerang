@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate') %>
 
 <div id="map" style="width: 100%; height: 500px"></div>
-<h1>Project Search</h1>
+<h1 class="mt-4">Project Search</h1>
 
 <!-- Search Form -->
 <div class="container mt-4 mb-5">
@@ -45,59 +45,27 @@
 </div>
 <% } %>
 
-<!-- Search Results -->
-<% if (projects && projects.length > 0) { %>
-<div class="container">
-    <div class="row">
-        <% projects.forEach(project => { %>
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <img
-                    src="<%= project.images && project.images[0] ? project.images[0].url : 'https://res.cloudinary.com/dei5hbjfg/image/upload/v1730665603/Boomerang/ujp5lxrxohzvkutf5oos.jpg' %>"
-                    class="card-img-top"
-                    alt="<%= project.title %>"
-                />
-                <div class="card-body">
-                    <h5 class="card-title"><%= project.title %></h5>
-                    <p class="card-text"><%= project.description %></p>
-                    <p class="card-text">
-                        <small class="text-muted"
-                            ><%= project.location %></small
-                        >
-                    </p>
-                    <a
-                        href="/projects/<%= project._id %>"
-                        class="btn btn-primary"
-                        >View</a
-                    >
-                </div>
-            </div>
-        </div>
-        <% }) %>
-    </div>
-</div>
-<% } %>
-
-<!-- Map JavaScript to Display Only Search Results -->
+<!-- Pass Project Data to ClusterMap.js as GeoJSON -->
 <script>
     const mapToken = "<%- process.env.MAPBOX_TOKEN %>";
-    const projects = { features: <%- JSON.stringify(projects.map(project => ({
-        type: 'Feature',
-        geometry: project.geometry,
-        properties: {
-            title: project.title,
-            description: project.description,
-            id: project._id
-        }
-    }))) %> };
 
-    // Initialize map with filtered projects
-    const mapElement = document.getElementById('map');
-    if (projects.features.length > 0) {
-        mapElement.style.display = 'block';
-    } else {
-        mapElement.style.display = 'none';
-    }
+    // Format project data as GeoJSON for map display in clusterMap.js
+    const projects = {
+        type: "FeatureCollection",
+        features: <%- JSON.stringify(projects.map(project => ({
+            type: "Feature",
+            geometry: {
+                type: "Point",
+                coordinates: project.geometry ? project.geometry.coordinates : [0, 0] // Default to [0, 0] if no coordinates
+            },
+            properties: {
+                title: project.title,
+                description: project.description,
+                popUpMarkup: `<a href="/projects/${project._id}">${project.title}</a>`, // Link to project's show page
+            }
+        }))) %>
+    };
 </script>
 
+<!-- Include ClusterMap JavaScript -->
 <script src="/javascripts/clusterMap.js"></script>

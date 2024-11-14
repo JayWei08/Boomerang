@@ -4,7 +4,7 @@
 <h1 class="mt-4">Project Search</h1>
 
 <!-- Search Form -->
-<div class="container mt-4 mb-5">
+<div class="container mt-4 mb-3">
     <form
         action="/search"
         method="GET"
@@ -23,7 +23,7 @@
 
 <!-- Search Results Information Message -->
 <% if (keyword && projects) { %>
-<div class="container text-center mt-4">
+<div class="container text-center mt-4 mb-5">
     <% if (projects.length > 0) { %>
     <p>
         Displaying <strong><%= projects.length %></strong> results for "<strong
@@ -38,10 +38,41 @@
     <% } %>
 </div>
 <% } else { %>
+
 <!-- Display a welcoming message if no search has been performed -->
 <div class="container text-center mt-5">
     <h2>Welcome to Project Search</h2>
     <p>Enter a keyword above to search for projects.</p>
+</div>
+<% } %> <% if (projects && projects.length > 0) { %>
+<div class="container">
+    <div class="row">
+        <% projects.forEach(project => { %>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img
+                    src="<%= project.images && project.images[0] ? project.images[0].url : 'default-image-url.jpg' %>"
+                    class="card-img-top"
+                    alt="..."
+                />
+                <div class="card-body">
+                    <h5 class="card-title"><%= project.title %></h5>
+                    <p class="card-text"><%= project.description %></p>
+                    <p class="card-text">
+                        <small class="text-muted"
+                            ><%= project.location %></small
+                        >
+                    </p>
+                    <a
+                        href="/projects/<%= project._id %>"
+                        class="btn btn-primary"
+                        >View</a
+                    >
+                </div>
+            </div>
+        </div>
+        <% }) %>
+    </div>
 </div>
 <% } %>
 

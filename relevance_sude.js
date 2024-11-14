@@ -1,11 +1,27 @@
-const keywords = []; //Strings to indexes
+// TODO IMPLEMENT IN controllers.project.js index function - intercept projects after Project.find()
 
-// THe keywords below this are in indexes
-const user_keywords = Multiset();
-const project_keywords = [];
-const relevance = 0;
+// Required
+const keywords = [];
 
-function get_relevanec(project_keywords, user_keywords) {
+// Inputs
+const user_keywords = Multiset(); // What keywords the user has visited before
+const project_keywords = []; // The keywords of the project
+const projects = []; // All projects are in ProjectSchema - models/project.js
+
+// have clusterMaps.js use this to get projects
+function get_projects(min_relevance, required_projects) {
+   const ret_projects = [];
+   const i = 0;
+   while (ret_projects.length < required_projects && i < projects.length) {
+      if (get_relevance(projects[i]) > min_relevance) {
+         ret_projects.push(projects[i]);
+      }
+   }
+   return ret_projects;
+}
+
+function get_relevance(project_keywords, user_keywords) {
+   const relevance = 0;
    for (const keyword of project_keywords) {
       relevance += user_keywords.get(keyword) || 0;
    }

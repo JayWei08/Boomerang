@@ -3,7 +3,7 @@ mapboxgl.accessToken = mapToken;
 const map = new mapboxgl.Map({
     container: "map",
     style: "mapbox://styles/mapbox/navigation-night-v1",
-    center: [103, 13.6699], // Default center (Asia region)
+    center: [103, 13.6699], // Default center
     zoom: 4,
 });
 
@@ -14,7 +14,7 @@ map.on("load", () => {
     // Add a GeoJSON source for the projects, enabling clustering
     map.addSource("projects", {
         type: "geojson",
-        data: projects, // Use the projects passed from the server (change to relevance)
+        data: projects, // Use the relevant projects data passed from the server
         cluster: true,
         clusterMaxZoom: 14,
         clusterRadius: 50,
@@ -96,12 +96,12 @@ map.on("load", () => {
 
     // Display a popup when clicking on an unclustered project point
     map.on("click", "unclustered-point", (e) => {
-        const { popUpMarkup } = e.features[0].properties; // Access `popUpMarkup`
+        const { popUpMarkup } = e.features[0].properties;
         const coordinates = e.features[0].geometry.coordinates.slice();
 
         new mapboxgl.Popup()
             .setLngLat(coordinates)
-            .setHTML(popUpMarkup) // Use `popUpMarkup` for HTML content
+            .setHTML(popUpMarkup)
             .addTo(map);
     });
 
@@ -113,11 +113,13 @@ map.on("load", () => {
         map.getCanvas().style.cursor = "";
     });
 
-    // Automatically fit map bounds to show all project points
+    // Automatically fit map bounds to show only the relevant project points
     if (projects.features.length > 0) {
         const bounds = new mapboxgl.LngLatBounds();
         projects.features.forEach((feature) => {
-            bounds.extend(feature.geometry.coordinates);
+            if (feature.geometry && feature.geometry.coordinates) {
+                bounds.extend(feature.geometry.coordinates);
+            }
         });
         map.fitBounds(bounds, { padding: 50 });
     }

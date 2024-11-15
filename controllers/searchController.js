@@ -1,14 +1,13 @@
-// controllers/searchController.js
-const Project = require("../models/project"); // assuming a Project model
+const Project = require("../models/project");
 
 exports.searchProjects = async (req, res) => {
     const keyword = req.query.keyword;
 
-    // Check if the keyword is missing or empty
     if (!keyword || keyword.trim() === "") {
         return res.render("projects/search", {
             projects: [],
-            keyword: "", // Optional: Display the keyword as an empty string
+            geoJsonProjects: { type: "FeatureCollection", features: [] },
+            keyword: "",
             message: "Please enter a keyword to search.",
         });
     }
@@ -18,7 +17,20 @@ exports.searchProjects = async (req, res) => {
             $text: { $search: keyword },
         });
 
-        res.render("projects/search", { projects, keyword });
+        const geoJsonProjects = {
+            type: "FeatureCollection",
+            features: projects.map((project) => ({
+                type: "Feature",
+                geometry: project.geometry,
+                properties: {
+                    title: project.title,
+                    description: project.description,
+                    popUpMarkup: `<a href="/projects/${project._id}">${project.title}</a>`,
+                },
+            })),
+        };
+
+        res.render("projects/search", { projects, geoJsonProjects, keyword });
     } catch (error) {
         console.error("Search error:", error);
         res.status(500).send("Error searching projects.");

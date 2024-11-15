@@ -54,6 +54,7 @@ const ProjectSchema = new Schema(
                 ref: "Comment",
             },
         ],
+        relevanceScore: type: Number
     },
     opts
 );

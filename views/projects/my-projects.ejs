@@ -1,0 +1,31 @@
+<% layout('layouts/boilerplate') %>
+
+<h1>My Projects</h1>
+
+<p>You have made <%= projects.length %> project(s).</p>
+
+<div class="row">
+    <% projects.forEach(project => { %>
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm">
+            <img
+                src="<%= project.images && project.images[0] ? project.images[0].url : 'default-image-url.jpg' %>"
+                class="card-img-top"
+                alt="<%= project.title %>"
+            />
+            <div class="card-body">
+                <h5 class="card-title"><%= project.title %></h5>
+                <p class="card-text">
+                    <%= project.description.substring(0, 100) %>...
+                </p>
+                <p class="card-text">
+                    <small class="text-muted"><%= project.location %></small>
+                </p>
+                <a href="/projects/<%= project._id %>" class="btn btn-primary"
+                    >View Project</a
+                >
+            </div>
+        </div>
+    </div>
+    <% }) %>
+</div>

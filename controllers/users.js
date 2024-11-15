@@ -1,22 +1,29 @@
 const User = require("../models/user");
+const sendWelcomeEmail = require("../utils/sendEmail");
 
 module.exports.renderRegister = (req, res) => {
     res.render("users/register");
 };
 
-module.exports.register = async (req, res, next) => {
+module.exports.register = async (req, res) => {
     try {
-        const { email, username, password } = req.body;
-        const user = new User({ email, username });
+        const { username, email, password } = req.body;
+
+        // Create a new user and register with passport-local
+        const user = new User({ username, email });
         const registeredUser = await User.register(user, password);
-        req.login(registeredUser, (err) => {
-            if (err) return next(err);
-            req.flash("success", "Welcome to boomerang!");
-            res.redirect("/projects");
-        });
-    } catch (e) {
-        req.flash("error", e.message);
-        res.redirect("/register");
+
+        // Send welcome email
+        await sendWelcomeEmail(email, username);
+
+        req.flash(
+            "success",
+            "Welcome to Boomerang! A welcome email has been sent."
+        );
+        res.redirect("/projects");
+    } catch (error) {
+        req.flash("error", error.message);
+        res.redirect("register");
     }
 };
 

@@ -1,71 +1,95 @@
 <% layout('layouts/boilerplate') %>
 
-<div id="map" style="width: 100%; height: 500px"></div>
-<h1 class="mt-4">Project Search</h1>
+   <div id="map" style="width: 100%; height: 500px"></div>
+   <h1 class="mt-4">Project Search</h1>
 
-<!-- Search Form -->
-<div class="container mt-4 mb-5">
-    <form
-        action="/search"
-        method="GET"
-        class="form-inline d-flex justify-content-center"
-    >
-        <input
-            type="text"
-            name="keyword"
-            class="form-control mr-2"
-            placeholder="Search for a project..."
-            required
-        />
-        <button type="submit" class="btn btn-primary">Search</button>
-    </form>
-</div>
+   <!-- Search Form -->
+   <div class="container mt-4 mb-3">
+      <form action="/search" method="GET" class="form-inline d-flex justify-content-center">
+         <input type="text" name="keyword" class="form-control mr-2" placeholder="Search for a project..." required />
+         <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+   </div>
 
-<!-- Search Results Information Message -->
-<% if (keyword && projects) { %>
-<div class="container text-center mt-4">
-    <% if (projects.length > 0) { %>
-    <p>
-        Displaying <strong><%= projects.length %></strong> results for "<strong
-            ><%= keyword %></strong
-        >"
-    </p>
-    <% } else { %>
-    <p>
-        No projects found for "<strong><%= keyword %></strong>". Please try a
-        different keyword.
-    </p>
-    <% } %>
-</div>
-<% } else { %>
-<!-- Display a welcoming message if no search has been performed -->
-<div class="container text-center mt-5">
-    <h2>Welcome to Project Search</h2>
-    <p>Enter a keyword above to search for projects.</p>
-</div>
-<% } %>
+   <!-- Search Results Information Message -->
+   <% if (keyword && projects) { %>
+      <div class="container text-center mt-4 mb-5">
+         <% if (projects.length> 0) { %>
+            <p>
+               Displaying <strong>
+                  <%= projects.length %>
+               </strong> results for "<strong>
+                  <%= keyword %>
+               </strong>"
+            </p>
+            <% } else { %>
+               <p>
+                  No projects found for "<strong>
+                     <%= keyword %>
+                  </strong>". Please try a
+                  different keyword.
+               </p>
+               <% } %>
+      </div>
+      <% } else { %>
 
-<!-- Pass Project Data to ClusterMap.js as GeoJSON -->
-<script>
-    const mapToken = "<%- process.env.MAPBOX_TOKEN %>";
+         <!-- Display a welcoming message if no search has been performed -->
+         <div class="container text-center mt-5">
+            <h2>Welcome to Project Search</h2>
+            <p>Enter a keyword above to search for projects.</p>
+         </div>
+         <% } %>
+            <% if (projects && projects.length> 0) { %>
+               <div class="container">
+                  <div class="row">
+                     <% projects.forEach(project=> { %>
+                        <div class="col-md-4 mb-4">
+                           <div class="card">
+                              <img
+                                 src="<%= project.images && project.images[0] ? project.images[0].url : 'default-image-url.jpg' %>"
+                                 class="card-img-top" alt="..." />
+                              <div class="card-body">
+                                 <h5 class="card-title">
+                                    <%= project.title %>
+                                 </h5>
+                                 <p class="card-text">
+                                    <%= project.description %>
+                                 </p>
+                                 <p class="card-text">
+                                    <small class="text-muted">
+                                       <%= project.location %>
+                                    </small>
+                                 </p>
+                                 <a href="/projects/<%= project._id %>" class="btn btn-primary">View</a>
+                              </div>
+                           </div>
+                        </div>
+                        <% }) %>
+                  </div>
+               </div>
+               <% } %>
 
-    // Format project data as GeoJSON for map display in clusterMap.js
-    const projects = {
-        type: "FeatureCollection",
-        features: <%- JSON.stringify(projects.map(project => ({
-            type: "Feature",
-            geometry: {
-                type: "Point",
-                coordinates: project.geometry ? project.geometry.coordinates : [0, 0] // Default to [0, 0] if no coordinates
-            },
-            properties: {
-                title: project.title,
-                description: project.description,
-                popUpMarkup: `<a href="/projects/${project._id}">${project.title}</a>`, // Link to project's show page
-            }
-        }))) %>
+                  <!-- Pass Project Data to ClusterMap.js as GeoJSON -->
+                  <script>
+                     const mapToken = "<%- process.env.MAPBOX_TOKEN %>";
+
+                     // Format project data as GeoJSON for map display in clusterMap.js
+                     const projects = {
+                        type: "FeatureCollection",
+                        features: <% - JSON.stringify(projects.map(project => ({
+                           type: "Feature",
+                           geometry: {
+                              type: "Point",
+                              coordinates: project.geometry ? project.geometry.coordinates : [0, 0] // Default to [0, 0] if no coordinates
+                           },
+                           properties: {
+                              title: project.title,
+                              description: project.description,
+                              popUpMarkup: `<a href="/projects/${project._id}">${project.title}</a>`, // Link to project's show page
+                           }
+                        }))) %>
     };
-</script>
+                  </script>
 
-<!-- Include ClusterMap JavaScript -->
-<script src="/javascripts/clusterMap.js"></script>
+                  <!-- Include ClusterMap JavaScript -->
+                  <script src="/javascripts/clusterMap.js"></script>

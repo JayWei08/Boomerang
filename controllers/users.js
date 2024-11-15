@@ -9,18 +9,18 @@ module.exports.register = async (req, res) => {
     try {
         const { username, email, password } = req.body;
 
-        // Create a new user instance and register the user
+        // Create a new user and register with passport-local
         const user = new User({ username, email });
         const registeredUser = await User.register(user, password);
 
-        // Send the welcome email
+        // Send welcome email
         await sendWelcomeEmail(email, username);
 
         req.flash(
             "success",
             "Welcome to Boomerang! A welcome email has been sent."
         );
-        res.redirect("/projects"); // Adjust redirect as needed
+        res.redirect("/projects");
     } catch (error) {
         req.flash("error", error.message);
         res.redirect("register");

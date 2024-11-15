@@ -6,6 +6,13 @@ const { cloudinary } = require("../cloudinary");
 
 module.exports.index = async (req, res) => {
     const projects = await Project.find({});
+    if (false) { // user is logged in
+        projects.forEach(project => {
+            project.relevanceScore = calculateRelevance(project, searchTerm);
+        });
+
+        projects.sort((a, b) => b.relevanceScore - a.relevanceScore)
+    }
     res.render("projects/index", { projects });
 };
 

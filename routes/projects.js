@@ -22,6 +22,17 @@ router
 // New Project Page
 router.get("/new", isLoggedIn, projects.renderNewForm);
 
+// Route to view "My Projects" page
+router.get("/my-projects", isLoggedIn, async (req, res) => {
+    try {
+        const projects = await Project.find({ author: req.user._id });
+        res.render("projects/my-projects", { projects });
+    } catch (error) {
+        req.flash("error", "Unable to load your projects.");
+        res.redirect("/projects");
+    }
+});
+
 router
     .route("/:id")
     .get(catchAsync(projects.showProject))

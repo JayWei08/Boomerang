@@ -1,10 +1,12 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
 const cities = require("./cities");
 const Project = require("../models/project");
 const projects = require("./startups");
+const dbUrl = process.env.DB_URL;
 
 mongoose
-    .connect("mongodb://localhost:27017/boomerang") // Add the missing colon here
+    .connect(dbUrl) // Add the missing colon here
     .then(() => {
         console.log("MONGO CONNECTION OPEN");
     })

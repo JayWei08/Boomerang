@@ -110,7 +110,7 @@ async function process_projects(req, Users) {
 
     if (user) {
         projects.forEach((project) => {
-            project.relevanceScore = calculateRelevance(project, user.keyword);
+            project.relevanceScore = calculateRelevance(project, user.keywords);
         });
 
         projects.sort((a, b) => b.relevanceScore - a.relevanceScore);

@@ -121,10 +121,8 @@ async function process_projects(req, Users) {
 
 async function get_user(Users, req) {
     const user = null;
-    if (req.user.googleID) {
-        user = await Users.findOne({ googleID: req.user.googleID });
-    } else if (req.user.email) {
-        user = await Users.findOne({ email: req.user.email });
+    if (req.user) {
+        user = Users.findById(req.user._id);
     }
     return user;
 }

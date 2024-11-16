@@ -1,13 +1,13 @@
 class Multiset {
-   constructor(import_elements = new Map()) {
-      this.elements = import_elements;
+   constructor(import_map = new Map()) {
+      this.map = import_map;
    }
 
    add(element) {
       if (!this.elements.has(element)) {
          this.elements.set(element, 0);
       }
-      this.elements.set(element, this.elements.get(element) + 1);
+      this.map.set(element, this.map.get(element) + 1);
    }
 
    add_list(elements) {
@@ -17,11 +17,11 @@ class Multiset {
    }
 
    remove(element) {
-      if (this.elements.has(element)) {
-         const count = this.elements.get(element);
-         this.elements.set(element, count - 1);
+      if (this.map.has(element)) {
+         const count = this.map.get(element);
+         this.map.set(element, count - 1);
          if (count === 1) {
-            this.elements.delete(element);
+            this.map.delete(element);
          }
       } else {
          console.log("Element not found in the multiset.");
@@ -29,10 +29,10 @@ class Multiset {
    }
 
    get(element) {
-      return this.elements.get(element);
+      return this.map.get(element);
    }
 
    export() {
-      return this.elements;
+      return this.map;
    }
 }

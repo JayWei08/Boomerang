@@ -7,17 +7,7 @@ const { cloudinary } = require("../cloudinary");
 const Multiset = require("../extra/Multiset");
 
 module.exports.index = async (req, res) => {
-    const projects = await Project.find({});
-    const user = get_user(req);
-    if (user && false) {
-        // TODO: Remove false
-        projects.forEach((project) => {
-            const user = Users.find({ googleID: user.keywords });
-            project.relevanceScore = calculateRelevance(project, user.keyword);
-        });
-
-        projects.sort((a, b) => b.relevanceScore - a.relevanceScore);
-    }
+    const projects = process_projects(req, Users);
     res.render("projects/index", { projects });
 };
 
@@ -60,13 +50,7 @@ module.exports.showProject = async (req, res) => {
     }
     res.render("projects/show", { project });
 
-    const user = get_user(req);
-    if (user) {
-        // TODO: Remove false
-        const userKeywords = new Multiset(user.keywords);
-        userKeywords.add_list(project.keywords);
-        // TODO: Update mongodb user
-    }
+    add_user_keywords(req, project, Users);
 };
 
 module.exports.renderEditForm = async (req, res) => {
@@ -109,25 +93,50 @@ module.exports.deleteProject = async (req, res) => {
     res.redirect("/projects");
 };
 
-async function get_user(req) {
+async function add_user_keywords(req, project, Users) {
+    const user = get_user(Users, req);
+    if (user) {
+        const userKeywords = new Multiset(user.keywords);
+        userKeywords.add_list(project.keywords);
+
+        user.keywords = userKeywords.export();
+        await user.save();
+    }
+}
+
+async function process_projects(req, Users) {
+    const projects = await Project.find({});
+    const user = await get_user(Users, req);
+
+    if (user) {
+        projects.forEach((project) => {
+            project.relevanceScore = calculateRelevance(project, user.keyword);
+        });
+
+        projects.sort((a, b) => b.relevanceScore - a.relevanceScore);
+    }
+
+    return projects;
+}
+
+async function get_user(Users, req) {
     const user = null;
     if (req.user.googleID) {
-        user = await User.findOne({ googleID: req.user.googleID });
+        user = await Users.findOne({ googleID: req.user.googleID });
     } else if (req.user.email) {
-        user = await User.findOne({ email: req.user.email });
+        user = await Users.findOne({ email: req.user.email });
     }
     return user;
 }
 
-function get_relevance(project_keywords, user_keywords) {
+function calculateRelevance(project_keywords, user_keywords) {
     const relevance = 0;
     const maxRelevance = 3;
     for (const keyword of project_keywords) {
-        const currRelevance = user_keywords.get(keyword) || 0;
-        if (currRelevance != 0) {
-            currRelevance = Math.max(maxRelevance, currRelevance);
+        const currRelevance = user_keywords.get(keyword);
+        if (currRelevance) {
+            relevance += Math.max(currRelevance, maxRelevance);
         }
-        relevance += currRelevance;
     }
     return relevance;
 }

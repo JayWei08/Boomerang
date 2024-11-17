@@ -108,12 +108,14 @@ module.exports.toggleSaveProject = async (req, res) => {
         req.flash("success", "Project saved to your library!");
     }
 
-    // Redirect back to search if keyword is present
-    if (keyword) {
+    // Check if the referer is the library page and redirect accordingly
+    if (req.headers.referer && req.headers.referer.includes("/library")) {
+        return res.redirect("/projects/library");
+    } else if (keyword) {
         return res.redirect(`/search?keyword=${keyword}`);
+    } else {
+        return res.redirect("/projects");
     }
-    // Default redirect to projects
-    res.redirect("/projects");
 };
 
 module.exports.viewLibrary = async (req, res) => {

@@ -15,8 +15,9 @@ const UserSchema = new Schema({
     },
     keywords: {
         type: Map,
-        of: Number
-    }
+        of: Number,
+    },
+    savedProjects: [{ type: Schema.Types.ObjectId, ref: "Project" }],
 });
 
 UserSchema.plugin(passportLocalMongoose);

@@ -90,18 +90,50 @@ module.exports.deleteProject = async (req, res) => {
     res.redirect("/projects");
 };
 
+// Save Project Controller
+// controllers/projects.js
+module.exports.toggleSaveProject = async (req, res) => {
+    const { id } = req.params;
+    const keyword = req.query.keyword || ""; // Get keyword if provided
+    const user = await Users.findById(req.user._id);
+
+    const alreadySaved = user.savedProjects.includes(id);
+    if (alreadySaved) {
+        user.savedProjects.pull(id);
+        await user.save();
+        req.flash("success", "Project removed from your library.");
+    } else {
+        user.savedProjects.push(id);
+        await user.save();
+        req.flash("success", "Project saved to your library!");
+    }
+
+    // Redirect back to search if keyword is present
+    if (keyword) {
+        return res.redirect(`/search?keyword=${keyword}`);
+    }
+    // Default redirect to projects
+    res.redirect("/projects");
+};
+
+module.exports.viewLibrary = async (req, res) => {
+    const user = await Users.findById(req.user._id).populate("savedProjects");
+    res.render("projects/library", { projects: user.savedProjects });
+};
+
 async function add_user_keywords(req, project, Users) {
     const user = await get_user(Users, req);
     if (user) {
         const userKeywords = new Multiset(user.keywords);
 
-        const projectKeywords = Array.isArray(project.keywords) ? project.keywords : [];
+        const projectKeywords = Array.isArray(project.keywords)
+            ? project.keywords
+            : [];
         userKeywords.add_list(projectKeywords);
 
         user.keywords = userKeywords.export();
 
         await user.save();
-
     }
 }
 
@@ -111,7 +143,9 @@ async function process_projects(req, Users) {
 
     if (user) {
         projects.forEach((project) => {
-            const projectKeywords = Array.isArray(project.keywords) ? project.keywords : [];
+            const projectKeywords = Array.isArray(project.keywords)
+                ? project.keywords
+                : [];
             project.relevanceScore = calculateRelevance(
                 projectKeywords,
                 user.keywords

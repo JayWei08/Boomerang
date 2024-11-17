@@ -32,6 +32,7 @@ router.get("/my-projects", isLoggedIn, async (req, res) => {
         res.redirect("/projects");
     }
 });
+router.get("/library", isLoggedIn, catchAsync(projects.viewLibrary));
 
 router
     .route("/:id")
@@ -51,6 +52,13 @@ router.get(
     isLoggedIn,
     isAuthor,
     catchAsync(projects.renderEditForm)
+);
+
+// routes/projects.js
+router.post(
+    "/:id/toggleSave",
+    isLoggedIn,
+    catchAsync(projects.toggleSaveProject)
 );
 
 module.exports = router;

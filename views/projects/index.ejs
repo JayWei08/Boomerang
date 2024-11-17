@@ -37,7 +37,39 @@
                     alt="<%= project.title %>"
                 />
                 <div class="card-body">
-                    <h5 class="card-title"><%= project.title %></h5>
+                    <!-- Title and Bookmark in a Flex Container -->
+                    <div
+                        style="
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                        "
+                    >
+                        <h5 class="card-title" style="margin: 0">
+                            <%= project.title %>
+                        </h5>
+                        <% if (currentUser) { %>
+                        <form
+                            action="/projects/<%= project._id %>/toggleSave"
+                            method="POST"
+                            style="margin: 0"
+                        >
+                            <button
+                                type="submit"
+                                class="btn btn-link p-0"
+                                style="font-size: 1rem; color: #007bff"
+                            >
+                                <% if (currentUser.savedProjects &&
+                                currentUser.savedProjects.includes(project._id.toString()))
+                                { %>
+                                <i class="fas fa-bookmark"></i>
+                                <% } else { %>
+                                <i class="far fa-bookmark"></i>
+                                <% } %>
+                            </button>
+                        </form>
+                        <% } %>
+                    </div>
                     <p class="card-text"><%= project.description %></p>
                     <p class="card-text">
                         <small class="text-muted"
@@ -76,6 +108,47 @@
             }
         }))) %>
     };
+</script>
+
+<!-- Script for AJAX Bookmark Toggle -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const saveIcons = document.querySelectorAll(".save-icon");
+
+        saveIcons.forEach((icon) => {
+            icon.addEventListener("click", async function (event) {
+                event.preventDefault();
+
+                const projectId = this.getAttribute("data-project-id");
+                const iconElement = this.querySelector("i");
+
+                try {
+                    const response = await fetch(
+                        `/projects/${projectId}/toggleSave`,
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-Requested-With": "XMLHttpRequest",
+                            },
+                        }
+                    );
+                    const result = await response.json();
+
+                    // Toggle the icon based on the save status
+                    if (result.status === "saved") {
+                        iconElement.classList.remove("far");
+                        iconElement.classList.add("fas");
+                    } else if (result.status === "unsaved") {
+                        iconElement.classList.remove("fas");
+                        iconElement.classList.add("far");
+                    }
+                } catch (error) {
+                    console.error("Error toggling project save:", error);
+                }
+            });
+        });
+    });
 </script>
 
 <!-- Include ClusterMap JavaScript -->

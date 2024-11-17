@@ -43,7 +43,3 @@ body {
 }
 
 /* Add hover effect for all items */
-.dropdown-item:hover {
-    background-color: #e9ecef;   /* Darker gray on hover */
-    color: #0056b3;              /* Bootstrap's primary color for hover */
-}

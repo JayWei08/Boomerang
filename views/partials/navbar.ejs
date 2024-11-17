@@ -4,7 +4,7 @@
 
 
 <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-   <div class="container-fluid">
+   <div class="container">
        <a class="navbar-brand" href="/">Boomerang</a>
        <button
            class="navbar-toggler"
@@ -36,16 +36,16 @@
                <% } %>
                <div class="dropdown d-inline-block ms-2">
                   <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <%= selectedLanguage.toUpperCase() %>
+                      <%= selectedLanguage.toUpperCase() %>
                   </button>
                   <ul class="dropdown-menu" aria-labelledby="languageDropdown">
-                        <% availableLanguages.forEach(lang => { %>
-                           <li>
+                      <% availableLanguages.forEach(lang => { %>
+                          <li>
                               <a class="dropdown-item" href="#" onclick="setLanguage('<%= lang %>')">
-                                 <%= lang.toUpperCase() %>
-                             </a>
-                           </li>
-                        <% }) %>
+                                  <%= lang.toUpperCase() %>
+                              </a>
+                          </li>
+                      <% }) %>
                   </ul>
                </div>
            </div>

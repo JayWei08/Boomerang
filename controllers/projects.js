@@ -90,47 +90,20 @@ module.exports.deleteProject = async (req, res) => {
     res.redirect("/projects");
 };
 
-// async function add_user_keywords(req, project, Users) {
-//     const user = get_user(Users, req);
-//     if (user) {
-//         const userKeywords = new Multiset(user.keywords);
-//         userKeywords.add_list(project.keywords);
-
-//         user.keywords = userKeywords.export();
-//         await user.save();
-//     }
-// }
-
 async function add_user_keywords(req, project, Users) {
     const user = await get_user(Users, req);
     if (user) {
         const userKeywords = new Multiset(user.keywords);
 
-        // Ensure project.keywords is an array or pass an empty array as a fallback
-        const projectKeywords = Array.isArray(project.keywords)
-            ? project.keywords
-            : [];
+        const projectKeywords = Array.isArray(project.keywords) ? project.keywords : [];
         userKeywords.add_list(projectKeywords);
 
-        user.keywords = Array.from(userKeywords.export());
+        user.keywords = userKeywords.export();
+
         await user.save();
+
     }
 }
-
-// async function process_projects(req, Users) {
-//     const projects = await Project.find({});
-//     const user = await get_user(Users, req);
-
-//     if (user) {
-//         projects.forEach((project) => {
-//             project.relevanceScore = calculateRelevance(project, user.keywords);
-//         });
-
-//         projects.sort((a, b) => b.relevanceScore - a.relevanceScore);
-//     }
-
-//     return projects;
-// }
 
 async function process_projects(req, Users) {
     const projects = await Project.find({});
@@ -138,17 +111,13 @@ async function process_projects(req, Users) {
 
     if (user) {
         projects.forEach((project) => {
-            // Ensure project.keywords is an array or default to an empty array
-            const projectKeywords = Array.isArray(project.keywords)
-                ? project.keywords
-                : [];
+            const projectKeywords = Array.isArray(project.keywords) ? project.keywords : [];
             project.relevanceScore = calculateRelevance(
                 projectKeywords,
                 user.keywords
             );
         });
 
-        // Sort projects by relevance score in descending order
         projects.sort((a, b) => b.relevanceScore - a.relevanceScore);
     }
 
@@ -163,25 +132,13 @@ async function get_user(Users, req) {
     return user;
 }
 
-// function calculateRelevance(project_keywords, user_keywords) {
-//     const relevance = 0;
-//     const maxRelevance = 3;
-//     for (const keyword of project_keywords) {
-//         const currRelevance = user_keywords.get(keyword);
-//         if (currRelevance) {
-//             relevance += Math.max(currRelevance, maxRelevance);
-//         }
-//     }
-//     return relevance;
-// }
-
 function calculateRelevance(project_keywords, user_keywords) {
     let relevance = 0;
     const maxRelevance = 3;
 
     for (const keyword of project_keywords) {
-        const currRelevance = user_keywords.get(keyword) || 0; // Use 0 if keyword not found
-        relevance += Math.min(currRelevance, maxRelevance); // Limit relevance score
+        const currRelevance = user_keywords.get(keyword) || 0;
+        relevance += Math.min(currRelevance, maxRelevance);
     }
 
     return relevance;

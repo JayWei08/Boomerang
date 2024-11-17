@@ -31,7 +31,7 @@ const seedDB = async () => {
         // Create a new project instance with randomized data
         const camp = new Project({
             //YOUR USER ID
-            author: "6726985eb381c0ee9baf59a7",
+            author: "673940577338fc528ee30cdd",
             location: `${randomCity.city}, ${randomCity.state}`,
             title: randomProject.title,
             description: randomProject.description,

@@ -7,7 +7,7 @@ const { cloudinary } = require("../cloudinary");
 const Multiset = require("../extra/Multiset");
 
 module.exports.index = async (req, res) => {
-    const projects = process_projects(req, Users);
+    const projects = await process_projects(req, Users);
     res.render("projects/index", { projects });
 };
 
@@ -30,7 +30,6 @@ module.exports.createProject = async (req, res, next) => {
     }));
     project.author = req.user._id;
     await project.save();
-    console.log(project);
     req.flash("success", "Successfully made a new project!");
     res.redirect(`/projects/${project._id}`);
 };
@@ -65,7 +64,6 @@ module.exports.renderEditForm = async (req, res) => {
 
 module.exports.updateProject = async (req, res) => {
     const { id } = req.params;
-    console.log(req.body);
     const project = await Project.findByIdAndUpdate(id, {
         ...req.body.project,
         updatedAt: Date.now(), // Update `updatedAt` to current date
@@ -80,7 +78,6 @@ module.exports.updateProject = async (req, res) => {
         await project.updateOne({
             $pull: { images: { filename: { $in: req.body.deleteImages } } },
         });
-        console.log(project);
     }
     req.flash("success", "Successfully updated project!");
     res.redirect(`/projects/${project._id}`);
@@ -93,16 +90,47 @@ module.exports.deleteProject = async (req, res) => {
     res.redirect("/projects");
 };
 
+// async function add_user_keywords(req, project, Users) {
+//     const user = get_user(Users, req);
+//     if (user) {
+//         const userKeywords = new Multiset(user.keywords);
+//         userKeywords.add_list(project.keywords);
+
+//         user.keywords = userKeywords.export();
+//         await user.save();
+//     }
+// }
+
 async function add_user_keywords(req, project, Users) {
-    const user = get_user(Users, req);
+    const user = await get_user(Users, req);
     if (user) {
         const userKeywords = new Multiset(user.keywords);
-        userKeywords.add_list(project.keywords);
 
-        user.keywords = userKeywords.export();
+        // Ensure project.keywords is an array or pass an empty array as a fallback
+        const projectKeywords = Array.isArray(project.keywords)
+            ? project.keywords
+            : [];
+        userKeywords.add_list(projectKeywords);
+
+        user.keywords = Array.from(userKeywords.export());
         await user.save();
     }
 }
+
+// async function process_projects(req, Users) {
+//     const projects = await Project.find({});
+//     const user = await get_user(Users, req);
+
+//     if (user) {
+//         projects.forEach((project) => {
+//             project.relevanceScore = calculateRelevance(project, user.keywords);
+//         });
+
+//         projects.sort((a, b) => b.relevanceScore - a.relevanceScore);
+//     }
+
+//     return projects;
+// }
 
 async function process_projects(req, Users) {
     const projects = await Project.find({});
@@ -110,9 +138,17 @@ async function process_projects(req, Users) {
 
     if (user) {
         projects.forEach((project) => {
-            project.relevanceScore = calculateRelevance(project, user.keywords);
+            // Ensure project.keywords is an array or default to an empty array
+            const projectKeywords = Array.isArray(project.keywords)
+                ? project.keywords
+                : [];
+            project.relevanceScore = calculateRelevance(
+                projectKeywords,
+                user.keywords
+            );
         });
 
+        // Sort projects by relevance score in descending order
         projects.sort((a, b) => b.relevanceScore - a.relevanceScore);
     }
 
@@ -120,21 +156,33 @@ async function process_projects(req, Users) {
 }
 
 async function get_user(Users, req) {
-    const user = null;
+    let user = null;
     if (req.user) {
         user = Users.findById(req.user._id);
     }
     return user;
 }
 
+// function calculateRelevance(project_keywords, user_keywords) {
+//     const relevance = 0;
+//     const maxRelevance = 3;
+//     for (const keyword of project_keywords) {
+//         const currRelevance = user_keywords.get(keyword);
+//         if (currRelevance) {
+//             relevance += Math.max(currRelevance, maxRelevance);
+//         }
+//     }
+//     return relevance;
+// }
+
 function calculateRelevance(project_keywords, user_keywords) {
-    const relevance = 0;
+    let relevance = 0;
     const maxRelevance = 3;
+
     for (const keyword of project_keywords) {
-        const currRelevance = user_keywords.get(keyword);
-        if (currRelevance) {
-            relevance += Math.max(currRelevance, maxRelevance);
-        }
+        const currRelevance = user_keywords.get(keyword) || 0; // Use 0 if keyword not found
+        relevance += Math.min(currRelevance, maxRelevance); // Limit relevance score
     }
+
     return relevance;
 }

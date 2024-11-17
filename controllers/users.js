@@ -9,11 +9,9 @@ module.exports.register = async (req, res) => {
     try {
         const { username, email, password } = req.body;
 
-        // Create a new user and register with passport-local
-        const user = new User({ username, email });
+        const user = new User({ username, email, keywords: {} });
         const registeredUser = await User.register(user, password);
 
-        // Send welcome email
         await sendWelcomeEmail(email, username);
 
         req.flash(

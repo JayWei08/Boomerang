@@ -1,35 +1,64 @@
+<form id="languageForm" action="/language" method="POST" style="display: none;">
+   <input type="hidden" name="language" id="languageInput">
+</form>
+
+
 <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">Boomerang</a>
-        <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-        >
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-link active" href="/">Home</a>
-                <a class="nav-link" href="/projects">Projects</a>
-                <a class="nav-link" href="/search">Search</a>
-                <!-- Added Search Link -->
-                <a class="nav-link" href="/projects/new">New Project</a>
-            </div>
-            <div class="navbar-nav ms-auto">
-                <% if (!currentUser) { %>
-                <a href="/login" class="nav-link">Login</a>
-                <a href="/register" class="nav-link">Register</a>
-                <% } else { %>
-                <a href="/projects/my-projects" class="nav-link">My Projects</a>
-                <a href="/projects/library" class="nav-link">Library</a>
-                <a href="/logout" class="nav-link">Logout</a>
-                <% } %>
-            </div>
-        </div>
-    </div>
+   <div class="container-fluid">
+       <a class="navbar-brand" href="/">Boomerang</a>
+       <button
+           class="navbar-toggler"
+           type="button"
+           data-bs-toggle="collapse"
+           data-bs-target="#navbarNavAltMarkup"
+           aria-controls="navbarNavAltMarkup"
+           aria-expanded="false"
+           aria-label="Toggle navigation"
+       >
+           <span class="navbar-toggler-icon"></span>
+       </button>
+       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+           <div class="navbar-nav">
+               <a class="nav-link active" href="/">Home</a>
+               <a class="nav-link" href="/projects">Projects</a>
+               <a class="nav-link" href="/search">Search</a>
+               <!-- Added Search Link -->
+               <a class="nav-link" href="/projects/new">New Project</a>
+           </div>
+           <div class="navbar-nav ms-auto">
+               <% if (!currentUser) { %>
+               <a href="/login" class="nav-link">Login</a>
+               <a href="/register" class="nav-link">Register</a>
+               <% } else { %>
+               <a href="/projects/my-projects" class="nav-link">My Projects</a>
+               <a href="/projects/library" class="nav-link">Library</a>
+               <a href="/logout" class="nav-link">Logout</a>
+               <% } %>
+               <div class="dropdown d-inline-block ms-2">
+                  <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <%= selectedLanguage.toUpperCase() %>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                        <% availableLanguages.forEach(lang => { %>
+                           <li>
+                              <a class="dropdown-item" href="#" onclick="setLanguage('<%= lang %>')">
+                                 <%= lang.toUpperCase() %>
+                             </a>
+                           </li>
+                        <% }) %>
+                  </ul>
+               </div>
+           </div>
+       </div>
+   </div>
 </nav>
+
+<script>
+   function setLanguage(language) {
+       // Set the selected language in the hidden input field
+       document.getElementById('languageInput').value = language;
+       
+       // Submit the hidden form
+       document.getElementById('languageForm').submit();
+   }
+</script>

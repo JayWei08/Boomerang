@@ -34,3 +34,16 @@ body {
     color: #333;
     text-shadow: none;
 }
+
+.dropdown-item {
+    padding: 8px 12px;           /* Consistent padding */
+    font-weight: bold;           /* Consistent font weight */
+    color: #333;                 /* Text color */
+    background-color: #f8f9fa;   /* Light gray background */
+}
+
+/* Add hover effect for all items */
+.dropdown-item:hover {
+    background-color: #e9ecef;   /* Darker gray on hover */
+    color: #0056b3;              /* Bootstrap's primary color for hover */
+}

@@ -18,6 +18,8 @@ const UserSchema = new Schema({
         of: Number,
     },
     savedProjects: [{ type: Schema.Types.ObjectId, ref: "Project" }],
+
+    language: { type: String, default: 'en' }
 });
 
 UserSchema.plugin(passportLocalMongoose);

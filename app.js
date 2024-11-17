@@ -24,6 +24,8 @@ const authRoutes = require("./routes/auth");
 const sendWelcomeEmail = require("./utils/sendEmail"); // Import your email utility
 const dbUrl = process.env.DB_URL;
 
+const languageRoutes = require('./routes/languageRoutes');
+
 mongoose
     //  .connect("mongodb://localhost:27017/boomerang") // Ensure the connection string is correct
     .connect(dbUrl)
@@ -126,9 +128,33 @@ app.use((req, res, next) => {
     next();
 });
 
+
+
+const availableLanguages = ['en', 'es', 'fr']; // Define languages here
+
+// Middleware to make availableLanguages and selectedLanguage accessible in all views
+app.use((req, res, next) => {
+    res.locals.availableLanguages = availableLanguages;
+    res.locals.selectedLanguage = req.session.language || 'en'; // Default to 'en' if no language set in session
+    next();
+});
+
+app.use(async (req, res, next) => {
+    let language = req.session.language || 'en';
+    
+    if (req.isAuthenticated()) {
+        const user = await User.findById(req.user._id);
+        language = user.language || language;
+    }
+
+    req.language = language;
+    next();
+});
+
 app.use("/", usersRoutes);
 app.use("/projects", projectsRoutes);
 app.use("/projects/:id/comments", commentsRoutes);
+app.use(languageRoutes);
 
 app.get("/", (req, res) => {
     res.render("home");

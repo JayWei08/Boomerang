@@ -21,8 +21,22 @@
                 <p class="card-text">
                     <small class="text-muted"><%= project.location %></small>
                 </p>
+                <p class="card-text">
+                    <% // Calculate days left until deadline var deadlineDate =
+                    new Date(project.deadline); var currentDate = new Date();
+                    var timeDifference = deadlineDate - currentDate; var
+                    daysLeft = Math.ceil(timeDifference / (1000 * 60 * 60 *
+                    24)); %>
+                    <small class="text-muted">
+                        <% if (daysLeft > 0) { %>
+                        <i class="fas fa-clock"></i> <%= daysLeft %> days left
+                        <% } else { %>
+                        <span class="text-danger">Deadline passed</span>
+                        <% } %>
+                    </small>
+                </p>
                 <a href="/projects/<%= project._id %>" class="btn btn-primary"
-                    >View Project</a
+                    >View</a
                 >
             </div>
         </div>

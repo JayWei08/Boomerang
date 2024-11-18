@@ -58,22 +58,27 @@
                 ></textarea>
                 <div class="valid-feedback">Looks good!</div>
             </div>
-            <div class="mb-3">
-                <label class="form-label" for="fundingGoal">Funding Goal</label>
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="fundingGoal">$</span>
-                    <input
-                        class="form-control"
-                        type="number"
-                        id="fundingGoal"
-                        name="project[fundingGoal]"
-                        aria-describedby="fundingGoal"
-                        placeholder="0.00"
-                        required
-                    />
-                    <div class="valid-feedback">Looks good!</div>
-                </div>
+            <div class="input-group mb-3">
+                <!-- Dropdown for currency selection -->
+                <select class="form-select" id="currency" name="project[currency]" aria-label="Currency selection" required>
+                    <option value="THB">THB - ฿</option>
+                    <option value="USD">USD - $</option>
+                    <!-- Add other currency options here -->
+                </select>
+                
+                <!-- Funding goal input field -->
+                <input
+                    class="form-control"
+                    type="number"
+                    id="fundingGoal"
+                    name="project[fundingGoal]"
+                    aria-describedby="fundingGoal"
+                    placeholder="0.00"
+                    required
+                />
+                <div class="valid-feedback">Looks good!</div>
             </div>
+
             <div class="mb-3">
                 <label class="form-label" for="deadline">Deadline</label>
                 <input

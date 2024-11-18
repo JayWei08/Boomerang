@@ -1,4 +1,16 @@
 <% layout('layouts/boilerplate') %>
+<%
+// Define the currency symbol function in the EJS template
+function getCurrencySymbol(currency) {
+    
+    const currencySymbols = {
+        USD: "$",
+        THB: "฿",
+        // Add other currency codes and symbols as needed
+    };
+    return currencySymbols[currency] || currency;
+}
+%>
 
 <div class="row">
     <!-- Left Column: Project Card -->
@@ -50,7 +62,7 @@
                     <%= project.location%>
                 </li>
                 <li class="list-group-item text-muted">
-                    <b>Funding Goal:</b> $<%= project.fundingGoal %>
+                    <b>Funding Goal:</b> <%= getCurrencySymbol(project.currency) %><%= project.fundingGoal %>
                 </li>
                 <li class="list-group-item">
                     <b>Submitted by:</b> <%= project.author.username %>

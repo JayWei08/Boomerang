@@ -33,6 +33,7 @@ const ProjectSchema = new Schema(
             },
         },
         description: { type: String, required: true }, // Ensure description is required
+        currency: { type: String, required: true },
         fundingGoal: { type: Number, required: true }, // Ensure fundingGoal is required
         location: { type: String, required: true }, // Ensure location is required
         deadline: { type: Date, required: true }, // Deadline for funding

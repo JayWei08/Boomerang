@@ -6,6 +6,7 @@ module.exports.projectSchema = Joi.object({
         // image: Joi.string().uri().optional(),
         description: Joi.string().required(),
         location: Joi.string().required(),
+        currency: Joi.string().required(),
         fundingGoal: Joi.number().required().min(0),
         deadline: Joi.date().greater("now").required(),
         status: Joi.string()

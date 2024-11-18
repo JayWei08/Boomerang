@@ -13,10 +13,19 @@ exports.searchProjects = async (req, res) => {
     }
 
     try {
-        const projects = await Project.find({
+        // First attempt a text search on title, description, and location
+        let projects = await Project.find({
             $text: { $search: keyword },
         });
 
+        // If no projects were found with text search, try a regular expression search on location
+        if (projects.length === 0) {
+            projects = await Project.find({
+                location: new RegExp(keyword, "i"), // Case-insensitive partial match for location
+            });
+        }
+
+        // Convert projects to GeoJSON format for map display
         const geoJsonProjects = {
             type: "FeatureCollection",
             features: projects.map((project) => ({
@@ -30,6 +39,7 @@ exports.searchProjects = async (req, res) => {
             })),
         };
 
+        // Render the search results with both the projects and geoJsonProjects
         res.render("projects/search", { projects, geoJsonProjects, keyword });
     } catch (error) {
         console.error("Search error:", error);

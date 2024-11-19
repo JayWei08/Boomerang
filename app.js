@@ -22,8 +22,8 @@ const commentsRoutes = require("./routes/comments");
 const searchRoute = require("./routes/search");
 const authRoutes = require("./routes/auth");
 const sendWelcomeEmail = require("./utils/sendEmail"); // Import your email utility
-const dbUrl = process.env.DB_URL;
 const paymentRoutes = require("./routes/payment");
+const dbUrl = process.env.DB_URL;
 
 const languageRoutes = require('./routes/languageRoutes');
 

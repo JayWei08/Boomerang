@@ -79,4 +79,21 @@ router.post("/:id/initiate-payment", async (req, res) => {
     }
 });
 
+router.post("/notify", async (req, res) => {
+    try {
+        const decodedPayload = jwt.verify(req.body.payload, process.env.secretKey);
+
+        if (decodedPayload.respCode === "0000") {
+            console.log("Payment successful:", decodedPayload);
+            res.status(200).send("OK");
+        } else {
+            console.error("Payment failed:", decodedPayload);
+            res.status(400).send("Failed");
+        }
+    } catch (error) {
+        console.error("Error handling notification:", error.message);
+        res.status(500).send("Error");
+    }
+});
+
 module.exports = router;

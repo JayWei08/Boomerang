@@ -1,34 +1,63 @@
 <% layout('layouts/boilerplate') %>
 
-<div id="map" style="width: 100%; height: 500px"></div>
-<h1 class="mt-4">All Projects</h1>
-
-<!-- Search Bar at the Top of Index Page -->
-<div class="container mt-4 mb-4">
-    <form
-        action="/search"
-        method="GET"
-        class="form-inline d-flex justify-content-center"
-    >
-        <input
-            type="text"
-            name="keyword"
-            class="form-control mr-2"
-            placeholder="Search projects"
-            required
-        />
-        <button type="submit" class="btn btn-primary">Search</button>
-    </form>
-</div>
-
-<div class="mt-3 mb-4">
-    <a href="/projects/new" class="btn btn-info">Add Project</a>
-</div>
+<header class="container" style="width: 100%; height: auto">
+    <h1 class="display-5 text-center mb-4">Chuck an idea, into reality.</h1>
+    <p class="text-center text-muted">ON BOOMERANG:</p>
+    <!-- box infographic -->
+    <div class="container">
+        <div class="row g-0 text-center">
+            <!-- Box 1 -->
+            <div class="col-md-4">
+                <div
+                    class="p-4 border shadow-sm"
+                    style="
+                        border-top-left-radius: 8px;
+                        border-bottom-left-radius: 8px;
+                        border-right: none;
+                    "
+                >
+                    <h2 class="text-success">269,449</h2>
+                    <p class="text-muted mb-0">projects funded</p>
+                </div>
+            </div>
+            <!-- Box 2 -->
+            <div class="col-md-4">
+                <div
+                    class="p-4 border shadow-sm"
+                    style="
+                        border-radius: 0;
+                        border-right: none;
+                        border-left: none;
+                    "
+                >
+                    <h2 class="text-success">$8,433,853,524</h2>
+                    <p class="text-muted mb-0">towards creative work</p>
+                </div>
+            </div>
+            <!-- Box 3 -->
+            <div class="col-md-4">
+                <div
+                    class="p-4 border shadow-sm"
+                    style="
+                        border-top-right-radius: 8px;
+                        border-bottom-right-radius: 8px;
+                        border-left: none;
+                    "
+                >
+                    <h2 class="text-success">99,228,469</h2>
+                    <p class="text-muted mb-0">pledges</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
 
 <!-- Project Cards Display -->
-<div class="container">
+<div class="container mt-5">
     <div class="row">
-        <% for (let project of projects) { %>
+        <% const firstSixProjects = projects.slice(0, 6); %> <% const
+        remainingProjects = projects.slice(6); %> <% for (let project of
+        firstSixProjects) { %>
         <div class="col-md-4 mb-4">
             <div class="card">
                 <img
@@ -37,7 +66,6 @@
                     alt="<%= project.title %>"
                 />
                 <div class="card-body">
-                    <!-- Title and Bookmark in a Flex Container -->
                     <div
                         style="
                             display: flex;
@@ -77,9 +105,85 @@
                         >
                     </p>
                     <p class="card-text">
-                        <% // Calculate days left until deadline const
-                        deadlineDate = new Date(project.deadline); const
-                        currentDate = new Date(); const timeDifference =
+                        <% const deadlineDate = new Date(project.deadline);
+                        const currentDate = new Date(); const timeDifference =
+                        deadlineDate - currentDate; const daysLeft =
+                        Math.ceil(timeDifference / (1000 * 60 * 60 * 24)); %>
+                        <small class="text-muted">
+                            <% if (daysLeft > 0) { %>
+                            <i class="fas fa-clock"></i> <%= daysLeft %> days
+                            left <% } else { %>
+                            <span class="text-danger">Deadline passed</span>
+                            <% } %>
+                        </small>
+                    </p>
+                    <a
+                        href="/projects/<%= project._id %>"
+                        class="btn btn-primary"
+                        >View</a
+                    >
+                </div>
+            </div>
+        </div>
+        <% } %>
+    </div>
+</div>
+
+<div id="map" style="width: 100%; height: 500px"></div>
+
+<!-- Remaining Projects -->
+<div class="container mt-5">
+    <div class="row">
+        <% for (let project of remainingProjects) { %>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img
+                    src="<%= project.images && project.images[0] ? project.images[0].url : 'https://res.cloudinary.com/dei5hbjfg/image/upload/v1730665603/Boomerang/ujp5lxrxohzvkutf5oos.jpg' %>"
+                    class="card-img-top"
+                    alt="<%= project.title %>"
+                />
+                <div class="card-body">
+                    <div
+                        style="
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                        "
+                    >
+                        <h5 class="card-title" style="margin: 0">
+                            <%= project.title %>
+                        </h5>
+                        <% if (currentUser) { %>
+                        <form
+                            action="/projects/<%= project._id %>/toggleSave"
+                            method="POST"
+                            style="margin: 0"
+                        >
+                            <button
+                                type="submit"
+                                class="btn btn-link p-0"
+                                style="font-size: 1rem; color: #007bff"
+                            >
+                                <% if (currentUser.savedProjects &&
+                                currentUser.savedProjects.includes(project._id.toString()))
+                                { %>
+                                <i class="fas fa-bookmark"></i>
+                                <% } else { %>
+                                <i class="far fa-bookmark"></i>
+                                <% } %>
+                            </button>
+                        </form>
+                        <% } %>
+                    </div>
+                    <p class="card-text"><%= project.description %></p>
+                    <p class="card-text">
+                        <small class="text-muted"
+                            ><%= project.location %></small
+                        >
+                    </p>
+                    <p class="card-text">
+                        <% const deadlineDate = new Date(project.deadline);
+                        const currentDate = new Date(); const timeDifference =
                         deadlineDate - currentDate; const daysLeft =
                         Math.ceil(timeDifference / (1000 * 60 * 60 * 24)); %>
                         <small class="text-muted">

@@ -48,7 +48,7 @@
                             >
                             <input
                                 class="form-control form-control-lg"
-                                type="text"
+                                type="password"
                                 id="password"
                                 name="password"
                                 required
@@ -56,12 +56,21 @@
                             <div class="valid-feedback">Looks good!</div>
                         </div>
 
-                        <a href="/auth/google" class="btn btn-danger">
-                            Sign in with Google
-                        </a>
+                        <div class="my-4">
+                            <a
+                                data-mdb-ripple-init
+                                class="btn btn-lg btn-block border border-dark"
+                                href="/auth/google"
+                                role="button"
+                            >
+                                <i class="fab fa-google me-2"></i>Continue with
+                                Google
+                            </a>
+                        </div>
+
                         <button class="btn btn-success">Login</button>
 
-                        <div class="mt-5">
+                        <div class="mt-4">
                             <p>
                                 Don't have an account?
                                 <a

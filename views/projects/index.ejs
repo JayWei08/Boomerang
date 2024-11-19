@@ -1,10 +1,10 @@
 <% layout('layouts/boilerplate') %>
 
-<header class="container" style="width: 100%; height: auto">
-    <h1 class="display-5 text-center mb-4">Chuck an idea, into reality.</h1>
+<header class="container mb-4" style="width: 100%; height: auto">
+    <h1 class="display-5 text-center mb-5">Chuck an idea, into reality.</h1>
     <p class="text-center text-muted">ON BOOMERANG:</p>
     <!-- box infographic -->
-    <div class="container">
+    <div class="container mt-4">
         <div class="row g-0 text-center">
             <!-- Box 1 -->
             <div class="col-md-4">
@@ -16,7 +16,7 @@
                         border-right: none;
                     "
                 >
-                    <h2 class="text-success">269,449</h2>
+                    <h2 class="text-primary">29,449</h2>
                     <p class="text-muted mb-0">projects funded</p>
                 </div>
             </div>
@@ -30,7 +30,7 @@
                         border-left: none;
                     "
                 >
-                    <h2 class="text-success">$8,433,853,524</h2>
+                    <h2 class="text-primary">$8,433,853</h2>
                     <p class="text-muted mb-0">towards creative work</p>
                 </div>
             </div>
@@ -44,7 +44,7 @@
                         border-left: none;
                     "
                 >
-                    <h2 class="text-success">99,228,469</h2>
+                    <h2 class="text-primary">9,228,469</h2>
                     <p class="text-muted mb-0">pledges</p>
                 </div>
             </div>
@@ -52,84 +52,204 @@
     </div>
 </header>
 
-<!-- Project Cards Display -->
 <div class="container mt-5">
-    <div class="row">
-        <% const firstSixProjects = projects.slice(0, 6); %> <% const
-        remainingProjects = projects.slice(6); %> <% for (let project of
-        firstSixProjects) { %>
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <img
-                    src="<%= project.images && project.images[0] ? project.images[0].url : 'https://res.cloudinary.com/dei5hbjfg/image/upload/v1730665603/Boomerang/ujp5lxrxohzvkutf5oos.jpg' %>"
-                    class="card-img-top"
-                    alt="<%= project.title %>"
-                />
-                <div class="card-body">
-                    <div
-                        style="
-                            display: flex;
-                            justify-content: space-between;
-                            align-items: center;
-                        "
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">Recommended Projects</h4>
+        <div>
+            <button
+                class="btn btn-outline-dark btn-sm me-2"
+                onclick="scrollLeftAction()"
+            >
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button
+                class="btn btn-outline-dark btn-sm"
+                onclick="scrollRightAction()"
+            >
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+    <div
+        id="scrollableProjects"
+        class="d-flex overflow-auto"
+        style="gap: 20px; scroll-behavior: smooth"
+    >
+        <% const firstNineProjects = projects.slice(0, 9); %> <% const
+        remainingProjects = projects.slice(9); %> <% for (let project of
+        firstNineProjects) { %>
+        <div
+            class="card"
+            style="min-width: 300px; max-width: 300px; flex: 0 0 auto"
+        >
+            <img
+                src="<%= project.images && project.images[0] ? project.images[0].url : 'https://res.cloudinary.com/dei5hbjfg/image/upload/v1730665603/Boomerang/ujp5lxrxohzvkutf5oos.jpg' %>"
+                class="card-img-top"
+                alt="<%= project.title %>"
+                style="height: 180px; object-fit: cover"
+            />
+            <div class="card-body">
+                <h5 class="card-title"><%= project.title %></h5>
+                <% if (currentUser) { %>
+                <form
+                    action="/projects/<%= project._id %>/toggleSave"
+                    method="POST"
+                    style="margin: 0"
+                >
+                    <button
+                        type="submit"
+                        class="btn btn-link p-0"
+                        style="font-size: 1rem; color: #007bff"
                     >
-                        <h5 class="card-title" style="margin: 0">
-                            <%= project.title %>
-                        </h5>
-                        <% if (currentUser) { %>
-                        <form
-                            action="/projects/<%= project._id %>/toggleSave"
-                            method="POST"
-                            style="margin: 0"
-                        >
-                            <button
-                                type="submit"
-                                class="btn btn-link p-0"
-                                style="font-size: 1rem; color: #007bff"
-                            >
-                                <% if (currentUser.savedProjects &&
-                                currentUser.savedProjects.includes(project._id.toString()))
-                                { %>
-                                <i class="fas fa-bookmark"></i>
-                                <% } else { %>
-                                <i class="far fa-bookmark"></i>
-                                <% } %>
-                            </button>
-                        </form>
+                        <% if (currentUser.savedProjects &&
+                        currentUser.savedProjects.includes(project._id.toString()))
+                        { %>
+                        <i class="fas fa-bookmark"></i>
+                        <% } else { %>
+                        <i class="far fa-bookmark"></i>
                         <% } %>
-                    </div>
-                    <p class="card-text"><%= project.description %></p>
-                    <p class="card-text">
-                        <small class="text-muted"
-                            ><%= project.location %></small
-                        >
-                    </p>
-                    <p class="card-text">
-                        <% const deadlineDate = new Date(project.deadline);
-                        const currentDate = new Date(); const timeDifference =
-                        deadlineDate - currentDate; const daysLeft =
-                        Math.ceil(timeDifference / (1000 * 60 * 60 * 24)); %>
-                        <small class="text-muted">
-                            <% if (daysLeft > 0) { %>
-                            <i class="fas fa-clock"></i> <%= daysLeft %> days
-                            left <% } else { %>
-                            <span class="text-danger">Deadline passed</span>
-                            <% } %>
-                        </small>
-                    </p>
-                    <a
-                        href="/projects/<%= project._id %>"
-                        class="btn btn-primary"
-                        >View</a
-                    >
-                </div>
+                    </button>
+                </form>
+                <% } %>
+                <p class="card-text text-muted">
+                    <small><%= project.location %></small>
+                </p>
+                <% const deadlineDate = new Date(project.deadline); const
+                currentDate = new Date(); const timeDifference = deadlineDate -
+                currentDate; const daysLeft = Math.ceil(timeDifference / (1000 *
+                60 * 60 * 24)); %>
+                <p class="card-text">
+                    <small class="text-muted">
+                        <% if (daysLeft > 0) { %>
+                        <i class="fas fa-clock"></i> <%= daysLeft %> days left
+                        <% } else { %>
+                        <span class="text-danger">Deadline passed</span>
+                        <% } %>
+                    </small>
+                </p>
+                <a href="/projects/<%= project._id %>" class="btn btn-primary"
+                    >View</a
+                >
             </div>
         </div>
         <% } %>
     </div>
 </div>
 
-<div id="map" style="width: 100%; height: 500px"></div>
+<hr class="mt-5" />
+
+<section class="py-3 py-md-5 m-3">
+    <div class="container">
+        <div class="row gy-3 gy-md-4 gy-lg-0 align-items-lg-center">
+            <div class="col-12 col-lg-7 col-xl-5">
+                <div id="map" style="width: 100%; height: 500px"></div>
+            </div>
+            <div class="col-12 col-lg-5 col-xl-7">
+                <div class="row justify-content-xl-center">
+                    <div class="col-12 col-xl-11">
+                        <h2 class="mb-3">About Us</h2>
+                        <p class="lead fs-5 text-secondary-custom mb-5">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing
+                            elit. Commodi natus aspernatur corporis deleniti
+                            quidem qui aliquam quae est. Repudiandae consectetur
+                            rerum facere officiis quia fugit dolorem deleniti,
+                            voluptate qui cumque. Porro ipsa et molestiae
+                            pariatur ex blanditiis odio facilis sit quod numquam
+                            saepe labore, ad tenetur maiores magnam veritatis!
+                            Nostrum, repellat quo. Ut voluptate est animi vero
+                            adipisci, ab recusandae.
+                        </p>
+                        <div class="row gy-4 gy-md-0 gx-xxl-5X">
+                            <!-- info-box number one -->
+                            <div class="col-12 col-md-4">
+                                <div class="d-flex">
+                                    <div class="me-4 text-primary">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="35"
+                                            height="35"
+                                            fill="currentColor"
+                                            class="bi bi-key-fill"
+                                            viewBox="0 0 16 16"
+                                        >
+                                            <path
+                                                d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2M2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2"
+                                            />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h2 class="h4 mb-3">No-Cost Access</h2>
+                                        <p class="text-secondary-custom mb-0">
+                                            Open and free access to everyone
+                                            with varying background
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- info-box number two -->
+                            <div class="col-12 col-md-4">
+                                <div class="d-flex">
+                                    <div class="me-4 text-primary">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="32"
+                                            height="32"
+                                            fill="currentColor"
+                                            class="bi bi-clock-fill"
+                                            viewBox="0 0 16 16"
+                                        >
+                                            <path
+                                                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"
+                                            />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h2 class="h4 mb-3">Daytime Viewing</h2>
+                                        <p class="text-secondary-custom mb-0">
+                                            12-hour time difference to EST,
+                                            allows live celestial observations
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- info-box number three -->
+                            <div class="col-12 col-md-4">
+                                <div class="d-flex">
+                                    <div class="me-4 text-primary">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="32"
+                                            height="32"
+                                            fill="currentColor"
+                                            class="bi bi-moon-stars-fill"
+                                            viewBox="0 0 16 16"
+                                        >
+                                            <path
+                                                d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278"
+                                            />
+                                            <path
+                                                d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.73 1.73 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.73 1.73 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.73 1.73 0 0 0 1.097-1.097zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z"
+                                            />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h2 class="h4 mb-3">
+                                            Pristine Darkness
+                                        </h2>
+                                        <p class="text-secondary-custom mb-0">
+                                            Based in Bortle class 2 dark sky
+                                            zone with an elevation of 3170m
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- Remaining Projects -->
 <div class="container mt-5">
@@ -271,3 +391,27 @@
 
 <!-- Include ClusterMap JavaScript -->
 <script src="/javascripts/clusterMap.js"></script>
+
+<script>
+    // JavaScript for scrolling
+    function scrollLeftAction() {
+        const scrollable = document.getElementById("scrollableProjects");
+        // Scroll left only if not already at the start
+        if (scrollable.scrollLeft > 0) {
+            scrollable.scrollLeft -= scrollable.offsetWidth; // Scroll by container width
+        }
+        console.log("Scrolled Left:", scrollable.scrollLeft);
+    }
+
+    function scrollRightAction() {
+        const scrollable = document.getElementById("scrollableProjects");
+        // Scroll right only if not already at the end
+        if (
+            scrollable.scrollLeft <
+            scrollable.scrollWidth - scrollable.offsetWidth
+        ) {
+            scrollable.scrollLeft += scrollable.offsetWidth; // Scroll by container width
+        }
+        console.log("Scrolled Right:", scrollable.scrollLeft);
+    }
+</script>

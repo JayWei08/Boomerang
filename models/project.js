@@ -32,11 +32,11 @@ const ProjectSchema = new Schema(
                 required: true,
             },
         },
-        description: { type: String, required: true }, // Ensure description is required
-        currency: { type: String, required: true },
-        fundingGoal: { type: Number, required: true }, // Ensure fundingGoal is required
-        location: { type: String, required: true }, // Ensure location is required
-        deadline: { type: Date, required: true }, // Deadline for funding
+        description: { type: String, required: true },
+        currency: { type: String, required: false }, // TODO: set to true
+        fundingGoal: { type: Number, required: true },
+        location: { type: String, required: true },
+        deadline: { type: Date, required: true },
         createdAt: { type: Date, default: Date.now },
         updatedAt: { type: Date, default: Date.now },
         author: {
@@ -55,7 +55,7 @@ const ProjectSchema = new Schema(
                 ref: "Comment",
             },
         ],
-        kewords: [
+        keywords: [
             {
                 type: String,
             },

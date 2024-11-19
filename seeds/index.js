@@ -17,7 +17,7 @@ mongoose
 
 const seedDB = async () => {
     await Project.deleteMany({});
-    for (let i = 0; i < 200; i++) {
+    for (let i = 0; i < 20; i++) {
         // Randomly pick a project title and description
         const randomProject =
             projects[Math.floor(Math.random() * projects.length)];
@@ -29,12 +29,13 @@ const seedDB = async () => {
         const fundingGoal = Math.floor(Math.random() * 50) * 1000 + 1000;
 
         // Create a new project instance with randomized data
-        const camp = new Project({
+        const project = new Project({
             //YOUR USER ID
             author: "673940577338fc528ee30cdd",
             location: `${randomCity.city}, ${randomCity.state}`,
             title: randomProject.title,
             description: randomProject.description,
+            currency: "",
             fundingGoal: fundingGoal,
             geometry: {
                 type: "Point",
@@ -54,8 +55,9 @@ const seedDB = async () => {
                 },
             ],
             status: "active",
+            keywords: randomProject.keywords,
         });
-        await camp.save();
+        await project.save();
     }
 };
 

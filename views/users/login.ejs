@@ -1,37 +1,91 @@
 <% layout('layouts/boilerplate') %>
-<h1>Login</h1>
-<form action="/login" class="validated-form" novalidate method="POST">
-    <div class="mb-3">
-        <label class="form-label" for="username">Username</label>
-        <input
-            class="form-control"
-            type="text"
-            id="username"
-            name="username"
-            required
-        />
-        <div class="valid-feedback">Looks good!</div>
-    </div>
-    <div class="mb-3">
-        <label class="form-label" for="password">Password</label>
-        <input
-            class="form-control"
-            type="password"
-            id="password"
-            name="password"
-            required
-        />
-        <div class="valid-feedback">Looks good!</div>
-    </div>
-    <a href="/auth/google" class="btn btn-danger"> Sign in with Google </a>
-    <button class="btn btn-success">Login</button>
+<section class="vh-80 mb-5">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6 text-black">
+                <div class="px-5 ms-xl-4">
+                    <i
+                        class="fas fa-crow fa-2x me-3 pt-5 mt-xl-4"
+                        style="color: #709085"
+                    ></i>
+                    <span class="h1 fw-bold mb-0">Logo</span>
+                </div>
 
-    <div class="mt-5">
-        <p>
-            Don't have an account?
-            <a href="/register" class="text-primary text-decoration-none"
-                >Sign up</a
-            >
-        </p>
+                <div
+                    class="d-flex align-items-center h-custom-2 px-5 ms-xl-4 mt-5 pt-5 pt-xl-0 mt-xl-n5"
+                >
+                    <form
+                        action="/login"
+                        class="validated-form"
+                        novalidate
+                        method="POST"
+                        style="width: 23rem"
+                    >
+                        <h3
+                            class="fw-normal mb-3 pb-3"
+                            style="letter-spacing: 1px"
+                        >
+                            Log in
+                        </h3>
+
+                        <div data-mdb-input-init class="form-outline mb-4">
+                            <label class="form-label" for="username"
+                                >Username</label
+                            >
+                            <input
+                                class="form-control form-control-lg"
+                                type="text"
+                                id="username"
+                                name="username"
+                                required
+                            />
+                            <div class="valid-feedback">Looks good!</div>
+                        </div>
+
+                        <div data-mdb-input-init class="form-outline mb-4">
+                            <label class="form-label" for="password"
+                                >Password</label
+                            >
+                            <input
+                                class="form-control form-control-lg"
+                                type="text"
+                                id="password"
+                                name="password"
+                                required
+                            />
+                            <div class="valid-feedback">Looks good!</div>
+                        </div>
+
+                        <a href="/auth/google" class="btn btn-danger">
+                            Sign in with Google
+                        </a>
+                        <button class="btn btn-success">Login</button>
+
+                        <div class="mt-5">
+                            <p>
+                                Don't have an account?
+                                <a
+                                    href="/register"
+                                    class="text-primary text-decoration-none"
+                                    >Sign up</a
+                                >
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm-6 px-0 d-none d-sm-block">
+                <img
+                    src="https://media.istockphoto.com/id/475209510/photo/throwing-plain-boomerand-midair.webp?a=1&b=1&s=612x612&w=0&k=20&c=eaxfKyxmKn_Pm9kVmHyg7SDg3eo33SJOlTZb3KuV1cs="
+                    alt="Login image"
+                    class="w-100"
+                    style="
+                        object-fit: cover;
+                        object-position: left;
+                        height: 600px;
+                    "
+                />
+            </div>
+        </div>
     </div>
-</form>
+</section>

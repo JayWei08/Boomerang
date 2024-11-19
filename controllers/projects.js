@@ -126,14 +126,14 @@ module.exports.viewLibrary = async (req, res) => {
 async function add_user_keywords(req, project, Users) {
     const user = await get_user(Users, req);
     if (user) {
-        const userKeywords = new Multiset(user.keywords);
+        const userKeywords = new Multiset(user.keywords || new Map()); // Initialize if undefined
 
         const projectKeywords = Array.isArray(project.keywords)
             ? project.keywords
             : [];
         userKeywords.add_list(projectKeywords);
 
-        user.keywords = userKeywords.export();
+        user.keywords = userKeywords.export(); // Ensure the format matches expectations
 
         await user.save();
     }
@@ -143,9 +143,11 @@ async function process_projects(req, Users) {
     const projects = await Project.find({});
     const user = await get_user(Users, req);
 
-    if (user) {
+    if (user && user.keywords instanceof Map) {
         projects.forEach((project) => {
-            const projectKeywords = Array.isArray(project.keywords) ? project.keywords : [];
+            const projectKeywords = Array.isArray(project.keywords)
+                ? project.keywords
+                : [];
             project.relevanceScore = calculateRelevance(
                 projectKeywords,
                 user.keywords
@@ -153,6 +155,11 @@ async function process_projects(req, Users) {
         });
 
         projects.sort((a, b) => b.relevanceScore - a.relevanceScore);
+    } else {
+        // Assign a default relevanceScore if the user or keywords are missing
+        projects.forEach((project) => {
+            project.relevanceScore = 0;
+        });
     }
 
     return projects;
@@ -161,16 +168,20 @@ async function process_projects(req, Users) {
 async function get_user(Users, req) {
     let user = null;
     if (req.user) {
-        user = Users.findById(req.user._id);
+        user = await Users.findById(req.user._id);
     }
     return user;
 }
 
 function calculateRelevance(project_keywords, user_keywords) {
+    if (!user_keywords || !(user_keywords instanceof Map)) {
+        return 0; // Default relevance if user_keywords is missing or invalid
+    }
+
     let relevance = 0;
 
     for (const keyword of project_keywords) {
-        relevance += user_keywords.get(keyword) || 0;
+        relevance += user_keywords.get(keyword) || 0; // Add keyword relevance or default to 0
     }
 
     return relevance;

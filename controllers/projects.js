@@ -168,11 +168,9 @@ async function get_user(Users, req) {
 
 function calculateRelevance(project_keywords, user_keywords) {
     let relevance = 0;
-    const maxRelevance = 3;
 
     for (const keyword of project_keywords) {
-        const currRelevance = user_keywords.get(keyword) || 0;
-        relevance += Math.min(currRelevance, maxRelevance);
+        relevance += user_keywords.get(keyword) || 0;
     }
 
     return relevance;

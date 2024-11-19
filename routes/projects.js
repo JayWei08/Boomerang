@@ -79,7 +79,7 @@ router.post("/:id/initiate-payment", async (req, res) => {
     }
 });
 
-router.post("/notify", async (req, res) => {
+router.post("/:id/notify", async (req, res) => {
     try {
         const decodedPayload = jwt.verify(req.body.payload, process.env.secretKey);
 

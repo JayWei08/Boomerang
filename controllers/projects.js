@@ -4,7 +4,7 @@ const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 const mapBoxToken = process.env.MAPBOX_TOKEN;
 const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
 const { cloudinary } = require("../cloudinary");
-const Multiset = require("../extra/Multiset");
+const Multiset = require("../utils/Multiset");
 
 module.exports.index = async (req, res) => {
     const projects = await process_projects(req, Users);
@@ -132,8 +132,6 @@ async function add_user_keywords(req, project, Users) {
             ? project.keywords
             : [];
         userKeywords.add_list(projectKeywords);
-        console.log(userKeywords);
-        console.log(projectKeywords);
 
         user.keywords = userKeywords.export();
 
@@ -146,14 +144,12 @@ async function process_projects(req, Users) {
     const user = await get_user(Users, req);
 
     if (user) {
-        // console.log(user.keywords); // TODO: REMOVE
         projects.forEach((project) => {
             const projectKeywords = Array.isArray(project.keywords) ? project.keywords : [];
             project.relevanceScore = calculateRelevance(
                 projectKeywords,
                 user.keywords
             );
-            // console.log(project.relevanceScore)  // TODO: REMOVE
         });
 
         projects.sort((a, b) => b.relevanceScore - a.relevanceScore);

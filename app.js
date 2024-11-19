@@ -23,6 +23,7 @@ const searchRoute = require("./routes/search");
 const authRoutes = require("./routes/auth");
 const sendWelcomeEmail = require("./utils/sendEmail"); // Import your email utility
 const dbUrl = process.env.DB_URL;
+const paymentRoutes = require("./routes/payment");
 
 const languageRoutes = require('./routes/languageRoutes');
 
@@ -128,8 +129,6 @@ app.use((req, res, next) => {
     next();
 });
 
-
-
 const availableLanguages = ['en', 'es', 'fr']; // Define languages here
 
 // Middleware to make availableLanguages and selectedLanguage accessible in all views
@@ -141,7 +140,7 @@ app.use((req, res, next) => {
 
 app.use(async (req, res, next) => {
     let language = req.session.language || 'en';
-    
+
     if (req.isAuthenticated()) {
         const user = await User.findById(req.user._id);
         language = user.language || language;
@@ -155,6 +154,8 @@ app.use("/", usersRoutes);
 app.use("/projects", projectsRoutes);
 app.use("/projects/:id/comments", commentsRoutes);
 app.use(languageRoutes);
+app.use("/payment", paymentRoutes);
+
 
 app.get("/", (req, res) => {
     res.render("home");

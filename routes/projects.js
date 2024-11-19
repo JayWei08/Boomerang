@@ -61,4 +61,22 @@ router.post(
     catchAsync(projects.toggleSaveProject)
 );
 
+// Project Payment
+router.post("/:id/initiate-payment", async (req, res) => {
+    const { invoiceNo, amount, currencyCode } = req.body;
+
+    try {
+        const paymentResponse = await createPaymentToken(invoiceNo, amount, currencyCode);
+
+        if (paymentResponse.respCode === "0000") {
+            // Redirect user to the payment page
+            res.redirect(paymentResponse.webPaymentUrl);
+        } else {
+            res.status(400).json({ error: paymentResponse.respDesc });
+        }
+    } catch (error) {
+        res.status(500).json({ error: "Failed to initiate payment" });
+    }
+});
+
 module.exports = router;

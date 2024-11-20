@@ -1,11 +1,11 @@
 const User = require('../models/user'); // adjust path as needed
 
 // Language options available
-const availableLanguages = ['en', 'es', 'fr']; // Add more as needed
+const availableLanguages = ['th', 'en']; // Add more as needed
 
 // Render language selection page
 exports.renderLanguageSelectionPage = (req, res) => {
-    res.render('yourView', { availableLanguages, selectedLanguage: req.session.language || 'en' });
+    res.render('yourView', { availableLanguages, selectedLanguage: req.session.language || 'th' });
 };
 
 // Handle language selection

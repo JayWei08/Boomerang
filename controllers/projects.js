@@ -1,10 +1,12 @@
 const Project = require("../models/project");
 const Users = require("../models/user");
+const ApiFetch = require("../models/apiFetch"); 
 const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 const mapBoxToken = process.env.MAPBOX_TOKEN;
 const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
 const { cloudinary } = require("../cloudinary");
 const Multiset = require("../utils/Multiset");
+const currencyToken = process.env.CURRENCY_TOKEN;
 
 module.exports.index = async (req, res) => {
     const projects = await process_projects(req, Users);
@@ -35,21 +37,72 @@ module.exports.createProject = async (req, res, next) => {
 };
 
 module.exports.showProject = async (req, res) => {
-    const project = await Project.findById(req.params.id)
-        .populate({
-            path: "comments",
-            populate: {
-                path: "author",
-            },
-        })
-        .populate("author");
-    if (!project) {
-        req.flash("error", "Cannot find that project!");
+    try {
+        // Find the project
+        const project = await Project.findById(req.params.id)
+            .populate({
+                path: "comments",
+                populate: { path: "author" },
+            })
+            .populate("author");
+
+        if (!project) {
+            req.flash("error", "Cannot find that project!");
+            return res.redirect("/projects");
+        }
+
+        // Check the database for the last fetch time
+        let apiFetch = await ApiFetch.findOne();
+        const now = Date.now();
+        const oneHour = 1000 * 60 * 60; // 1 hour in milliseconds
+
+        let currencyData;
+
+        if (!apiFetch || now - new Date(apiFetch.lastFetchTime).getTime() > oneHour) {
+            console.log("Fetching fresh currency data...");
+            const response = await fetch('https://api.freecurrencyapi.com/v1/latest?apikey=fca_live_cm1tAAJNfEOsxaq2vaGu0SI5uBAT8rBSgNSlHbTJ');
+            const freshData = await response.json();
+            
+            if (!apiFetch) {
+                // Create a new document if none exists
+                apiFetch = new ApiFetch({
+                    lastFetchTime: new Date(),
+                    currencyData: freshData,
+                });
+            } else {
+                // Update the existing document
+                apiFetch.lastFetchTime = new Date();
+                apiFetch.currencyData = freshData;
+            }
+
+            await apiFetch.save(); // Save the updated or new document
+            currencyData = freshData;
+            
+        } else {
+            console.log("Using cached currency data from MongoDB.");
+            currencyData = apiFetch.currencyData;
+        }
+        
+        if (req.user) {
+            // Use the logged-in user's currency
+            const user = await Users.findById(req.user._id);
+            userCurrency = user.currency; // Default to USD if user's currency is missing
+        } else {
+            // Use session's currency if no user is logged in
+            userCurrency = req.session.currency; // Default to USD if session currency is missing
+        }
+
+       
+
+        // Render the project details with project and user currency data
+        res.render("projects/show", { project, currencyData, userCurrency });
+       
+        add_user_keywords(req, project, Users);
+    } catch (error) {
+        console.error("Error in showProject:", error);
+        req.flash("error", "Something went wrong!");
         res.redirect("/projects");
     }
-    res.render("projects/show", { project });
-
-    add_user_keywords(req, project, Users);
 };
 
 module.exports.renderEditForm = async (req, res) => {

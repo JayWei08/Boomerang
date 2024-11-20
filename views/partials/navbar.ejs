@@ -1,6 +1,9 @@
 <form id="languageForm" action="/language" method="POST" style="display: none">
     <input type="hidden" name="language" id="languageInput" />
 </form>
+<form id="currencyForm" action="/currency" method="POST" style="display: none">
+    <input type="hidden" name="currency" id="currencyInput" />
+</form>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container" style="height: 90px">
@@ -104,6 +107,34 @@
                         <% }) %>
                     </ul>
                 </div>
+                <div class="dropdown d-inline-block ms-2">
+                    <button
+                        class="btn btn-secondary dropdown-toggle"
+                        type="button"
+                        id="currencyDropdown"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                    >
+                        <%= selectedCurrency.toUpperCase() %>
+                    </button>
+                    <ul
+                        class="dropdown-menu"
+                        aria-labelledby="currencyDropdown"
+                    >
+                        <% availableCurrencies.forEach(cur => { %>
+                        <li>
+                            <a
+                                class="dropdown-item"
+                                href="#"
+                                onclick="setCurrency('<%= cur %>')"
+                            >
+                                <%= cur.toUpperCase() %>
+                            </a>
+                        </li>
+                        <% }) %>
+                    </ul>
+                </div>
+                
             </div>
         </div>
     </div>
@@ -116,5 +147,12 @@
 
         // Submit the hidden form
         document.getElementById("languageForm").submit();
+    }
+    function setCurrency(currency) {
+        // Set the selected language in the hidden input field
+        document.getElementById("currencyInput").value = currency;
+
+        // Submit the hidden form
+        document.getElementById("currencyForm").submit();
     }
 </script>

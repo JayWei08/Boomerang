@@ -24,7 +24,9 @@ const authRoutes = require("./routes/auth");
 const sendWelcomeEmail = require("./utils/sendEmail"); // Import your email utility
 const dbUrl = process.env.DB_URL;
 
-const languageRoutes = require("./routes/languageRoutes");
+const languageRoutes = require('./routes/languageRoutes');
+const currencyRoutes = require('./routes/currencyRoutes');
+
 
 mongoose
     //  .connect("mongodb://localhost:27017/boomerang") // Ensure the connection string is correct
@@ -68,6 +70,8 @@ const sessionConfig = {
         httpOnly: true,
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
         maxAge: 1000 * 60 * 60 * 24 * 7,
+        // expires: Date.now() + 1000 * 10,
+        // maxAge: 1000 * 10,
     },
 };
 app.use(session(sessionConfig));
@@ -120,6 +124,52 @@ passport.use(
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+const availableLanguages = ['en', 'th']; // Define available languages
+const availableCurrencies = ['USD', 'THB']; 
+// Middleware to make availableLanguages and selectedLanguage accessible in all views
+app.use((req, res, next) => {
+    res.locals.availableCurrencies = availableCurrencies;
+    res.locals.selectedCurrency = req.session.currency || 'THB'; 
+    res.locals.availableLanguages = availableLanguages;
+    res.locals.selectedLanguage = req.session.language || 'th'; // Default to 'en' if no language set in session
+    next();
+});
+
+// Middleware to ensure language is synchronized with the database and session
+app.use(async (req, res, next) => {
+    try {
+        let language = req.session.language || 'th';
+        let currency = req.session.currency || 'THB'; // Default to 'en'
+
+        if (req.isAuthenticated()) {
+            // Fetch the language from the database for authenticated users
+            const user = await User.findById(req.user._id);
+            if (user && user.language) {
+                language = user.language;
+            }
+            if (user && user.currency) {
+                currency = user.currency;
+            }
+        }
+
+        req.language = language; // Store in the request object for convenience
+        req.session.language = language; // Ensure session is updated
+        res.locals.selectedLanguage = language; // Update locals for views
+        req.currency = currency; // Store in the request object for convenience
+        req.session.currency = currency; // Ensure session is updated
+        res.locals.selectedCurrency = currency; // Update locals for views
+
+        next();
+    } catch (error) {
+        console.error('Error syncing', error);
+        next(error);
+    }
+});
+
+
+
+
+
 app.use((req, res, next) => {
     console.log(req.session);
     res.locals.currentUser = req.user;
@@ -128,31 +178,20 @@ app.use((req, res, next) => {
     next();
 });
 
-const availableLanguages = ["en", "es", "fr"]; // Define languages here
 
-// Middleware to make availableLanguages and selectedLanguage accessible in all views
-app.use((req, res, next) => {
-    res.locals.availableLanguages = availableLanguages;
-    res.locals.selectedLanguage = req.session.language || "en"; // Default to 'en' if no language set in session
-    next();
-});
 
-app.use(async (req, res, next) => {
-    let language = req.session.language || "en";
 
-    if (req.isAuthenticated()) {
-        const user = await User.findById(req.user._id);
-        language = user.language || language;
-    }
-
-    req.language = language;
-    next();
-});
 
 app.use("/", usersRoutes);
 app.use("/projects", projectsRoutes);
 app.use("/projects/:id/comments", commentsRoutes);
 app.use(languageRoutes);
+app.use(currencyRoutes);
+
+
+app.get("/", (req, res) => {
+    res.render("home");
+});
 
 app.use("/", authRoutes);
 

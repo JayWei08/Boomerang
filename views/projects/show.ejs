@@ -1,6 +1,5 @@
 <% layout('layouts/boilerplate') %>
 <%
-// Define the currency symbol function in the EJS template
 function getCurrencySymbol(currency) {
     
     const currencySymbols = {
@@ -10,7 +9,14 @@ function getCurrencySymbol(currency) {
     };
     return currencySymbols[currency] || currency;
 }
+
+function getExchangeRates(userCurrency, projectCurrency, projectAmount, exchangeRates) {
+    
+    console.log(userCurrency, projectCurrency, projectAmount, exchangeRates);
+    return (projectAmount * (exchangeRates.data[userCurrency]/exchangeRates.data[projectCurrency])).toFixed(2)
+}
 %>
+
 
 <div class="row">
     <!-- Left Column: Project Card -->
@@ -38,7 +44,7 @@ function getCurrencySymbol(currency) {
                 <span class="visually-hidden">Previous</span>
             </button>
             <button
-                class="carousel-control-next"
+                class="carousel-control-next"-====
                 type="button"
                 data-bs-target="#carouselExample"
                 data-bs-slide="next"
@@ -62,7 +68,7 @@ function getCurrencySymbol(currency) {
                     <%= project.location%>
                 </li>
                 <li class="list-group-item text-muted">
-                    <b>Funding Goal:</b> <%= getCurrencySymbol(project.currency) %><%= project.fundingGoal %>
+                    <b>Funding Goal:</b> <%= getCurrencySymbol(userCurrency) %><%= getExchangeRates(userCurrency, project.currency, project.fundingGoal, currencyData) %>
                 </li>
                 <li class="list-group-item">
                     <b>Submitted by:</b> <%= project.author.username %>
@@ -150,6 +156,7 @@ function getCurrencySymbol(currency) {
 <script>
     const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
     const project = <%- JSON.stringify(project) %>
+   
 </script>
 
 <script src="/javascripts/showPageMap.js"></script>

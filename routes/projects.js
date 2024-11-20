@@ -25,13 +25,36 @@ router.get("/new", isLoggedIn, projects.renderNewForm);
 // Route to view "My Projects" page
 router.get("/my-projects", isLoggedIn, async (req, res) => {
     try {
-        const projects = await Project.find({ author: req.user._id });
-        res.render("projects/my-projects", { projects });
+        const projects = await Project.find({
+            author: req.user._id,
+            isDraft: false,
+        });
+        const drafts = await Project.find({
+            author: req.user._id,
+            isDraft: true,
+        });
+        res.render("projects/my-projects", { projects, drafts });
     } catch (error) {
         req.flash("error", "Unable to load your projects.");
         res.redirect("/projects");
     }
 });
+
+router.post(
+    "/save-draft",
+    isLoggedIn,
+    upload.array("image"), // Process file uploads
+    (req, res, next) => {
+        console.log("Uploaded Files in Route:", req.files); // Debug log
+        console.log("Draft Data in Route:", req.body); // Debug log
+        next();
+    },
+    catchAsync(projects.saveDraft)
+);
+
+// Delete a Draft
+router.delete("/drafts/:id", isLoggedIn, catchAsync(projects.deleteDraft));
+
 router.get("/library", isLoggedIn, catchAsync(projects.viewLibrary));
 
 router
@@ -66,7 +89,11 @@ router.post("/:id/initiate-payment", async (req, res) => {
     const { invoiceNo, amount, currencyCode } = req.body;
 
     try {
-        const paymentResponse = await createPaymentToken(invoiceNo, amount, currencyCode);
+        const paymentResponse = await createPaymentToken(
+            invoiceNo,
+            amount,
+            currencyCode
+        );
 
         if (paymentResponse.respCode === "0000") {
             // Redirect user to the payment page
@@ -81,7 +108,10 @@ router.post("/:id/initiate-payment", async (req, res) => {
 
 router.post("/:id/notify", async (req, res) => {
     try {
-        const decodedPayload = jwt.verify(req.body.payload, process.env.secretKey);
+        const decodedPayload = jwt.verify(
+            req.body.payload,
+            process.env.secretKey
+        );
 
         if (decodedPayload.respCode === "0000") {
             console.log("Payment successful:", decodedPayload);

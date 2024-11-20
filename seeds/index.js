@@ -17,7 +17,7 @@ mongoose
 
 const seedDB = async () => {
     await Project.deleteMany({});
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 100; i++) {
         // Randomly pick a project title and description
         const randomProject =
             projects[Math.floor(Math.random() * projects.length)];

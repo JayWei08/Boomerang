@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const Comment = require("./comment");
 const Schema = mongoose.Schema;
 
 // Schema for image thumbnails
@@ -13,41 +12,73 @@ ImageSchema.virtual("thumbnail").get(function () {
 });
 
 const opts = { toJSON: { virtuals: true } };
-
-// Main schema for projects
 const ProjectSchema = new Schema(
     {
-        title: { type: String, required: true }, // Ensure title is required
+        title: {
+            type: String,
+            required: function () {
+                return !this.get("isDraft"); // Use this.get() for safe access
+            },
+        },
         images: [ImageSchema],
         geometry: {
             type: {
                 type: String,
                 enum: ["Point"],
-                default: "Point", // Default to "Point"
-                required: true,
+                default: "Point",
+                required: function () {
+                    return !this.get("isDraft");
+                },
             },
             coordinates: {
-                type: [Number], // [longitude, latitude]
-                default: [-113.1331, 47.0202], // Default coordinates
-                required: true,
+                type: [Number],
+                default: [-113.1331, 47.0202],
+                required: function () {
+                    return !this.get("isDraft");
+                },
             },
         },
-        description: { type: String, required: true },
-        currency: { type: String, required: false }, // TODO: set to true
-        fundingGoal: { type: Number, required: true },
-        location: { type: String, required: true },
-        deadline: { type: Date, required: true },
+        description: {
+            type: String,
+            required: function () {
+                return !this.get("isDraft");
+            },
+        },
+        currency: {
+            type: String,
+            required: function () {
+                return !this.get("isDraft");
+            },
+        },
+        fundingGoal: {
+            type: Number,
+            required: function () {
+                return !this.get("isDraft");
+            },
+        },
+        location: {
+            type: String,
+            required: function () {
+                return !this.get("isDraft");
+            },
+        },
+        deadline: {
+            type: Date,
+            required: function () {
+                return !this.get("isDraft");
+            },
+        },
         createdAt: { type: Date, default: Date.now },
         updatedAt: { type: Date, default: Date.now },
         author: {
             type: Schema.Types.ObjectId,
             ref: "User",
-            required: true, // Ensure author is required
+            required: true,
         },
         status: {
             type: String,
             enum: ["active", "successful", "failed", "canceled"],
-            default: "active", // Default to active status
+            default: "active",
         },
         comments: [
             {
@@ -61,13 +92,16 @@ const ProjectSchema = new Schema(
             },
         ],
         relevanceScore: { type: Number },
+        isDraft: { type: Boolean, default: true },
+        lastSavedAt: { type: Date, default: Date.now },
     },
     opts
 );
 
-// Add text index for title and description to enable full-text search
+// Text index for enabling full-text search
 ProjectSchema.index({ title: "text", description: "text", location: "text" });
 
+// Virtual property for map popups
 ProjectSchema.virtual("properties.popUpMarkup").get(function () {
     return `<strong><a href="/projects/${this._id}">${this.title}</a></strong>`;
 });
@@ -75,7 +109,7 @@ ProjectSchema.virtual("properties.popUpMarkup").get(function () {
 // Middleware to delete associated comments when a project is deleted
 ProjectSchema.post("findOneAndDelete", async function (doc) {
     if (doc) {
-        await Comment.deleteMany({
+        await mongoose.model("Comment").deleteMany({
             _id: {
                 $in: doc.comments,
             },
@@ -83,5 +117,4 @@ ProjectSchema.post("findOneAndDelete", async function (doc) {
     }
 });
 
-// Model export
 module.exports = mongoose.model("Project", ProjectSchema);

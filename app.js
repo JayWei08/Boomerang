@@ -190,9 +190,7 @@ app.use(languageRoutes);
 app.use(currencyRoutes);
 
 
-app.get("/", (req, res) => {
-    res.render("home");
-});
+
 
 app.use("/", authRoutes);
 

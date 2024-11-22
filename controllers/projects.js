@@ -40,7 +40,31 @@ module.exports.index = async (req, res) => {
         projects.sort((a, b) => b.relevanceScore - a.relevanceScore);
     }
 
-    res.render("projects/index", { projects });
+    try {
+        const geoJsonProjects = {
+            type: "FeatureCollection",
+            features: projects.map((project) => ({
+                type: "Feature",
+                geometry: project.geometry || {
+                    type: "Point",
+                    coordinates: [0, 0],
+                },
+                properties: {
+                    title: project.title,
+                    description: project.description,
+                    popUpMarkup: `<a href="/projects/${project._id}">${project.title}</a>`,
+                },
+            })),
+        };
+
+        res.render("projects/index", {
+            geoJsonProjects,
+            projects: allProjects.slice(0, 15), // Example for paginated data
+        });
+    } catch (err) {
+        console.error("Error loading projects:", err);
+        res.redirect("/");
+    }
 };
 
 module.exports.renderNewForm = async (req, res) => {

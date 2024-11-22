@@ -24,9 +24,8 @@ const authRoutes = require("./routes/auth");
 const sendWelcomeEmail = require("./utils/sendEmail"); // Import your email utility
 const dbUrl = process.env.DB_URL;
 
-const languageRoutes = require('./routes/languageRoutes');
-const currencyRoutes = require('./routes/currencyRoutes');
-
+const languageRoutes = require("./routes/languageRoutes");
+const currencyRoutes = require("./routes/currencyRoutes");
 
 mongoose
     //  .connect("mongodb://localhost:27017/boomerang") // Ensure the connection string is correct
@@ -164,7 +163,7 @@ app.use(async (req, res, next) => {
 
         next();
     } catch (error) {
-        console.error('Error syncing', error);
+        console.error("Error syncing", error);
         next(error);
     }
 });
@@ -177,7 +176,6 @@ app.use((req, res, next) => {
     next();
 });
 
-
 app.use("/", usersRoutes);
 app.use("/projects", projectsRoutes);
 app.use("/projects/:id/comments", commentsRoutes);
@@ -188,6 +186,34 @@ app.use("/", authRoutes);
 
 // Register the search route
 app.use("/", searchRoute);
+
+app.get("/about", (req, res) => {
+    res.render("about/about.ejs");
+});
+
+app.get("/how-boomerang-works", (req, res) => {
+    res.render("about/how-it-works.ejs");
+});
+
+app.get("/faq", (req, res) => {
+    res.render("usefulLinks/faq.ejs");
+});
+
+app.get("/rules", (req, res) => {
+    res.render("usefulLinks/rules.ejs");
+});
+
+app.get("/creators", (req, res) => {
+    res.render("usefulLinks/creators.ejs");
+});
+
+app.get("/nonprofit-resources", (req, res) => {
+    res.render("usefulLinks/non-profit.ejs");
+});
+
+app.get("/prohibited-content", (req, res) => {
+    res.render("usefulLinks/prohibitedContent.ejs");
+});
 
 app.all("*", (req, res, next) => {
     next(new ExpressError("Page Not Found", 404));

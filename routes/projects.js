@@ -19,6 +19,36 @@ router
         catchAsync(projects.createProject)
     );
 
+router.get("/api/projects", async (req, res) => {
+    const { page = 1, limit = 15 } = req.query;
+    const skip = (page - 1) * limit;
+
+    console.log(
+        `Fetching projects: page=${page}, limit=${limit}, skip=${skip}`
+    );
+
+    try {
+        const projects = await Project.find()
+            .skip(Number(skip))
+            .limit(Number(limit));
+        const total = await Project.countDocuments();
+
+        console.log(`Fetched ${projects.length} projects of ${total} total`);
+
+        res.status(200).json({
+            projects,
+            totalPages: Math.ceil(total / limit),
+            currentPage: Number(page),
+        });
+    } catch (err) {
+        console.error("Error fetching projects:", err.message);
+        res.status(500).json({
+            message: "Failed to fetch projects",
+            error: err.message,
+        });
+    }
+});
+
 // New Project Page
 router.get("/new", isLoggedIn, projects.renderNewForm);
 

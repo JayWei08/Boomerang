@@ -15,10 +15,14 @@ const opts = { toJSON: { virtuals: true } };
 const ProjectSchema = new Schema(
     {
         title: {
-            type: String,
+            type: Map,
+            of: String,
             required: function () {
                 return !this.get("isDraft"); // Use this.get() for safe access
             },
+        },
+        titleText: {
+            type: String,
         },
         images: [ImageSchema],
         geometry: {
@@ -39,10 +43,14 @@ const ProjectSchema = new Schema(
             },
         },
         description: {
-            type: String,
+            type: Map,
+            of: String,
             required: function () {
                 return !this.get("isDraft");
             },
+        },
+        descriptionText: {
+            type: String
         },
         currency: {
             type: String,

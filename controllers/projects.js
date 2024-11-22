@@ -9,7 +9,37 @@ const Multiset = require("../utils/Multiset");
 const currencyToken = process.env.CURRENCY_TOKEN;
 
 module.exports.index = async (req, res) => {
-    const projects = await process_projects(req, Users);
+    const language = req.language;
+    const user = await get_user(Users, req);
+
+    const projects = await Project.find({});
+    const filteredProjects = projects.map(project => ({
+        titleText: project.title.get(req.language),
+        descriptionText: project.description?.get(req.language)
+    }));
+
+    // let projects = await Project.aggregate([{
+    //     $project: {
+    //         title: { $getField: language },
+    //         description: { $getField: language },
+    //     },
+    // },]);
+
+    if (user && user.keywords instanceof Map) {
+        const keywords = user.keywords;
+        projects.forEach((project) => {
+            const projectKeywords = Array.isArray(project.keywords)
+                ? project.keywords
+                : [];
+            project.relevanceScore = calculateRelevance(
+                projectKeywords,
+                keywords
+            );
+        });
+
+        projects.sort((a, b) => b.relevanceScore - a.relevanceScore);
+    }
+
     res.render("projects/index", { projects });
 };
 
@@ -95,10 +125,17 @@ module.exports.showProject = async (req, res) => {
                 populate: { path: "author" },
             })
             .populate("author");
-            
-        console.log(project); //TODO
-        console.log(project.title); // TODO
-        console.log(project.title.get("th")); // TODO
+
+        console.log(project);
+        console.log(project.title);
+        console.log(project.title.get('th')); // TODO
+
+        const language = req.language;
+        project.titleText = project.title[language] || project.title['th'];
+        project.descriptionText = project.description[language] || project.description['th'];
+
+        console.log(language);
+        console.log(project.title);
 
         if (!project) {
             req.flash("error", "Cannot find that project!");
@@ -255,9 +292,9 @@ module.exports.saveDraft = async (req, res) => {
         // Ensure `images` array is always present and handle uploaded files
         const uploadedImages = Array.isArray(req.files)
             ? req.files.map((file) => ({
-                  url: file.path,
-                  filename: file.filename,
-              }))
+                url: file.path,
+                filename: file.filename,
+            }))
             : []; // Fallback to an empty array if no files are uploaded
 
         let project;
@@ -348,27 +385,20 @@ async function add_user_keywords(req, project, Users) {
     }
 }
 
-async function process_projects(req, Users) {
-    const projects = await Project.find({});
-    const user = await get_user(Users, req);
-
+async function process_projects(projects, user) {
     if (user && user.keywords instanceof Map) {
+        const keywords = user.keywords;
         projects.forEach((project) => {
             const projectKeywords = Array.isArray(project.keywords)
                 ? project.keywords
                 : [];
             project.relevanceScore = calculateRelevance(
                 projectKeywords,
-                user.keywords
+                keywords
             );
         });
 
         projects.sort((a, b) => b.relevanceScore - a.relevanceScore);
-    } else {
-        // Assign a default relevanceScore if the user or keywords are missing
-        projects.forEach((project) => {
-            project.relevanceScore = 0;
-        });
     }
 
     return projects;

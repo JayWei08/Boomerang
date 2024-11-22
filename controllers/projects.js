@@ -98,7 +98,7 @@ module.exports.showProject = async (req, res) => {
             
         console.log(project); //TODO
         console.log(project.title); // TODO
-        console.log(project.title["th"]); // TODO
+        console.log(project.title.get("th")); // TODO
 
         if (!project) {
             req.flash("error", "Cannot find that project!");

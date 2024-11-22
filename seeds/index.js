@@ -46,11 +46,11 @@ const seedDB = async () => {
             updatedAt: new Date("2024-10-15"),
             images: [
                 {
-                    url: "https://res.cloudinary.com/dei5hbjfg/image/upload/v1730665603/Boomerang/ujp5lxrxohzvkutf5oos.jpg",
+                    url: "https://res.cloudinary.com/dei5hbjfg/image/upload/v1732073743/Boomerang/qxc1jfz18ana6m3d0fbr.png",
                     filename: "Boomerang/ujp5lxrxohzvkutf5oos",
                 },
                 {
-                    url: "https://res.cloudinary.com/dei5hbjfg/image/upload/v1730665603/Boomerang/yxnzsyuugorktvqfp7ln.jpg",
+                    url: "https://res.cloudinary.com/dei5hbjfg/image/upload/v1732073743/Boomerang/lgtvfra0krsrwggt3pkk.png",
                     filename: "Boomerang/yxnzsyuugorktvqfp7ln",
                 },
             ],

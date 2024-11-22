@@ -9,11 +9,41 @@ const Multiset = require("../utils/Multiset");
 const currencyToken = process.env.CURRENCY_TOKEN;
 
 module.exports.index = async (req, res) => {
+    const language = req.language;
+    const user = await get_user(Users, req);
+
+    const projects = await Project.find({});
+    const filteredProjects = projects.map(project => ({
+        titleText: project.title.get(req.language),
+        descriptionText: project.description.get(req.language)
+    }));
+
+    // let projects = await Project.aggregate([{
+    //     $project: {
+    //         title: { $getField: language },
+    //         description: { $getField: language },
+    //     },
+    // },]);
+
+    if (user && user.keywords instanceof Map) {
+        const keywords = user.keywords;
+        projects.forEach((project) => {
+            const projectKeywords = Array.isArray(project.keywords)
+                ? project.keywords
+                : [];
+            project.relevanceScore = calculateRelevance(
+                projectKeywords,
+                keywords
+            );
+        });
+
+        projects.sort((a, b) => b.relevanceScore - a.relevanceScore);
+    }
+
     try {
-        const allProjects = await Project.find({});
         const geoJsonProjects = {
             type: "FeatureCollection",
-            features: allProjects.map((project) => ({
+            features: projects.map((project) => ({
                 type: "Feature",
                 geometry: project.geometry || {
                     type: "Point",
@@ -120,6 +150,10 @@ module.exports.showProject = async (req, res) => {
             })
             .populate("author");
 
+        const language = req.language;
+        project.titleText = project.title.get(language) || project.title.get('th');
+        project.description = project.description.get(language) || project.description.get('th');
+
         if (!project) {
             req.flash("error", "Cannot find that project!");
             return res.redirect("/projects");
@@ -136,7 +170,7 @@ module.exports.showProject = async (req, res) => {
             !apiFetch ||
             now - new Date(apiFetch.lastFetchTime).getTime() > oneHour
         ) {
-            console.log("Fetching fresh currency data...");
+            // console.log("Fetching fresh currency data...");
             const response = await fetch(
                 "https://api.freecurrencyapi.com/v1/latest?apikey=fca_live_cm1tAAJNfEOsxaq2vaGu0SI5uBAT8rBSgNSlHbTJ"
             );
@@ -157,7 +191,7 @@ module.exports.showProject = async (req, res) => {
             await apiFetch.save(); // Save the updated or new document
             currencyData = freshData;
         } else {
-            console.log("Using cached currency data from MongoDB.");
+            // console.log("Using cached currency data from MongoDB.");
             currencyData = apiFetch.currencyData;
         }
 
@@ -275,9 +309,9 @@ module.exports.saveDraft = async (req, res) => {
         // Ensure `images` array is always present and handle uploaded files
         const uploadedImages = Array.isArray(req.files)
             ? req.files.map((file) => ({
-                  url: file.path,
-                  filename: file.filename,
-              }))
+                url: file.path,
+                filename: file.filename,
+            }))
             : []; // Fallback to an empty array if no files are uploaded
 
         let project;
@@ -368,27 +402,20 @@ async function add_user_keywords(req, project, Users) {
     }
 }
 
-async function process_projects(req, Users) {
-    const projects = await Project.find({});
-    const user = await get_user(Users, req);
-
+async function process_projects(projects, user) {
     if (user && user.keywords instanceof Map) {
+        const keywords = user.keywords;
         projects.forEach((project) => {
             const projectKeywords = Array.isArray(project.keywords)
                 ? project.keywords
                 : [];
             project.relevanceScore = calculateRelevance(
                 projectKeywords,
-                user.keywords
+                keywords
             );
         });
 
         projects.sort((a, b) => b.relevanceScore - a.relevanceScore);
-    } else {
-        // Assign a default relevanceScore if the user or keywords are missing
-        projects.forEach((project) => {
-            project.relevanceScore = 0;
-        });
     }
 
     return projects;

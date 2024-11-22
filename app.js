@@ -124,22 +124,23 @@ passport.use(
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-const availableLanguages = ["en", "th"]; // Define available languages
-const availableCurrencies = ["USD", "THB"];
-// Middleware to make availableLanguages and selectedLanguage accessible in all views
+const availableLanguages = ['en', 'th'];
+const availableCurrencies = ['USD', 'THB'];
+
 app.use((req, res, next) => {
-    res.locals.availableCurrencies = availableCurrencies;
-    res.locals.selectedCurrency = req.session.currency || "THB";
     res.locals.availableLanguages = availableLanguages;
-    res.locals.selectedLanguage = req.session.language || "th"; // Default to 'en' if no language set in session
+    res.locals.selectedLanguage = req.query.lang || req.session.language || 'th';
+
+    res.locals.availableCurrencies = availableCurrencies;
+    res.locals.selectedCurrency = req.session.currency || 'THB';
     next();
 });
 
 // Middleware to ensure language is synchronized with the database and session
 app.use(async (req, res, next) => {
     try {
-        let language = req.session.language || "th";
-        let currency = req.session.currency || "THB"; // Default to 'en'
+        let language = req.query.lang || req.session.language || 'th';
+        let currency = req.session.currency || 'THB'; // Default to 'en'
 
         if (req.isAuthenticated()) {
             // Fetch the language from the database for authenticated users
@@ -152,12 +153,13 @@ app.use(async (req, res, next) => {
             }
         }
 
-        req.language = language; // Store in the request object for convenience
-        req.session.language = language; // Ensure session is updated
-        res.locals.selectedLanguage = language; // Update locals for views
-        req.currency = currency; // Store in the request object for convenience
-        req.session.currency = currency; // Ensure session is updated
-        res.locals.selectedCurrency = currency; // Update locals for views
+        req.language = language;
+        req.session.language = language;
+        res.locals.selectedLanguage = language;
+
+        req.currency = currency;
+        req.session.currency = currency;
+        res.locals.selectedCurrency = currency;
 
         next();
     } catch (error) {

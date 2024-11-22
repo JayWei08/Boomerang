@@ -1,162 +1,129 @@
 <% layout('layouts/boilerplate') %>
-<%
-function getCurrencySymbol(currency) {
-    
-    const currencySymbols = {
-        USD: "$",
-        THB: "฿",
-        // Add other currency codes and symbols as needed
-    };
-    return currencySymbols[currency] || currency;
-}
-
-function getExchangeRates(userCurrency, projectCurrency, projectAmount, exchangeRates) {
-    
-    console.log(userCurrency, projectCurrency, projectAmount, exchangeRates);
-    return (projectAmount * (exchangeRates.data[userCurrency]/exchangeRates.data[projectCurrency])).toFixed(2)
-}
-%>
+    <% function getCurrencySymbol(currency) { const currencySymbols={ USD: "$" , THB: "฿" }; return
+        currencySymbols[currency] || currency; } function getExchangeRates(userCurrency, projectCurrency, projectAmount,
+        exchangeRates) { console.log(userCurrency, projectCurrency, projectAmount, exchangeRates); return (projectAmount
+        * (exchangeRates.data[userCurrency]/exchangeRates.data[projectCurrency])).toFixed(2) } %>
 
 
-<div class="row">
-    <!-- Left Column: Project Card -->
-    <div class="col-lg-6 mb-4">
-        <!-- Project Card -->
-        <div id="carouselExample" class="carousel slide">
-            <div class="carousel-inner">
-                <% project.images.forEach((img, i) => { %>
-                <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
-                    <img src="<%= img.url %>" class="d-block w-100" alt="..." />
+        <div class="row">
+            <!-- Left Column: Project Card -->
+            <div class="col-lg-6 mb-4">
+                <!-- Project Card -->
+                <div id="carouselExample" class="carousel slide">
+                    <div class="carousel-inner">
+                        <% project.images.forEach((img, i)=> { %>
+                            <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
+                                <img src="<%= img.url %>" class="d-block w-100" alt="..." />
+                            </div>
+                            <% }) %>
+                    </div>
+                    <% if(project.images.length> 1){ %>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" -====type="button" data-bs-target="#carouselExample"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                        <% } %>
                 </div>
-                <% }) %>
-            </div>
-            <% if(project.images.length > 1){ %>
-            <button
-                class="carousel-control-prev"
-                type="button"
-                data-bs-target="#carouselExample"
-                data-bs-slide="prev"
-            >
-                <span
-                    class="carousel-control-prev-icon"
-                    aria-hidden="true"
-                ></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button
-                class="carousel-control-next"-====
-                type="button"
-                data-bs-target="#carouselExample"
-                data-bs-slide="next"
-            >
-                <span
-                    class="carousel-control-next-icon"
-                    aria-hidden="true"
-                ></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-            <% } %>
-        </div>
 
-        <div class="card mb-4">
-            <div class="card-body">
-                <h5 class="card-title"><%= project.title %></h5>
-                <p class="card-text"><%= project.description %></p>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%= project.titleText %>
+                        </h5>
+                        <p class="card-text">
+                            <%= project.descriptionText %>
+                        </p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item text-muted">
+                            <%= project.location%>
+                        </li>
+                        <li class="list-group-item text-muted">
+                            <b>Funding Goal:</b>
+                            <%= getCurrencySymbol(userCurrency) %>
+                                <%= getExchangeRates(userCurrency, project.currency, project.fundingGoal, currencyData)
+                                    %>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Submitted by:</b>
+                            <%= %>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Deadline:</b>
+                            <%= project.deadline %>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Created At:</b>
+                            <%= project.createdAt %>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Updated At:</b>
+                            <%= project.updatedAt %>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Status:</b>
+                            <%= project.status %>
+                        </li>
+                    </ul>
+                    <% if (currentUser) { %>
+                        <div class="card-body">
+                            <a class="card-link btn btn-info" href="/projects/<%= project._id %>/edit">Edit</a>
+                            <form class="d-inline" action="/projects/<%= project._id %>?_method=DELETE" method="POST">
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                        <% } %>
+                </div>
             </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item text-muted">
-                    <%= project.location%>
-                </li>
-                <li class="list-group-item text-muted">
-                    <b>Funding Goal:</b> <%= getCurrencySymbol(userCurrency) %><%= getExchangeRates(userCurrency, project.currency, project.fundingGoal, currencyData) %>
-                </li>
-                <li class="list-group-item">
-                    <b>Submitted by:</b> <%= project.author.username %>
-                </li>
-                <li class="list-group-item">
-                    <b>Deadline:</b> <%= project.deadline %>
-                </li>
-                <li class="list-group-item">
-                    <b>Created At:</b> <%= project.createdAt %>
-                </li>
-                <li class="list-group-item">
-                    <b>Updated At:</b> <%= project.updatedAt %>
-                </li>
-                <li class="list-group-item">
-                    <b>Status:</b> <%= project.status %>
-                </li>
-            </ul>
-            <% if (currentUser && project.author.equals(currentUser._id)) { %>
-            <div class="card-body">
-                <a
-                    class="card-link btn btn-info"
-                    href="/projects/<%= project._id %>/edit"
-                    >Edit</a
-                >
-                <form
-                    class="d-inline"
-                    action="/projects/<%= project._id %>?_method=DELETE"
-                    method="POST"
-                >
-                    <button class="btn btn-danger">Delete</button>
-                </form>
-            </div>
-            <% } %>
-        </div>
-    </div>
 
-    <!-- Right Column: Map and Comments -->
-    <div class="col-lg-6">
-        <!-- Map -->
-        <div id="map" style="width: 100%; height: 300px" class="mb-4"></div>
+            <!-- Right Column: Map and Comments -->
+            <div class="col-lg-6">
+                <!-- Map -->
+                <div id="map" style="width: 100%; height: 300px" class="mb-4"></div>
 
-        <!-- Comments -->
-        <% if(currentUser){ %>
-        <h3 class="mt-4 mb-3">Leave A Comment</h3>
-        <form
-            action="/projects/<%= project._id %>/comments"
-            method="POST"
-            class="mb-4 validated-form"
-            novalidate
-        >
-            <div class="mb-3">
-                <label class="form-label" for="body">Comment</label>
-                <textarea
-                    class="form-control"
-                    name="comment[body]"
-                    cols="30"
-                    rows="3"
-                    id="body"
-                    required
-                ></textarea>
-                <div class="valid-feedback">Looks good!</div>
-            </div>
-            <button class="btn btn-success">Submit</button>
-        </form>
-        <% } %> <% for (let comment of project.comments) { %>
-        <div class="card mb-4">
-            <div class="card-body">
-                <h5 class="card-title">By: <%= comment.author.username %></h5>
-                <p class="card-text">Comment: <%= comment.body %></p>
-                <% if(currentUser && comment.author.equals(currentUser._id)) {
-                %>
-                <form
-                    action="/projects/<%=project._id%>/comments/<%=comment._id%>?_method=DELETE"
-                    method="POST"
-                >
-                    <button class="btn btn-sm btn-danger">Delete</button>
-                </form>
-                <% } %>
+                <!-- Comments -->
+                <% if(currentUser){ %>
+                    <h3 class="mt-4 mb-3">Leave A Comment</h3>
+                    <form action="/projects/<%= project._id %>/comments" method="POST" class="mb-4 validated-form"
+                        novalidate>
+                        <div class="mb-3">
+                            <label class="form-label" for="body">Comment</label>
+                            <textarea class="form-control" name="comment[body]" cols="30" rows="3" id="body"
+                                required></textarea>
+                            <div class="valid-feedback">Looks good!</div>
+                        </div>
+                        <button class="btn btn-success">Submit</button>
+                    </form>
+                    <% } %>
+                        <% for (let comment of project.comments) { %>
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <h5 class="card-title">By:</h5>
+                                    <p class="card-text">Comment: <%= comment.body %>
+                                    </p>
+                                    <% if(currentUser) { %>
+                                        <form
+                                            action="/projects/<%=project._id%>/comments/<%=comment._id%>?_method=DELETE"
+                                            method="POST">
+                                            <button class="btn btn-sm btn-danger">Delete</button>
+                                        </form>
+                                        <% } %>
+                                </div>
+                            </div>
+                            <% } %>
             </div>
         </div>
-        <% } %>
-    </div>
-</div>
 
-<script>
-    const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
-    const project = <%- JSON.stringify(project) %>
-   
-</script>
+        <script>
+            const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
+            const project = <% - JSON.stringify(project) %>
 
-<script src="/javascripts/showPageMap.js"></script>
+        </script>
+
+        <script src="/javascripts/showPageMap.js"></script>

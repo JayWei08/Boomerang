@@ -95,6 +95,10 @@ module.exports.showProject = async (req, res) => {
                 populate: { path: "author" },
             })
             .populate("author");
+            
+        console.log(project); //TODO
+        console.log(project.title); // TODO
+        console.log(project.title["th"]); // TODO
 
         if (!project) {
             req.flash("error", "Cannot find that project!");

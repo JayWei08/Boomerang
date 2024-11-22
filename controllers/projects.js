@@ -27,20 +27,37 @@ module.exports.index = async (req, res) => {
 
     if (user && user.keywords instanceof Map) {
         const keywords = user.keywords;
-        projects.forEach((project) => {
-            const projectKeywords = Array.isArray(project.keywords)
-                ? project.keywords
+        filteredProjects.forEach((project) => {
+            const projectKeywords = Array.isArray(filteredProjects.keywords)
+                ? filteredProjects.keywords
                 : [];
-            project.relevanceScore = calculateRelevance(
+            filteredProjects.relevanceScore = calculateRelevance(
                 projectKeywords,
                 keywords
             );
         });
 
-        projects.sort((a, b) => b.relevanceScore - a.relevanceScore);
+        filteredProjects.sort((a, b) => b.relevanceScore - a.relevanceScore);
     }
 
-    res.render("projects/index", { projects });
+    try {
+        const { page = 1, limit = 15 } = req.query;
+        const skip = (page - 1) * limit;
+        const paginatedProjects = filteredProjects.slice(
+            skip,
+            skip + Number(limit)
+        );
+        const totalPages = Math.ceil(filteredProjects.length / limit);
+        res.render("projects/index", {
+            projects: paginatedProjects,
+            currentPage: Number(page),
+            totalPages,
+        });
+    } catch (error) {
+        console.error("Error in processing projects:", error);
+        req.flash("error", "Unable to fetch projects. Please try again.");
+        res.redirect("/projects");
+    }
 };
 
 module.exports.renderNewForm = async (req, res) => {
@@ -118,7 +135,6 @@ module.exports.createProject = async (req, res, next) => {
 
 module.exports.showProject = async (req, res) => {
     try {
-        // Find the project
         const project = await Project.findById(req.params.id)
             .populate({
                 path: "comments",
@@ -135,7 +151,6 @@ module.exports.showProject = async (req, res) => {
             return res.redirect("/projects");
         }
 
-        // Check the database for the last fetch time
         let apiFetch = await ApiFetch.findOne();
         const now = Date.now();
         const oneHour = 1000 * 60 * 60; // 1 hour in milliseconds
@@ -153,18 +168,16 @@ module.exports.showProject = async (req, res) => {
             const freshData = await response.json();
 
             if (!apiFetch) {
-                // Create a new document if none exists
                 apiFetch = new ApiFetch({
                     lastFetchTime: new Date(),
                     currencyData: freshData,
                 });
             } else {
-                // Update the existing document
                 apiFetch.lastFetchTime = new Date();
                 apiFetch.currencyData = freshData;
             }
 
-            await apiFetch.save(); // Save the updated or new document
+            await apiFetch.save();
             currencyData = freshData;
         } else {
             // console.log("Using cached currency data from MongoDB.");
@@ -172,15 +185,12 @@ module.exports.showProject = async (req, res) => {
         }
 
         if (req.user) {
-            // Use the logged-in user's currency
             const user = await Users.findById(req.user._id);
-            userCurrency = user.currency; // Default to USD if user's currency is missing
+            userCurrency = user.currency;
         } else {
-            // Use session's currency if no user is logged in
-            userCurrency = req.session.currency; // Default to USD if session currency is missing
+            userCurrency = req.session.currency;
         }
 
-        // Render the project details with project and user currency data
         res.render("projects/show", { project, currencyData, userCurrency });
 
         add_user_keywords(req, project, Users);

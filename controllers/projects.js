@@ -9,8 +9,33 @@ const Multiset = require("../utils/Multiset");
 const currencyToken = process.env.CURRENCY_TOKEN;
 
 module.exports.index = async (req, res) => {
-    const projects = await process_projects(req, Users);
-    res.render("projects/index", { projects });
+    try {
+        const { page = 1, limit = 15 } = req.query; // Retrieve page and limit from query
+        const skip = (page - 1) * limit; // Calculate number of documents to skip
+
+        // Process the projects using the existing logic
+        const processedProjects = await process_projects(req, Users);
+
+        // Apply pagination on the processed projects
+        const paginatedProjects = processedProjects.slice(
+            skip,
+            skip + Number(limit)
+        );
+
+        // Calculate total pages based on the length of the processed projects
+        const totalPages = Math.ceil(processedProjects.length / limit);
+
+        // Render the view with paginated projects and metadata
+        res.render("projects/index", {
+            projects: paginatedProjects,
+            currentPage: Number(page),
+            totalPages,
+        });
+    } catch (error) {
+        console.error("Error in processing projects:", error);
+        req.flash("error", "Unable to fetch projects. Please try again.");
+        res.redirect("/projects");
+    }
 };
 
 module.exports.renderNewForm = async (req, res) => {

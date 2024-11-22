@@ -31,11 +31,11 @@ const seedDB = async () => {
         // Create a new project instance with randomized data
         const project = new Project({
             //YOUR USER ID
-            author: "673940577338fc528ee30cdd",
+            author: "67400f748a414a4e0ff4c463",
             location: `${randomCity.city}, ${randomCity.state}`,
             title: randomProject.title,
             description: randomProject.description,
-            currency: "",
+            currency: "USD", // Provide a valid default currency
             fundingGoal: fundingGoal,
             geometry: {
                 type: "Point",
@@ -56,6 +56,7 @@ const seedDB = async () => {
             ],
             status: "active",
             keywords: randomProject.keywords,
+            isDraft: false, // Ensure this is set to false
         });
         await project.save();
     }

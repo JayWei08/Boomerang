@@ -8,7 +8,13 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container" style="height: 90px">
         <!-- Brand -->
-        <a class="navbar-brand" href="/projects">Boomerang</a>
+        <a class="navbar-brand d-flex align-items-center" href="/projects">
+            <img
+                src="/images/Boomerang Logo.png"
+                alt="Boomerang Logo"
+                style="height: 20px"
+            />
+        </a>
 
         <!-- Toggle Button for Mobile -->
         <button
@@ -36,7 +42,7 @@
                 action="/search"
                 method="GET"
                 class="d-flex ms-3 me-auto"
-                style="width: 625px"
+                style="width: 600px"
             >
                 <div class="position-relative w-100">
                     <input
@@ -66,19 +72,46 @@
                 class="navbar-nav d-flex align-items-center justify-content-around text-center"
             >
                 <div
-                    class="w-100 mb-2 p-1 border"
+                    class="w-100 mb-2 border"
                     style="border: 1px; font-weight: bold"
                 >
                     <a class="nav-link" href="/projects/new">Start a project</a>
                 </div>
+
                 <% if (!currentUser) { %>
                 <a href="/login" class="nav-link">Login</a>
                 <% } else { %>
-                <a href="/projects/my-projects" class="nav-link">My Projects</a>
-                <a href="/projects/library" class="nav-link">Library</a>
+                <!-- Dashboard Dropdown -->
+                <div class="dropdown ms-2">
+                    <button
+                        class="btn btn-secondary dropdown-toggle"
+                        type="button"
+                        id="dashboardDropdown"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                    >
+                        Dashboard
+                    </button>
+                    <ul
+                        class="dropdown-menu"
+                        aria-labelledby="dashboardDropdown"
+                    >
+                        <li>
+                            <a
+                                class="dropdown-item"
+                                href="/projects/my-projects"
+                                >My Projects</a
+                            >
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/projects/library"
+                                >Library</a
+                            >
+                        </li>
+                    </ul>
+                </div>
                 <a href="/logout" class="nav-link">Logout</a>
                 <% } %>
-
                 <!-- Language Dropdown -->
                 <div class="dropdown d-inline-block ms-2">
                     <button
@@ -134,7 +167,6 @@
                         <% }) %>
                     </ul>
                 </div>
-                
             </div>
         </div>
     </div>

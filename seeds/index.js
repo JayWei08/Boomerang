@@ -34,10 +34,8 @@ const seedDB = async () => {
             author: "67400f748a414a4e0ff4c463",
             location: `${randomCity.city}, ${randomCity.state}`,
             title: randomProject.title,
-            titleText: randomProject.title['th'],
             description: randomProject.description,
-            descriptionText: randomProject.description['th'],
-            currency: "THB",
+            currency: "USD", // Provide a valid default currency
             fundingGoal: fundingGoal,
             geometry: {
                 type: "Point",

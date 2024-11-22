@@ -15,16 +15,9 @@ const opts = { toJSON: { virtuals: true } };
 const ProjectSchema = new Schema(
     {
         title: {
-            type: Map,
-            of: String,
-            required: function () {
-                return !this.get("isDraft"); // Use this.get() for safe access
-            },
-        },
-        titleText: {
             type: String,
             required: function () {
-                return !this.get("isDraft");
+                return !this.get("isDraft"); // Use this.get() for safe access
             },
         },
         images: [ImageSchema],
@@ -46,13 +39,6 @@ const ProjectSchema = new Schema(
             },
         },
         description: {
-            type: Map,
-            of: String,
-            required: function () {
-                return !this.get("isDraft");
-            },
-        },
-        descriptionText: {
             type: String,
             required: function () {
                 return !this.get("isDraft");

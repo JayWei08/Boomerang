@@ -22,6 +22,6 @@ exports.setCurrency = async (req, res) => {
     }
 
     req.session.currency = currency;
-    // console.log(currency);
+    console.log(currency)
     res.redirect('back');
 };

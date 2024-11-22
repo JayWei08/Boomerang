@@ -15,7 +15,7 @@ module.exports.index = async (req, res) => {
     const projects = await Project.find({});
     const filteredProjects = projects.map(project => ({
         titleText: project.title.get(req.language),
-        descriptionText: project.description?.get(req.language)
+        descriptionText: project.description.get(req.language)
     }));
 
     // let projects = await Project.aggregate([{
@@ -126,16 +126,9 @@ module.exports.showProject = async (req, res) => {
             })
             .populate("author");
 
-        console.log(project);
-        console.log(project.title);
-        console.log(project.title.get('th')); // TODO
-
         const language = req.language;
-        project.titleText = project.title[language] || project.title['th'];
-        project.descriptionText = project.description[language] || project.description['th'];
-
-        console.log(language);
-        console.log(project.title);
+        project.titleText = project.title.get(language) || project.title.get('th');
+        project.description = project.description.get(language) || project.description.get('th');
 
         if (!project) {
             req.flash("error", "Cannot find that project!");
@@ -153,7 +146,7 @@ module.exports.showProject = async (req, res) => {
             !apiFetch ||
             now - new Date(apiFetch.lastFetchTime).getTime() > oneHour
         ) {
-            console.log("Fetching fresh currency data...");
+            // console.log("Fetching fresh currency data...");
             const response = await fetch(
                 "https://api.freecurrencyapi.com/v1/latest?apikey=fca_live_cm1tAAJNfEOsxaq2vaGu0SI5uBAT8rBSgNSlHbTJ"
             );
@@ -174,7 +167,7 @@ module.exports.showProject = async (req, res) => {
             await apiFetch.save(); // Save the updated or new document
             currencyData = freshData;
         } else {
-            console.log("Using cached currency data from MongoDB.");
+            // console.log("Using cached currency data from MongoDB.");
             currencyData = apiFetch.currencyData;
         }
 

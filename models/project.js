@@ -23,6 +23,9 @@ const ProjectSchema = new Schema(
         },
         titleText: {
             type: String,
+            required: function () {
+                return !this.get("isDraft");
+            },
         },
         images: [ImageSchema],
         geometry: {
@@ -50,7 +53,10 @@ const ProjectSchema = new Schema(
             },
         },
         descriptionText: {
-            type: String
+            type: String,
+            required: function () {
+                return !this.get("isDraft");
+            },
         },
         currency: {
             type: String,

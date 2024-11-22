@@ -336,22 +336,11 @@
 <script>
     const mapToken = "<%- process.env.MAPBOX_TOKEN %>";
 
-    // Format project data as GeoJSON for map display in clusterMap.js
-    const projects = {
-        type: "FeatureCollection",
-        features: <%- JSON.stringify(projects.map(project => ({
-            type: "Feature",
-            geometry: {
-                type: "Point",
-                coordinates: project.geometry ? project.geometry.coordinates : [0, 0] // Default to [0, 0] if no coordinates
-            },
-            properties: {
-                title: project.title,
-                description: project.description,
-                popUpMarkup: `<a href="/projects/${project._id}">${project.title}</a>`, // Link to project's show page
-            }
-        }))) %>
-    };
+    // Pass the geoJsonProjects data directly
+    const projects = <%- JSON.stringify(geoJsonProjects) %>;
+</script>
+
+
 </script>
 
 <!-- Script for AJAX Bookmark Toggle -->

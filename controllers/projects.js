@@ -27,7 +27,7 @@ module.exports.index = async (req, res) => {
 
     if (user && user.keywords instanceof Map) {
         const keywords = user.keywords;
-        filteredProjects.forEach((project) => {
+        filteredProjects.forEach((filteredProjects) => {
             const projectKeywords = Array.isArray(filteredProjects.keywords)
                 ? filteredProjects.keywords
                 : [];

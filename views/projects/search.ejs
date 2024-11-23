@@ -1,14 +1,18 @@
 <% layout('layouts/boilerplate') %>
 
     <div id="map" style="width: 100%; height: 500px"></div>
-    <h1 class="mt-4">Project Search</h1>
+    <h1 class="mt-4">
+        <%= __('projectSearch.heading') %>
+    </h1>
 
     <!-- Search Form -->
     <div class="container mt-4 mb-3">
         <form action="/search" method="GET" class="form-inline d-flex justify-content-center">
-            <input type="text" name="keyword" class="form-control mr-2" placeholder="Search for a project..."
-                required />
-            <button type="submit" class="btn btn-primary">Search</button>
+            <input type="text" name="keyword" class="form-control mr-2"
+                placeholder="<%= __('projectSearch.searchPlaceholder') %>" required />
+            <button type="submit" class="btn btn-primary">
+                <%= __('projectSearch.searchButton') %>
+            </button>
         </form>
     </div>
 
@@ -17,28 +21,26 @@
         <div class="container text-center mt-4 mb-5">
             <% if (projects.length> 0) { %>
                 <p>
-                    Displaying <strong>
-                        <%= projects.length %>
-                    </strong> results for "<strong>
-                        <%= keyword %>
-                    </strong>"
+                    <%= __('projectSearch.resultsFound', { count: projects.length, keyword: keyword }) %>
                 </p>
                 <% } else { %>
                     <p>
-                        No projects found for "<strong>
-                            <%= keyword %>
-                        </strong>". Please try a
-                        different keyword.
+                        <%= __('projectSearch.noResults', { keyword: keyword }) %>
                     </p>
                     <% } %>
         </div>
         <% } else { %>
             <!-- Display a welcoming message if no search has been performed -->
             <div class="container text-center mt-5">
-                <h2>Welcome to Project Search</h2>
-                <p>Enter a keyword above to search for projects.</p>
+                <h2>
+                    <%= __('projectSearch.welcomeMessage') %>
+                </h2>
+                <p>
+                    <%= __('projectSearch.instructions') %>
+                </p>
             </div>
             <% } %>
+
                 <% if (projects && projects.length> 0) { %>
                     <div class="container">
                         <div class="row">
@@ -46,14 +48,11 @@
                                 <div class="col-md-4 mb-4">
                                     <div class="card">
                                         <img src="<%= project.images && project.images[0] ? project.images[0].url : 'default-image-url.jpg' %>"
-                                            class="card-img-top" alt="..." />
+                                            class="card-img-top" alt="<%= project.titleText %>" />
                                         <div class="card-body">
                                             <!-- Title and Bookmark in a Flex Container -->
-                                            <div style="
-                            display: flex;
-                            justify-content: space-between;
-                            align-items: center;
-                        ">
+                                            <div
+                                                style="display: flex; justify-content: space-between; align-items: center;">
                                                 <h5 class="card-title" style="margin: 0">
                                                     <%= project.titleText %>
                                                 </h5>
@@ -67,10 +66,8 @@
                                                                 currentUser.savedProjects.includes(project._id.toString()))
                                                                 { %>
                                                                 <i class="fas fa-bookmark"></i>
-                                                                <!-- Filled icon for saved -->
                                                                 <% } else { %>
                                                                     <i class="far fa-bookmark"></i>
-                                                                    <!-- Unfilled icon for unsaved -->
                                                                     <% } %>
                                                         </button>
                                                     </form>
@@ -85,20 +82,24 @@
                                                 </small>
                                             </p>
                                             <p class="card-text">
-                                                <% // Calculate days left until deadline const deadlineDate=new
-                                                    Date(project.deadline); const currentDate=new Date(); const
-                                                    timeDifference=deadlineDate - currentDate; const
+                                                <% const deadlineDate=new Date(project.deadline); const currentDate=new
+                                                    Date(); const timeDifference=deadlineDate - currentDate; const
                                                     daysLeft=Math.ceil(timeDifference / (1000 * 60 * 60 * 24)); %>
                                                     <small class="text-muted">
                                                         <% if (daysLeft> 0) { %>
                                                             <i class="fas fa-clock"></i>
-                                                            <%= daysLeft %> days
-                                                                left <% } else { %>
-                                                                    <span class="text-danger">Deadline passed</span>
-                                                                    <% } %>
+                                                            <%= daysLeft %>
+                                                                <%= __('projectSearch.daysLeft') %>
+                                                                    <% } else { %>
+                                                                        <span class="text-danger">
+                                                                            <%= __('projectSearch.deadlinePassed') %>
+                                                                        </span>
+                                                                        <% } %>
                                                     </small>
                                             </p>
-                                            <a href="/projects/<%= project._id %>" class="btn btn-primary">View</a>
+                                            <a href="/projects/<%= project._id %>" class="btn btn-primary">
+                                                <%= __('projectSearch.viewButton') %>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -148,7 +149,7 @@
                                                 iconElement.classList.add("far");
                                             }
                                         } catch (error) {
-                                            console.error("Error toggling project save:", error);
+                                            console.error("<%= __('projectSearch.errorToggleSave') %>", error);
                                         }
                                     });
                                 });

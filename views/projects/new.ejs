@@ -1,260 +1,211 @@
 <% layout('layouts/boilerplate') %>
-<div class="row">
-    <h1 class="text-center">Create New Project</h1>
-    <div class="col-6 offset-3">
-        <!-- Multi-step form container -->
-        <form
-            id="new-project-form"
-            method="POST"
-            action="/projects"
-            enctype="multipart/form-data"
-            novalidate
-        >
-            <!-- Include the hidden draftId field if resuming a draft -->
-            <% if (draft) { %>
-                <input type="hidden" name="draftId" value="<%= draft._id %>" />
-            <% } %>
+    <div class="row">
+        <h1 class="text-center">
+            <%= __('createProject.heading') %>
+        </h1>
+        <div class="col-6 offset-3">
+            <!-- Multi-step form container -->
+            <form id="new-project-form" method="POST" action="/projects" enctype="multipart/form-data" novalidate>
+                <!-- Include the hidden draftId field if resuming a draft -->
+                <% if (draft) { %>
+                    <input type="hidden" name="draftId" value="<%= draft._id %>" />
+                    <% } %>
 
-            <!-- Step 1: Basics -->
-            <div id="step-1" class="form-step">
-                <h2>Step 1: Basics</h2>
-                <div class="mb-3">
-                    <label class="form-label" for="title">Title</label>
-                    <input
-                        class="form-control"
-                        type="text"
-                        id="title"
-                        name="project[title]"
-                        value="<%= draft ? draft.title : '' %>"
-                        required
-                    />
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="location">Location</label>
-                    <input
-                        class="form-control"
-                        type="text"
-                        id="location"
-                        name="project[location]"
-                        value="<%= draft ? draft.location : '' %>"
-                        required
-                    />
-                </div>
-                <button
-                    type="button"
-                    class="btn btn-primary"
-                    onclick="nextStep(2)"
-                >
-                    Next
-                </button>
-                <button
-                    type="button"
-                    class="btn btn-secondary"
-                    onclick="saveDraft()"
-                >
-                    Save Draft
-                </button>
-            </div>
+                        <!-- Step 1: Basics -->
+                        <div id="step-1" class="form-step">
+                            <h2>
+                                <%= __('createProject.step1.heading') %>
+                            </h2>
+                            <div class="mb-3">
+                                <label class="form-label" for="title">
+                                    <%= __('createProject.step1.titleLabel') %>
+                                </label>
+                                <input class="form-control" type="text" id="title" name="project[title]"
+                                    value="<%= draft ? draft.title : '' %>" required />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="location">
+                                    <%= __('createProject.step1.locationLabel') %>
+                                </label>
+                                <input class="form-control" type="text" id="location" name="project[location]"
+                                    value="<%= draft ? draft.location : '' %>" required />
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="nextStep(2)">
+                                <%= __('createProject.nextButton') %>
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="saveDraft()">
+                                <%= __('createProject.saveDraftButton') %>
+                            </button>
+                        </div>
 
-            <!-- Step 2: Details -->
-            <div id="step-2" class="form-step" style="display: none">
-                <h2>Step 2: Details</h2>
-                <div class="mb-3">
-                    <label class="form-label" for="image">Add Images</label>
-                    <input type="file" name="image" id="image" multiple />
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="description">Description</label>
-                    <textarea
-                        class="form-control"
-                        id="description"
-                        name="project[description]"
-                        required
-                    ><%= draft ? draft.description : '' %></textarea>
-                </div>
+                        <!-- Step 2: Details -->
+                        <div id="step-2" class="form-step" style="display: none">
+                            <h2>
+                                <%= __('createProject.step2.heading') %>
+                            </h2>
+                            <div class="mb-3">
+                                <label class="form-label" for="image">
+                                    <%= __('createProject.step2.addImagesLabel') %>
+                                </label>
+                                <input type="file" name="image" id="image" multiple />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="description">
+                                    <%= __('createProject.step2.descriptionLabel') %>
+                                </label>
+                                <textarea class="form-control" id="description" name="project[description]"
+                                    required><%= draft ? draft.description : '' %></textarea>
+                            </div>
 
-                <!-- Display saved draft images with checkboxes -->
-                <% if (draft && draft.images && draft.images.length > 0) { %>
-                    <div class="mb-3">
-                        <label class="form-label">Saved Images</label>
-                        <div class="d-flex flex-wrap">
-                            <% draft.images.forEach((image, index) => { %>
-                                <div class="m-2 text-center">
-                                    <img
-                                        src="<%= image.url %>"
-                                        alt="Draft Image"
-                                        class="img-thumbnail"
-                                        style="width: 150px;"
-                                    />
-                                    <div class="form-check">
-                                        <input
-                                            type="checkbox"
-                                            class="form-check-input"
-                                            id="delete-image-<%= index %>"
-                                            name="deleteImages[]"
-                                            value="<%= image.filename %>"
-                                        />
-                                        <label
-                                            class="form-check-label"
-                                            for="delete-image-<%= index %>"
-                                        >
-                                            Delete
-                                        </label>
+                            <% if (draft && draft.images && draft.images.length> 0) { %>
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        <%= __('createProject.step2.savedImagesLabel') %>
+                                    </label>
+                                    <div class="d-flex flex-wrap">
+                                        <% draft.images.forEach((image, index)=> { %>
+                                            <div class="m-2 text-center">
+                                                <img src="<%= image.url %>"
+                                                    alt="<%= __('createProject.step2.imageAlt') %>"
+                                                    class="img-thumbnail" style="width: 150px;" />
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input"
+                                                        id="delete-image-<%= index %>" name="deleteImages[]"
+                                                        value="<%= image.filename %>" />
+                                                    <label class="form-check-label" for="delete-image-<%= index %>">
+                                                        <%= __('createProject.step2.deleteImageLabel') %>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <% }); %>
                                     </div>
                                 </div>
-                            <% }); %>
+                                <% } %>
+
+                                    <button type="button" class="btn btn-secondary" onclick="previousStep(1)">
+                                        <%= __('createProject.previousButton') %>
+                                    </button>
+                                    <button type="button" class="btn btn-primary" onclick="nextStep(3)">
+                                        <%= __('createProject.nextButton') %>
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="saveDraft()">
+                                        <%= __('createProject.saveDraftButton') %>
+                                    </button>
                         </div>
-                    </div>
-                <% } %>
 
-                <button
-                    type="button"
-                    class="btn btn-secondary"
-                    onclick="previousStep(1)"
-                >
-                    Previous
-                </button>
-                <button
-                    type="button"
-                    class="btn btn-primary"
-                    onclick="nextStep(3)"
-                >
-                    Next
-                </button>
-                <button
-                    type="button"
-                    class="btn btn-secondary"
-                    onclick="saveDraft()"
-                >
-                    Save Draft
-                </button>
-            </div>
-
-            <!-- Step 3: Funding -->
-            <div id="step-3" class="form-step" style="display: none">
-                <h2>Step 3: Funding</h2>
-                <div class="mb-3">
-                    <label class="form-label" for="funding goal">Funding Goal</label>
-                    <div class="input-group">
-                        <select
-                            class="form-select"
-                            id="currency"
-                            name="project[currency]"
-                            required
-                        >
-                            <option value="THB" <%= draft && draft.currency === 'THB' ? 'selected' : '' %>>THB - ฿</option>
-                            <option value="USD" <%= draft && draft.currency === 'USD' ? 'selected' : '' %>>USD - $</option>
-                        </select>
-                        <input
-                            class="form-control"
-                            type="number"
-                            id="fundingGoal"
-                            name="project[fundingGoal]"
-                            placeholder="0.00"
-                            value="<%= draft ? draft.fundingGoal : '' %>"
-                            required
-                        />
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="deadline">Deadline</label>
-                    <input
-                        class="form-control"
-                        type="date"
-                        id="deadline"
-                        name="project[deadline]"
-                        value="<%= draft && draft.deadline ? draft.deadline.toISOString().split('T')[0] : '' %>"
-                        required
-                    />
-                </div>
-                <button
-                    type="button"
-                    class="btn btn-secondary"
-                    onclick="previousStep(2)"
-                >
-                    Previous
-                </button>
-                <button type="submit" class="btn btn-success">
-                    Submit Project
-                </button>
-                <button
-                    type="button"
-                    class="btn btn-secondary"
-                    onclick="saveDraft()"
-                >
-                    Save Draft
-                </button>
-            </div>
-        </form>
-        <a href="/projects">All projects</a>
+                        <!-- Step 3: Funding -->
+                        <div id="step-3" class="form-step" style="display: none">
+                            <h2>
+                                <%= __('createProject.step3.heading') %>
+                            </h2>
+                            <div class="mb-3">
+                                <label class="form-label" for="fundingGoal">
+                                    <%= __('createProject.step3.fundingGoalLabel') %>
+                                </label>
+                                <div class="input-group">
+                                    <select class="form-select" id="currency" name="project[currency]" required>
+                                        <option value="THB" <%=draft && draft.currency==='THB' ? 'selected' : '' %>>THB
+                                            - ฿</option>
+                                        <option value="USD" <%=draft && draft.currency==='USD' ? 'selected' : '' %>>USD
+                                            - $</option>
+                                    </select>
+                                    <input class="form-control" type="number" id="fundingGoal"
+                                        name="project[fundingGoal]"
+                                        placeholder="<%= __('createProject.step3.fundingGoalPlaceholder') %>"
+                                        value="<%= draft ? draft.fundingGoal : '' %>" required />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="deadline">
+                                    <%= __('createProject.step3.deadlineLabel') %>
+                                </label>
+                                <input class="form-control" type="date" id="deadline" name="project[deadline]"
+                                    value="<%= draft && draft.deadline ? draft.deadline.toISOString().split('T')[0] : '' %>"
+                                    required />
+                            </div>
+                            <button type="button" class="btn btn-secondary" onclick="previousStep(2)">
+                                <%= __('createProject.previousButton') %>
+                            </button>
+                            <button type="submit" class="btn btn-success">
+                                <%= __('createProject.submitButton') %>
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="saveDraft()">
+                                <%= __('createProject.saveDraftButton') %>
+                            </button>
+                        </div>
+            </form>
+            <a href="/projects">
+                <%= __('createProject.allProjectsLink') %>
+            </a>
+        </div>
     </div>
-</div>
 
-<script>
-    let currentStep = 1;
 
-    function nextStep(step) {
-        document.getElementById(`step-${currentStep}`).style.display = "none";
-        document.getElementById(`step-${step}`).style.display = "block";
-        currentStep = step;
-    }
+    <script>
+        let currentStep = 1;
 
-    function previousStep(step) {
-        document.getElementById(`step-${currentStep}`).style.display = "none";
-        document.getElementById(`step-${step}`).style.display = "block";
-        currentStep = step;
-    }
-
-    async function saveDraft() {
-        const formData = new FormData();
-
-        // Append the draft ID if it exists
-        const draftId = document.querySelector('input[name="draftId"]')?.value;
-        if (draftId) {
-            formData.append("draftId", draftId);
+        function nextStep(step) {
+            document.getElementById(`step-${currentStep}`).style.display = "none";
+            document.getElementById(`step-${step}`).style.display = "block";
+            currentStep = step;
         }
 
-        // Append text fields
-        formData.append("title", document.getElementById("title").value);
-        formData.append("location", document.getElementById("location").value);
-        formData.append("description", document.getElementById("description").value);
-        formData.append("fundingGoal", document.getElementById("fundingGoal").value);
-        formData.append("currency", document.getElementById("currency").value);
-        formData.append("deadline", document.getElementById("deadline").value);
-        formData.append("isDraft", true);
+        function previousStep(step) {
+            document.getElementById(`step-${currentStep}`).style.display = "none";
+            document.getElementById(`step-${step}`).style.display = "block";
+            currentStep = step;
+        }
 
-        // Append files from the file input field
-        const imageInput = document.getElementById("image");
-        if (imageInput && imageInput.files.length > 0) {
-            for (let i = 0; i < imageInput.files.length; i++) {
-                formData.append("image", imageInput.files[i]);
+        async function saveDraft() {
+            const formData = new FormData();
+
+            // Append the draft ID if it exists
+            const draftId = document.querySelector('input[name="draftId"]')?.value;
+            if (draftId) {
+                formData.append("draftId", draftId);
             }
-        }
 
-        // Append deleted image filenames
-        const deleteImages = document.querySelectorAll(
-            'input[name="deleteImages[]"]:checked'
-        );
-        deleteImages.forEach((checkbox) => {
-            formData.append("deleteImages[]", checkbox.value);
-        });
+            // Append text fields
+            formData.append("title", document.getElementById("title").value);
+            formData.append("location", document.getElementById("location").value);
+            formData.append("description", document.getElementById("description").value);
+            formData.append("fundingGoal", document.getElementById("fundingGoal").value);
+            formData.append("currency", document.getElementById("currency").value);
+            formData.append("deadline", document.getElementById("deadline").value);
+            formData.append("isDraft", true);
 
-        try {
-            const response = await fetch("/projects/save-draft", {
-                method: "POST",
-                body: formData,
+            // Append files from the file input field
+            const imageInput = document.getElementById("image");
+            if (imageInput && imageInput.files.length > 0) {
+                for (let i = 0; i < imageInput.files.length; i++) {
+                    formData.append("image", imageInput.files[i]);
+                }
+            }
+
+            // Append deleted image filenames
+            const deleteImages = document.querySelectorAll(
+                'input[name="deleteImages[]"]:checked'
+            );
+            deleteImages.forEach((checkbox) => {
+                formData.append("deleteImages[]", checkbox.value);
             });
 
-            if (response.ok) {
-                alert("Draft saved successfully!");
-            } else {
-                const error = await response.json();
-                console.error("Failed to save draft:", error);
+            try {
+                const response = await fetch("/projects/save-draft", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    alert("Draft saved successfully!");
+                } else {
+                    const error = await response.json();
+                    console.error("Failed to save draft:", error);
+                    alert("Failed to save draft.");
+                }
+            } catch (error) {
+                console.error("Error saving draft:", error);
                 alert("Failed to save draft.");
             }
-        } catch (error) {
-            console.error("Error saving draft:", error);
-            alert("Failed to save draft.");
         }
-    }
-</script>
+    </script>

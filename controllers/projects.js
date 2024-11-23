@@ -12,38 +12,45 @@ module.exports.index = async (req, res) => {
     const language = req.language;
     const user = await get_user(Users, req);
 
-    const projects = await Project.find({});
-    const filteredProjects = projects.map(project => ({
-        titleText: project.title.get(req.language),
-        descriptionText: project.description.get(req.language)
+    const allProjects = await Project.find({});
+    const projects = allProjects.map(project => ({
+        titleText: project.title.get(language),
+        descriptionText: project.description.get(language),
+        images: project.images,
+        geometry: project.geometry,
+        currency: project.currency,
+        fundingGoal: project.fundingGoal,
+        location: project.location,
+        deadline: project.deadline,
+        createdAt: project.createdAt,
+        updatedAt: project.updatedAt,
+        author: project.author,
+        status: project.status,
+        comments: project.comments,
+        keywords: project.keywords,
+        isDraft: project.isDraft,
+        lastSavedAt: project.lastSavedAt
     }));
-
-    // let projects = await Project.aggregate([{
-    //     $project: {
-    //         title: { $getField: language },
-    //         description: { $getField: language },
-    //     },
-    // },]);
 
     if (user && user.keywords instanceof Map) {
         const keywords = user.keywords;
-        filteredProjects.forEach((filteredProjects) => {
-            const projectKeywords = Array.isArray(filteredProjects.keywords)
-                ? filteredProjects.keywords
+        projects.forEach((project) => {
+            const projectKeywords = Array.isArray(project.keywords)
+                ? project.keywords
                 : [];
-            filteredProjects.relevanceScore = calculateRelevance(
+            project.relevanceScore = calculateRelevance(
                 projectKeywords,
                 keywords
             );
         });
 
-        filteredProjects.sort((a, b) => b.relevanceScore - a.relevanceScore);
+        projects.sort((a, b) => b.relevanceScore - a.relevanceScore);
     }
 
     try {
         const { page = 1, limit = 15 } = req.query;
         const skip = (page - 1) * limit;
-        const paginatedProjects = filteredProjects.slice(
+        const paginatedProjects = projects.slice(
             skip,
             skip + Number(limit)
         );

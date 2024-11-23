@@ -54,7 +54,7 @@ module.exports.index = async (req, res) => {
             skip,
             skip + Number(limit)
         );
-        const totalPages = Math.ceil(filteredProjects.length / limit);
+        const totalPages = Math.ceil(projects.length / limit);
         res.render("projects/index", {
             projects: paginatedProjects,
             currentPage: Number(page),

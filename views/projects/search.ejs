@@ -1,160 +1,185 @@
 <% layout('layouts/boilerplate') %>
 
-    <div id="map" style="width: 100%; height: 500px"></div>
-    <h1 class="mt-4">
-        <%= __('projectSearch.heading') %>
-    </h1>
+<div id="map" style="width: 100%; height: 500px"></div>
+<h1 class="mt-4"><%= __('projectSearch.heading') %></h1>
 
-    <!-- Search Form -->
-    <div class="container mt-4 mb-3">
-        <form action="/search" method="GET" class="form-inline d-flex justify-content-center">
-            <input type="text" name="keyword" class="form-control mr-2"
-                placeholder="<%= __('projectSearch.searchPlaceholder') %>" required />
-            <button type="submit" class="btn btn-primary">
-                <%= __('projectSearch.searchButton') %>
-            </button>
-        </form>
-    </div>
+<!-- Search Form -->
+<div class="container mt-4 mb-3">
+    <form
+        action="/search"
+        method="GET"
+        class="form-inline d-flex justify-content-center"
+    >
+        <input
+            type="text"
+            name="keyword"
+            class="form-control mr-2"
+            placeholder="<%= __('projectSearch.searchPlaceholder') %>"
+            required
+        />
+        <button type="submit" class="btn btn-primary">
+            <%= __('projectSearch.searchButton') %>
+        </button>
+    </form>
+</div>
 
-    <!-- Search Results Information Message -->
-    <% if (keyword && projects) { %>
-        <div class="container text-center mt-4 mb-5">
-            <% if (projects.length> 0) { %>
-                <p>
-                    <%= __('projectSearch.resultsFound', { count: projects.length, keyword: keyword }) %>
-                </p>
-                <% } else { %>
-                    <p>
-                        <%= __('projectSearch.noResults', { keyword: keyword }) %>
-                    </p>
-                    <% } %>
-        </div>
-        <% } else { %>
-            <!-- Display a welcoming message if no search has been performed -->
-            <div class="container text-center mt-5">
-                <h2>
-                    <%= __('projectSearch.welcomeMessage') %>
-                </h2>
-                <p>
-                    <%= __('projectSearch.instructions') %>
-                </p>
-            </div>
-            <% } %>
+<!-- Search Results Information Message -->
+<% if (keyword && projects) { %>
+<div class="container text-center mt-4 mb-5">
+    <% if (projects.length > 0) { %>
+    <p>
+        <%- __('projectSearch.resultsFound', { count: projects.length, keyword:
+        keyword }) %>
+    </p>
+    <% } else { %>
+    <p><%- __('projectSearch.noResults', { keyword: keyword }) %></p>
+    <% } %>
+</div>
 
-                <% if (projects && projects.length> 0) { %>
-                    <div class="container">
-                        <div class="row">
-                            <% projects.forEach(project=> { %>
-                                <div class="col-md-4 mb-4">
-                                    <div class="card">
-                                        <img src="<%= project.images && project.images[0] ? project.images[0].url : 'default-image-url.jpg' %>"
-                                            class="card-img-top" alt="<%= project.titleText %>" />
-                                        <div class="card-body">
-                                            <!-- Title and Bookmark in a Flex Container -->
-                                            <div
-                                                style="display: flex; justify-content: space-between; align-items: center;">
-                                                <h5 class="card-title" style="margin: 0">
-                                                    <%= project.titleText %>
-                                                </h5>
-                                                <% if (currentUser) { %>
-                                                    <form
-                                                        action="/projects/<%= project._id %>/toggleSave?keyword=<%= keyword %>"
-                                                        method="POST" style="margin: 0">
-                                                        <button type="submit" class="btn btn-link p-0"
-                                                            style="font-size: 1rem; color: #007bff">
-                                                            <% if (currentUser.savedProjects &&
-                                                                currentUser.savedProjects.includes(project._id.toString()))
-                                                                { %>
-                                                                <i class="fas fa-bookmark"></i>
-                                                                <% } else { %>
-                                                                    <i class="far fa-bookmark"></i>
-                                                                    <% } %>
-                                                        </button>
-                                                    </form>
-                                                    <% } %>
-                                            </div>
-                                            <p class="card-text">
-                                                <%= project.descriptionText %>
-                                            </p>
-                                            <p class="card-text">
-                                                <small class="text-muted">
-                                                    <%= project.location %>
-                                                </small>
-                                            </p>
-                                            <p class="card-text">
-                                                <% const deadlineDate=new Date(project.deadline); const currentDate=new
-                                                    Date(); const timeDifference=deadlineDate - currentDate; const
-                                                    daysLeft=Math.ceil(timeDifference / (1000 * 60 * 60 * 24)); %>
-                                                    <small class="text-muted">
-                                                        <% if (daysLeft> 0) { %>
-                                                            <i class="fas fa-clock"></i>
-                                                            <%= daysLeft %>
-                                                                <%= __('projectSearch.daysLeft') %>
-                                                                    <% } else { %>
-                                                                        <span class="text-danger">
-                                                                            <%= __('projectSearch.deadlinePassed') %>
-                                                                        </span>
-                                                                        <% } %>
-                                                    </small>
-                                            </p>
-                                            <a href="/projects/<%= project._id %>" class="btn btn-primary">
-                                                <%= __('projectSearch.viewButton') %>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <% }) %>
-                        </div>
+<% } else { %>
+<!-- Display a welcoming message if no search has been performed -->
+<div class="container text-center mt-5">
+    <h2><%= __('projectSearch.welcomeMessage') %></h2>
+    <p><%= __('projectSearch.instructions') %></p>
+</div>
+<% } %> <% if (projects && projects.length> 0) { %>
+<div class="container">
+    <div class="row">
+        <% projects.forEach(project=> { %>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img
+                    src="<%= project.images && project.images[0] ? project.images[0].url : 'default-image-url.jpg' %>"
+                    class="card-img-top"
+                    alt="<%= project.titleText %>"
+                />
+                <div class="card-body">
+                    <!-- Title and Bookmark in a Flex Container -->
+                    <div
+                        style="
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                        "
+                    >
+                        <h5 class="card-title" style="margin: 0">
+                            <%= project.titleText %>
+                        </h5>
+                        <% if (currentUser) { %>
+                        <form
+                            action="/projects/<%= project._id %>/toggleSave?keyword=<%= keyword %>"
+                            method="POST"
+                            style="margin: 0"
+                        >
+                            <button
+                                type="submit"
+                                class="btn btn-link p-0"
+                                style="font-size: 1rem; color: #007bff"
+                            >
+                                <% if (currentUser.savedProjects &&
+                                currentUser.savedProjects.includes(project._id.toString()))
+                                { %>
+                                <i class="fas fa-bookmark"></i>
+                                <% } else { %>
+                                <i class="far fa-bookmark"></i>
+                                <% } %>
+                            </button>
+                        </form>
+                        <% } %>
                     </div>
-                    <% } %>
+                    <p class="card-text"><%= project.descriptionText %></p>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            <%= project.location %>
+                        </small>
+                    </p>
+                    <p class="card-text">
+                        <% const deadlineDate=new Date(project.deadline); const
+                        currentDate=new Date(); const
+                        timeDifference=deadlineDate - currentDate; const
+                        daysLeft=Math.ceil(timeDifference / (1000 * 60 * 60 *
+                        24)); %>
+                        <small class="text-muted">
+                            <% if (daysLeft> 0) { %>
+                            <i class="fas fa-clock"></i>
+                            <%= daysLeft %> <%= __('projectSearch.daysLeft') %>
+                            <% } else { %>
+                            <span class="text-danger">
+                                <%= __('projectSearch.deadlinePassed') %>
+                            </span>
+                            <% } %>
+                        </small>
+                    </p>
+                    <a
+                        href="/projects/<%= project._id %>"
+                        class="btn btn-primary"
+                    >
+                        <%= __('projectSearch.viewButton') %>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <% }) %>
+    </div>
+</div>
+<% } %>
 
-                        <!-- Pass Project Data to ClusterMap.js as GeoJSON -->
-                        <script>
-                            const mapToken = "<%- process.env.MAPBOX_TOKEN %>";
+<script>
+    const mapToken = "<%= process.env.MAPBOX_TOKEN %>";
+    const geoJsonProjects = <%- JSON.stringify(geoJsonProjects) %>;
 
-                            // Use geoJsonProjects for map display
-                            const projects = <% - JSON.stringify(geoJsonProjects) %>;
-                        </script>
+    mapboxgl.accessToken = mapToken;
 
-                        <script>
-                            document.addEventListener("DOMContentLoaded", function () {
-                                const saveIcons = document.querySelectorAll(".save-icon");
+    const map = new mapboxgl.Map({
+        container: "map",
+        style: "mapbox://styles/mapbox/navigation-night-v1",
+        center: [100, 15], // Default center (Thailand)
+        zoom: 5, // Default zoom
+    });
 
-                                saveIcons.forEach((icon) => {
-                                    icon.addEventListener("click", async function (event) {
-                                        event.preventDefault();
+    // Add navigation controls
+    map.addControl(new mapboxgl.NavigationControl());
 
-                                        const projectId = this.getAttribute("data-project-id");
-                                        const iconElement = this.querySelector("i");
+    // Add the projects as a GeoJSON source
+    map.on("load", () => {
+        map.addSource("projects", {
+            type: "geojson",
+            data: geoJsonProjects,
+        });
 
-                                        try {
-                                            const response = await fetch(
-                                                `/projects/${projectId}/toggleSave?keyword=<%= keyword %>`,
-                                                {
-                                                    method: "POST",
-                                                    headers: {
-                                                        "Content-Type": "application/json",
-                                                        "X-Requested-With": "XMLHttpRequest",
-                                                    },
-                                                }
-                                            );
-                                            const result = await response.json();
+        // Add a layer for the project points
+        map.addLayer({
+            id: "project-points",
+            type: "circle",
+            source: "projects",
+            paint: {
+                "circle-color": "#11b4da",
+                "circle-radius": 6,
+                "circle-stroke-width": 2,
+                "circle-stroke-color": "#fff",
+            },
+        });
 
-                                            // Toggle the icon based on the save status
-                                            if (result.status === "saved") {
-                                                iconElement.classList.remove("far");
-                                                iconElement.classList.add("fas");
-                                            } else if (result.status === "unsaved") {
-                                                iconElement.classList.remove("fas");
-                                                iconElement.classList.add("far");
-                                            }
-                                        } catch (error) {
-                                            console.error("<%= __('projectSearch.errorToggleSave') %>", error);
-                                        }
-                                    });
-                                });
-                            });
-                        </script>
+        // Add popups on click
+        map.on("click", "project-points", (e) => {
+            const { title, description, popUpMarkup } = e.features[0].properties;
+            const coordinates = e.features[0].geometry.coordinates.slice();
 
-                        <!-- Include ClusterMap JavaScript -->
-                        <script src="/javascripts/clusterMap.js"></script>
+            new mapboxgl.Popup()
+                .setLngLat(coordinates)
+                .setHTML(popUpMarkup)
+                .addTo(map);
+        });
+
+        // Change cursor to pointer when hovering over points
+        map.on("mouseenter", "project-points", () => {
+            map.getCanvas().style.cursor = "pointer";
+        });
+        map.on("mouseleave", "project-points", () => {
+            map.getCanvas().style.cursor = "";
+        });
+    });
+</script>
+
+<!-- Include ClusterMap JavaScript -->
+<script src="/javascripts/clusterMap.js"></script>

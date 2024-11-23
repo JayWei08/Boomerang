@@ -1,10 +1,10 @@
-mapboxgl.accessToken = mapToken;
+mapboxgl.accessToken = mapToken; // Mapbox token injected from server-side
 
 const map = new mapboxgl.Map({
     container: "map",
     style: "mapbox://styles/mapbox/navigation-night-v1",
-    center: [103, 13.6699], // Default center
-    zoom: 4,
+    center: [103, 13.6699], // Default map center
+    zoom: 4, // Default zoom level
 });
 
 // Add navigation controls (zoom in/out, rotate)
@@ -14,13 +14,13 @@ map.on("load", () => {
     // Add a GeoJSON source for the projects, enabling clustering
     map.addSource("projects", {
         type: "geojson",
-        data: projects, // Use the relevant projects data passed from the server
+        data: projects, // Use GeoJSON data from the server
         cluster: true,
-        clusterMaxZoom: 14,
-        clusterRadius: 50,
+        clusterMaxZoom: 14, // Max zoom to cluster points
+        clusterRadius: 50, // Radius of each cluster
     });
 
-    // Layer for clustered circles
+    // Add layer for clusters
     map.addLayer({
         id: "clusters",
         type: "circle",
@@ -48,7 +48,7 @@ map.on("load", () => {
         },
     });
 
-    // Text label for the number of points in each cluster
+    // Add layer for cluster labels
     map.addLayer({
         id: "cluster-count",
         type: "symbol",
@@ -61,7 +61,7 @@ map.on("load", () => {
         },
     });
 
-    // Layer for individual (unclustered) project points
+    // Add layer for unclustered points
     map.addLayer({
         id: "unclustered-point",
         type: "circle",
@@ -94,7 +94,7 @@ map.on("load", () => {
         );
     });
 
-    // Display a popup when clicking on an unclustered project point
+    // When an unclustered point is clicked, show a popup
     map.on("click", "unclustered-point", (e) => {
         const { popUpMarkup } = e.features[0].properties;
         const coordinates = e.features[0].geometry.coordinates.slice();
@@ -105,7 +105,7 @@ map.on("load", () => {
             .addTo(map);
     });
 
-    // Change cursor to pointer when hovering over clusters
+    // Change the cursor to a pointer when hovering over clusters
     map.on("mouseenter", "clusters", () => {
         map.getCanvas().style.cursor = "pointer";
     });
@@ -113,7 +113,7 @@ map.on("load", () => {
         map.getCanvas().style.cursor = "";
     });
 
-    // Automatically fit map bounds to show only the relevant project points
+    // Automatically fit map bounds to show all project points
     if (projects.features.length > 0) {
         const bounds = new mapboxgl.LngLatBounds();
         projects.features.forEach((feature) => {

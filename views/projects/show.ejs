@@ -121,9 +121,8 @@
         </div>
 
         <script>
-            const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
-            const project = <% - JSON.stringify(project) %>
-
+            const mapToken = "<%= mapToken %>";
+            const project = <%- JSON.stringify(project) %>; // Pass project data as JSON
         </script>
-
         <script src="/javascripts/showPageMap.js"></script>
+        

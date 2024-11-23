@@ -9,64 +9,69 @@ const Multiset = require("../utils/Multiset");
 const currencyToken = process.env.CURRENCY_TOKEN;
 
 module.exports.index = async (req, res) => {
-    const language = req.language;
-    const user = await get_user(Users, req);
-
-    const allProjects = await Project.find({});
-    const projects = allProjects.map(project => ({
-        titleText: project.title.get(language),
-        descriptionText: project.description.get(language),
-        images: project.images,
-        geometry: project.geometry,
-        currency: project.currency,
-        fundingGoal: project.fundingGoal,
-        location: project.location,
-        deadline: project.deadline,
-        createdAt: project.createdAt,
-        updatedAt: project.updatedAt,
-        author: project.author,
-        status: project.status,
-        comments: project.comments,
-        keywords: project.keywords,
-        isDraft: project.isDraft,
-        lastSavedAt: project.lastSavedAt
-    }));
-
-    if (user && user.keywords instanceof Map) {
-        const keywords = user.keywords;
-        projects.forEach((project) => {
-            const projectKeywords = Array.isArray(project.keywords)
-                ? project.keywords
-                : [];
-            project.relevanceScore = calculateRelevance(
-                projectKeywords,
-                keywords
-            );
-        });
-
-        projects.sort((a, b) => b.relevanceScore - a.relevanceScore);
-    }
-
     try {
+        const language = req.language;
+        const user = await get_user(Users, req);
+
+        // Fetch all projects and map them with required data
+        const allProjects = await Project.find({});
+        const projects = allProjects.map((project) => ({
+            titleText: project.title.get(language),
+            descriptionText: project.description.get(language),
+            images: project.images,
+            geometry: project.geometry,
+            currency: project.currency,
+            fundingGoal: project.fundingGoal,
+            location: project.location,
+            deadline: project.deadline,
+            createdAt: project.createdAt,
+            updatedAt: project.updatedAt,
+            author: project.author,
+            status: project.status,
+            comments: project.comments,
+            keywords: project.keywords,
+            isDraft: project.isDraft,
+            lastSavedAt: project.lastSavedAt,
+        }));
+
+        // Calculate relevance if user has keywords
+        if (user && user.keywords instanceof Map) {
+            const keywords = user.keywords;
+            projects.forEach((project) => {
+                const projectKeywords = Array.isArray(project.keywords)
+                    ? project.keywords
+                    : [];
+                project.relevanceScore = calculateRelevance(
+                    projectKeywords,
+                    keywords
+                );
+            });
+
+            // Sort projects by relevance score
+            projects.sort((a, b) => b.relevanceScore - a.relevanceScore);
+        }
+
+        // Convert projects to GeoJSON format
         const geoJsonProjects = {
             type: "FeatureCollection",
             features: projects.map((project) => ({
                 type: "Feature",
                 geometry: project.geometry || {
                     type: "Point",
-                    coordinates: [0, 0],
+                    coordinates: [0, 0], // Default coordinates
                 },
                 properties: {
-                    title: project.title,
-                    description: project.description,
-                    popUpMarkup: `<a href="/projects/${project._id}">${project.title}</a>`,
+                    title: project.titleText,
+                    description: project.descriptionText,
+                    popUpMarkup: `<a href="/projects/${project._id}">${project.titleText}</a>`,
                 },
             })),
         };
 
+        // Render the projects/index template
         res.render("projects/index", {
             geoJsonProjects,
-            projects: allProjects.slice(0, 30),
+            projects: allProjects.slice(0, 30), // Limit displayed projects
         });
     } catch (err) {
         console.error("Error loading projects:", err);
@@ -146,7 +151,6 @@ module.exports.createProject = async (req, res, next) => {
         res.redirect("/projects/new");
     }
 };
-
 module.exports.showProject = async (req, res) => {
     try {
         const project = await Project.findById(req.params.id)
@@ -154,16 +158,19 @@ module.exports.showProject = async (req, res) => {
                 path: "comments",
                 populate: { path: "author" },
             })
-            .populate("author");
-
-        const language = req.language;
-        project.titleText = project.title.get(language) || project.title.get('th');
-        project.description = project.description.get(language) || project.description.get('th');
+            .populate("author"); // Populate the author field
 
         if (!project) {
             req.flash("error", "Cannot find that project!");
             return res.redirect("/projects");
         }
+
+        // Set the correct title and description language
+        const language = req.language;
+        project.titleText =
+            project.title.get(language) || project.title.get("th");
+        project.descriptionText =
+            project.description.get(language) || project.description.get("th");
 
         let apiFetch = await ApiFetch.findOne();
         const now = Date.now();
@@ -175,7 +182,6 @@ module.exports.showProject = async (req, res) => {
             !apiFetch ||
             now - new Date(apiFetch.lastFetchTime).getTime() > oneHour
         ) {
-            // console.log("Fetching fresh currency data...");
             const response = await fetch(
                 "https://api.freecurrencyapi.com/v1/latest?apikey=fca_live_cm1tAAJNfEOsxaq2vaGu0SI5uBAT8rBSgNSlHbTJ"
             );
@@ -194,18 +200,20 @@ module.exports.showProject = async (req, res) => {
             await apiFetch.save();
             currencyData = freshData;
         } else {
-            // console.log("Using cached currency data from MongoDB.");
             currencyData = apiFetch.currencyData;
         }
 
-        if (req.user) {
-            const user = await Users.findById(req.user._id);
-            userCurrency = user.currency;
-        } else {
-            userCurrency = req.session.currency;
-        }
+        const userCurrency = req.user
+            ? (await Users.findById(req.user._id)).currency
+            : req.session.currency;
 
-        res.render("projects/show", { project, currencyData, userCurrency });
+        // Pass the project, currencyData, and mapToken to the template
+        res.render("projects/show", {
+            project,
+            currencyData,
+            userCurrency,
+            mapToken: process.env.MAPBOX_TOKEN, // Pass Mapbox token
+        });
 
         add_user_keywords(req, project, Users);
     } catch (error) {
@@ -309,9 +317,9 @@ module.exports.saveDraft = async (req, res) => {
         // Ensure `images` array is always present and handle uploaded files
         const uploadedImages = Array.isArray(req.files)
             ? req.files.map((file) => ({
-                url: file.path,
-                filename: file.filename,
-            }))
+                  url: file.path,
+                  filename: file.filename,
+              }))
             : []; // Fallback to an empty array if no files are uploaded
 
         let project;

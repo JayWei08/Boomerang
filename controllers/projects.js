@@ -12,7 +12,6 @@ module.exports.index = async (req, res) => {
     const language = req.session.language;
     const user = await get_user(Users, req);
 
-    // Fetch all projects and map them with required data
     const allProjects = await Project.find({});
     const projects = allProjects.map((project) => ({
         titleText: project.title.get(language),
@@ -51,31 +50,32 @@ module.exports.index = async (req, res) => {
     }
 
     // Convert projects to GeoJSON format
-    const geoJsonProjects = {
-        type: "FeatureCollection",
-        features: projects.map((project) => ({
-            type: "Feature",
-            geometry: project.geometry || {
-                type: "Point",
-                coordinates: [0, 0], // Default coordinates
-            },
-            properties: {
-                title: project.titleText,
-                description: project.descriptionText,
-                popUpMarkup: `<a href="/projects/${project._id}">${project.titleText}</a>`,
-            },
-        })),
-    };
+    try {
+        const geoJsonProjects = {
+            type: "FeatureCollection",
+            features: projects.map((project) => ({
+                type: "Feature",
+                geometry: project.geometry || {
+                    type: "Point",
+                    coordinates: [0, 0], // Default coordinates
+                },
+                properties: {
+                    title: project.titleText,
+                    description: project.descriptionText,
+                    popUpMarkup: `<a href="/projects/${project._id}">${project.titleText}</a>`,
+                },
+            })),
+        };
 
-    // Render the projects/index template
-    res.render("projects/index", {
-        geoJsonProjects,
-        projects: projects.slice(0, 30),
-    });
-} catch (err) {
-    console.error("Error loading projects:", err);
-    res.redirect("/");
-}
+        // Render the projects/index template
+        res.render("projects/index", {
+            geoJsonProjects,
+            projects: projects.slice(0, 30),
+        });
+    } catch (err) {
+        console.error("Error loading projects:", err);
+        res.redirect("/");
+    }
 };
 
 module.exports.renderNewForm = async (req, res) => {
@@ -160,7 +160,6 @@ module.exports.showProject = async (req, res) => {
             .populate("author");
 
         const language = req.session.language;
-        console.log('project', language);
         project.titleText = project.title.get(language) || project.title.get('th');
         project.description = project.description.get(language) || project.description.get('th');
 
@@ -168,13 +167,6 @@ module.exports.showProject = async (req, res) => {
             req.flash("error", "Cannot find that project!");
             return res.redirect("/projects");
         }
-
-        // Set the correct title and description language
-        const language = req.language;
-        project.titleText =
-            project.title.get(language) || project.title.get("th");
-        project.descriptionText =
-            project.description.get(language) || project.description.get("th");
 
         let apiFetch = await ApiFetch.findOne();
         const now = Date.now();

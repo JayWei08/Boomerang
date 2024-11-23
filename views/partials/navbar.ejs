@@ -8,13 +8,18 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container" style="height: 90px">
         <!-- Brand -->
-        <a class="navbar-brand" href="/projects">
-            <%= __('navbar.brand') %>
-        </a>
+        <a class="navbar-brand" href="/projects"> <%= __('navbar.brand') %> </a>
 
         <!-- Toggle Button for Mobile -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="<%= __('navbar.toggle') %>">
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup"
+            aria-expanded="false"
+            aria-label="<%= __('navbar.toggle') %>"
+        >
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -31,77 +36,147 @@
             </div>
 
             <!-- Search Bar -->
-            <form action="/search" method="GET" class="d-flex ms-3 me-auto" style="width: 625px">
+            <form
+                action="/search"
+                method="GET"
+                class="d-flex ms-3 me-auto"
+                style="width: 625px"
+            >
                 <div class="position-relative w-100">
-                    <input type="text" name="keyword" class="form-control shadow-sm"
-                        placeholder="<%= __('navbar.searchPlaceholder') %>" required style="padding-left: 2.5rem" />
-                    <span class="position-absolute text-muted" style="
+                    <input
+                        type="text"
+                        name="keyword"
+                        class="form-control shadow-sm"
+                        placeholder="<%= __('navbar.searchPlaceholder') %>"
+                        required
+                        style="padding-left: 2.5rem"
+                    />
+                    <span
+                        class="position-absolute text-muted"
+                        style="
                             top: 50%;
                             left: 10px;
                             transform: translateY(-50%);
                             pointer-events: none;
-                        ">
+                        "
+                    >
                         <i class="fas fa-search"></i>
                     </span>
                 </div>
             </form>
 
             <!-- Right-Side Links -->
-            <div class="navbar-nav d-flex align-items-center justify-content-around text-center">
-                <div class="w-100 mb-2 p-1 border" style="border: 1px; font-weight: bold">
+            <div
+                class="navbar-nav d-flex align-items-center justify-content-around text-center"
+            >
+                <div
+                    class="w-100 mb-2 p-1 border"
+                    style="border: 1px; font-weight: bold"
+                >
                     <a class="nav-link" href="/projects/new">
                         <%= __('navbar.startProject') %>
                     </a>
                 </div>
                 <% if (!currentUser) { %>
-                    <a href="/login" class="nav-link">
-                        <%= __('navbar.login') %>
-                    </a>
-                    <% } else { %>
-                        <a href="/projects/my-projects" class="nav-link">
-                            <%= __('navbar.myProjects') %>
-                        </a>
-                        <a href="/projects/library" class="nav-link">
-                            <%= __('navbar.library') %>
-                        </a>
-                        <a href="/logout" class="nav-link">
-                            <%= __('navbar.logout') %>
-                        </a>
-                        <% } %>
+                <!-- Show login link if no user is logged in -->
+                <a href="/login" class="nav-link">
+                    <%= __('navbar.login') %>
+                </a>
+                <% } else { %>
+                <!-- Dashboard Dropdown -->
+                <div class="dropdown ms-2">
+                    <button
+                        class="btn btn-secondary dropdown-toggle"
+                        type="button"
+                        id="dashboardDropdown"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                    >
+                        <%= __('navbar.dashboard') %>
+                    </button>
+                    <ul
+                        class="dropdown-menu"
+                        aria-labelledby="dashboardDropdown"
+                    >
+                        <li>
+                            <a
+                                class="dropdown-item"
+                                href="/projects/my-projects"
+                            >
+                                <%= __('navbar.myProjects') %>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/projects/library">
+                                <%= __('navbar.library') %>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
 
-                            <!-- Language Dropdown -->
-                            <div class="dropdown d-inline-block ms-2">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <%= selectedLanguage.toUpperCase() %>
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="languageDropdown">
-                                    <% availableLanguages.forEach(lang=> { %>
-                                        <li>
-                                            <a class="dropdown-item" href="#" onclick="setLanguage('<%= lang %>')">
-                                                <%= lang.toUpperCase() %>
-                                            </a>
-                                        </li>
-                                        <% }) %>
-                                </ul>
-                            </div>
+                <!-- Logout Link -->
+                <a href="/logout" class="nav-link ms-2">
+                    <%= __('navbar.logout') %>
+                </a>
+                <% } %>
 
-                            <!-- Currency Dropdown -->
-                            <div class="dropdown d-inline-block ms-2">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="currencyDropdown"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <%= selectedCurrency.toUpperCase() %>
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="currencyDropdown">
-                                    <% availableCurrencies.forEach(cur=> { %>
-                                        <li>
-                                            <a class="dropdown-item" href="#" onclick="setCurrency('<%= cur %>')">
-                                                <%= cur.toUpperCase() %>
-                                            </a>
-                                        </li>
-                                        <% }) %>
-                                </ul>
-                            </div>
+                <!-- Language Dropdown -->
+                <div class="dropdown d-inline-block ms-2">
+                    <button
+                        class="btn btn-secondary dropdown-toggle"
+                        type="button"
+                        id="languageDropdown"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                    >
+                        <%= selectedLanguage.toUpperCase() %>
+                    </button>
+                    <ul
+                        class="dropdown-menu"
+                        aria-labelledby="languageDropdown"
+                    >
+                        <% availableLanguages.forEach(lang=> { %>
+                        <li>
+                            <a
+                                class="dropdown-item"
+                                href="#"
+                                onclick="setLanguage('<%= lang %>')"
+                            >
+                                <%= lang.toUpperCase() %>
+                            </a>
+                        </li>
+                        <% }) %>
+                    </ul>
+                </div>
+
+                <!-- Currency Dropdown -->
+                <div class="dropdown d-inline-block ms-2">
+                    <button
+                        class="btn btn-secondary dropdown-toggle"
+                        type="button"
+                        id="currencyDropdown"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                    >
+                        <%= selectedCurrency.toUpperCase() %>
+                    </button>
+                    <ul
+                        class="dropdown-menu"
+                        aria-labelledby="currencyDropdown"
+                    >
+                        <% availableCurrencies.forEach(cur=> { %>
+                        <li>
+                            <a
+                                class="dropdown-item"
+                                href="#"
+                                onclick="setCurrency('<%= cur %>')"
+                            >
+                                <%= cur.toUpperCase() %>
+                            </a>
+                        </li>
+                        <% }) %>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

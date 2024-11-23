@@ -24,10 +24,9 @@ const authRoutes = require("./routes/auth");
 const sendWelcomeEmail = require("./utils/sendEmail"); // Import your email utility
 const dbUrl = process.env.DB_URL;
 
-const languageRoutes = require('./routes/languageRoutes');
-const currencyRoutes = require('./routes/currencyRoutes');
+const languageRoutes = require("./routes/languageRoutes");
+const currencyRoutes = require("./routes/currencyRoutes");
 const i18n = require("i18n");
-
 
 mongoose
     //  .connect("mongodb://localhost:27017/boomerang") // Ensure the connection string is correct
@@ -125,23 +124,23 @@ passport.use(
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-
-const availableLanguages = ['en', 'th'];
-const availableCurrencies = ['USD', 'THB'];
+const availableLanguages = ["en", "th"];
+const availableCurrencies = ["USD", "THB"];
 
 app.use((req, res, next) => {
     res.locals.availableLanguages = availableLanguages;
-    res.locals.selectedLanguage = req.query.lang || req.session.language || 'th';
+    res.locals.selectedLanguage =
+        req.query.lang || req.session.language || "th";
 
     res.locals.availableCurrencies = availableCurrencies;
-    res.locals.selectedCurrency = req.session.currency || 'THB';
+    res.locals.selectedCurrency = req.session.currency || "THB";
     next();
 });
 
 app.use(async (req, res, next) => {
     try {
-        let language = req.query.lang || req.session.language || 'th';
-        let currency = req.session.currency || 'THB'; // Default to 'en'
+        let language = req.query.lang || req.session.language || "th";
+        let currency = req.session.currency || "THB"; // Default to 'en'
 
         if (req.isAuthenticated()) {
             // Fetch the language from the database for authenticated users
@@ -163,7 +162,7 @@ app.use(async (req, res, next) => {
 
         next();
     } catch (error) {
-        console.error('Error syncing', error);
+        console.error("Error syncing", error);
         next(error);
     }
 });
@@ -205,7 +204,6 @@ app.use(async (req, res, next) => {
     }
 });
 
-
 app.use((req, res, next) => {
     console.log(req.session);
     res.locals.currentUser = req.user;
@@ -213,7 +211,6 @@ app.use((req, res, next) => {
     res.locals.error = req.flash("error");
     next();
 });
-
 
 app.use("/", usersRoutes);
 app.use("/projects", projectsRoutes);
@@ -225,6 +222,34 @@ app.use("/", authRoutes);
 
 // Register the search route
 app.use("/", searchRoute);
+
+app.get("/about", (req, res) => {
+    res.render("about/about.ejs");
+});
+
+app.get("/how-boomerang-works", (req, res) => {
+    res.render("about/how-it-works.ejs");
+});
+
+app.get("/faq", (req, res) => {
+    res.render("usefulLinks/faq.ejs");
+});
+
+app.get("/rules", (req, res) => {
+    res.render("usefulLinks/rules.ejs");
+});
+
+app.get("/creators", (req, res) => {
+    res.render("usefulLinks/creators.ejs");
+});
+
+app.get("/nonprofit-resources", (req, res) => {
+    res.render("usefulLinks/non-profit.ejs");
+});
+
+app.get("/prohibited-content", (req, res) => {
+    res.render("usefulLinks/prohibitedContent.ejs");
+});
 
 app.all("*", (req, res, next) => {
     next(new ExpressError("Page Not Found", 404));

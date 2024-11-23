@@ -1,15 +1,21 @@
 <% layout('layouts/boilerplate') %>
 
-    <h1>My Projects</h1>
+    <h1>
+        <%= __('myProjects.heading') %>
+    </h1>
 
     <!-- Published Projects Section -->
-    <p>You have made <%= projects.length %> project(s).</p>
+    <p>
+        <%= __('myProjects.projectCount', { count: projects.length }) %>
+    </p>
 
     <div class="row">
-        <% projects.forEach(project=> { const deadlineDate = new
-            Date(project.deadline); const currentDate = new Date(); const timeDifference
-            = deadlineDate - currentDate; const daysLeft = Math.ceil(timeDifference /
-            (1000 * 60 * 60 * 24)); %>
+        <% projects.forEach(project=> {
+            const deadlineDate = new Date(project.deadline);
+            const currentDate = new Date();
+            const timeDifference = deadlineDate - currentDate;
+            const daysLeft = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+            %>
             <div class="col-md-4 mb-4">
                 <div class="card shadow-sm">
                     <img src="<%= project.images && project.images[0] ? project.images[0].url : 'default-image-url.jpg' %>"
@@ -30,13 +36,18 @@
                             <small class="text-muted">
                                 <% if (daysLeft> 0) { %>
                                     <i class="fas fa-clock"></i>
-                                    <%= daysLeft %> days left
-                                        <% } else { %>
-                                            <span class="text-danger">Deadline passed</span>
-                                            <% } %>
+                                    <%= daysLeft %>
+                                        <%= __('myProjects.daysLeft') %>
+                                            <% } else { %>
+                                                <span class="text-danger">
+                                                    <%= __('myProjects.deadlinePassed') %>
+                                                </span>
+                                                <% } %>
                             </small>
                         </p>
-                        <a href="/projects/<%= project._id %>" class="btn btn-primary">View</a>
+                        <a href="/projects/<%= project._id %>" class="btn btn-primary">
+                            <%= __('myProjects.viewButton') %>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -45,9 +56,13 @@
 
     <!-- Drafts Section -->
     <hr />
-    <h2>Your Drafts</h2>
+    <h2>
+        <%= __('myProjects.draftsHeading') %>
+    </h2>
 
-    <p>You have <%= drafts.length %> draft(s).</p>
+    <p>
+        <%= __('myProjects.draftCount', { count: drafts.length }) %>
+    </p>
 
     <div class="row">
         <% drafts.forEach(draft=> { %>
@@ -57,26 +72,29 @@
                         class="card-img-top" alt="<%= draft.title %>" />
                     <div class="card-body">
                         <h5 class="card-title">
-                            <%= draft.title ? draft.title : 'Untitled Draft' %>
+                            <%= draft.title ? draft.title : __('myProjects.untitledDraft') %>
                         </h5>
                         <p class="card-text">
-                            <%= draft.description ? draft.description.substring(0, 100) : 'No description available.' %>
+                            <%= draft.description ? draft.description.substring(0, 100) : __('myProjects.noDescription')
+                                %>
                         </p>
                         <p class="card-text">
                             <small class="text-muted">
-                                <%= draft.location ? draft.location : 'No location specified.' %>
+                                <%= draft.location ? draft.location : __('myProjects.noLocation') %>
                             </small>
                         </p>
                         <p class="card-text">
                             <small class="text-muted">
-                                Last saved: <%= new Date(draft.lastSavedAt).toLocaleString() %>
+                                <%= __('myProjects.lastSaved') %>: <%= new Date(draft.lastSavedAt).toLocaleString() %>
                             </small>
                         </p>
                         <a href="/projects/new?draftId=<%= draft._id %>" class="btn btn-warning">
-                            Resume Draft
+                            <%= __('myProjects.resumeDraft') %>
                         </a>
                         <form method="POST" action="/projects/drafts/<%= draft._id %>?_method=DELETE" class="d-inline">
-                            <button class="btn btn-danger">Delete</button>
+                            <button class="btn btn-danger">
+                                <%= __('myProjects.deleteButton') %>
+                            </button>
                         </form>
                     </div>
                 </div>

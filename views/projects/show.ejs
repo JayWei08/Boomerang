@@ -1,32 +1,36 @@
 <% layout('layouts/boilerplate') %>
+
     <% function getCurrencySymbol(currency) { const currencySymbols={ USD: "$" , THB: "฿" }; return
         currencySymbols[currency] || currency; } function getExchangeRates(userCurrency, projectCurrency, projectAmount,
-        exchangeRates) { console.log(userCurrency, projectCurrency, projectAmount, exchangeRates); return (projectAmount
-        * (exchangeRates.data[userCurrency]/exchangeRates.data[projectCurrency])).toFixed(2) } %>
-
+        exchangeRates) { return (projectAmount * (exchangeRates.data[userCurrency] /
+        exchangeRates.data[projectCurrency])).toFixed(2); } %>
 
         <div class="row">
             <!-- Left Column: Project Card -->
             <div class="col-lg-6 mb-4">
-                <!-- Project Card -->
+                <!-- Project Images Carousel -->
                 <div id="carouselExample" class="carousel slide">
                     <div class="carousel-inner">
                         <% project.images.forEach((img, i)=> { %>
                             <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
-                                <img src="<%= img.url %>" class="d-block w-100" alt="..." />
+                                <img src="<%= img.url %>" class="d-block w-100" alt="<%= __('show.imageAlt') %>" />
                             </div>
-                            <% }) %>
+                            <% }); %>
                     </div>
-                    <% if(project.images.length> 1){ %>
+                    <% if (project.images.length> 1) { %>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
                             data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
+                            <span class="visually-hidden">
+                                <%= __('show.previous') %>
+                            </span>
                         </button>
-                        <button class="carousel-control-next" -====type="button" data-bs-target="#carouselExample"
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
                             data-bs-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
+                            <span class="visually-hidden">
+                                <%= __('show.next') %>
+                            </span>
                         </button>
                         <% } %>
                 </div>
@@ -42,40 +46,56 @@
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item text-muted">
-                            <%= project.location%>
+                            <%= project.location %>
                         </li>
                         <li class="list-group-item text-muted">
-                            <b>Funding Goal:</b>
+                            <b>
+                                <%= __('show.fundingGoal') %>:
+                            </b>
                             <%= getCurrencySymbol(userCurrency) %>
                                 <%= getExchangeRates(userCurrency, project.currency, project.fundingGoal, currencyData)
                                     %>
                         </li>
                         <li class="list-group-item">
-                            <b>Submitted by:</b>
-                            <%= %>
+                            <b>
+                                <%= __('show.submittedBy') %>:
+                            </b>
+                            <%= project.author.name %>
                         </li>
                         <li class="list-group-item">
-                            <b>Deadline:</b>
-                            <%= project.deadline %>
+                            <b>
+                                <%= __('show.deadline') %>:
+                            </b>
+                            <%= project.deadline.toISOString().split('T')[0] %>
                         </li>
                         <li class="list-group-item">
-                            <b>Created At:</b>
-                            <%= project.createdAt %>
+                            <b>
+                                <%= __('show.createdAt') %>:
+                            </b>
+                            <%= project.createdAt.toISOString().split('T')[0] %>
                         </li>
                         <li class="list-group-item">
-                            <b>Updated At:</b>
-                            <%= project.updatedAt %>
+                            <b>
+                                <%= __('show.updatedAt') %>:
+                            </b>
+                            <%= project.updatedAt.toISOString().split('T')[0] %>
                         </li>
                         <li class="list-group-item">
-                            <b>Status:</b>
+                            <b>
+                                <%= __('show.status') %>:
+                            </b>
                             <%= project.status %>
                         </li>
                     </ul>
                     <% if (currentUser) { %>
                         <div class="card-body">
-                            <a class="card-link btn btn-info" href="/projects/<%= project._id %>/edit">Edit</a>
+                            <a class="card-link btn btn-info" href="/projects/<%= project._id %>/edit">
+                                <%= __('show.editButton') %>
+                            </a>
                             <form class="d-inline" action="/projects/<%= project._id %>?_method=DELETE" method="POST">
-                                <button class="btn btn-danger">Delete</button>
+                                <button class="btn btn-danger">
+                                    <%= __('show.deleteButton') %>
+                                </button>
                             </form>
                         </div>
                         <% } %>
@@ -87,43 +107,54 @@
                 <!-- Map -->
                 <div id="map" style="width: 100%; height: 300px" class="mb-4"></div>
 
-                <!-- Comments -->
-                <% if(currentUser){ %>
-                    <h3 class="mt-4 mb-3">Leave A Comment</h3>
+                <!-- Comments Section -->
+                <% if (currentUser) { %>
+                    <h3 class="mt-4 mb-3">
+                        <%= __('show.leaveComment') %>
+                    </h3>
                     <form action="/projects/<%= project._id %>/comments" method="POST" class="mb-4 validated-form"
                         novalidate>
                         <div class="mb-3">
-                            <label class="form-label" for="body">Comment</label>
+                            <label class="form-label" for="body">
+                                <%= __('show.commentLabel') %>
+                            </label>
                             <textarea class="form-control" name="comment[body]" cols="30" rows="3" id="body"
                                 required></textarea>
-                            <div class="valid-feedback">Looks good!</div>
+                            <div class="valid-feedback">
+                                <%= __('show.commentValid') %>
+                            </div>
                         </div>
-                        <button class="btn btn-success">Submit</button>
+                        <button class="btn btn-success">
+                            <%= __('show.submitButton') %>
+                        </button>
                     </form>
                     <% } %>
-                        <% for (let comment of project.comments) { %>
+                        <% project.comments.forEach(comment=> { %>
                             <div class="card mb-4">
                                 <div class="card-body">
-                                    <h5 class="card-title">By:</h5>
-                                    <p class="card-text">Comment: <%= comment.body %>
+                                    <h5 class="card-title">
+                                        <%= __('show.commentBy', { author: comment.author.name }) %>
+                                    </h5>
+                                    <p class="card-text">
+                                        <%= __('show.commentBody', { body: comment.body }) %>
                                     </p>
-                                    <% if(currentUser) { %>
+                                    <% if (currentUser) { %>
                                         <form
-                                            action="/projects/<%=project._id%>/comments/<%=comment._id%>?_method=DELETE"
+                                            action="/projects/<%= project._id %>/comments/<%= comment._id %>?_method=DELETE"
                                             method="POST">
-                                            <button class="btn btn-sm btn-danger">Delete</button>
+                                            <button class="btn btn-sm btn-danger">
+                                                <%= __('show.deleteComment') %>
+                                            </button>
                                         </form>
                                         <% } %>
                                 </div>
                             </div>
-                            <% } %>
+                            <% }); %>
             </div>
         </div>
 
         <script>
-            const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
-            const project = <% - JSON.stringify(project) %>
-
+            const mapToken = '<%- process.env.MAPBOX_TOKEN %>';
+            const project = <% - JSON.stringify(project) %>;
         </script>
-
         <script src="/javascripts/showPageMap.js"></script>

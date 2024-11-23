@@ -41,5 +41,56 @@
         "myProjects": "My Projects",
         "library": "Library",
         "logout": "Logout"
+    },
+    "drafts": {
+        "heading": "Your Drafts",
+        "untitled": "Untitled Draft",
+        "lastSaved": "Last Saved",
+        "location": "Location",
+        "notSpecified": "Not specified",
+        "resume": "Resume",
+        "delete": "Delete",
+        "noDrafts": "You have no saved drafts.",
+        "createNew": "Create New Project"
+    },
+    "editProject": {
+        "heading": "Edit Project",
+        "title": "Title",
+        "location": "Location",
+        "addImages": "Add Images",
+        "description": "Description",
+        "fundingGoal": "Funding Goal",
+        "currencySelection": "Currency selection",
+        "deadline": "Deadline",
+        "status": "Status",
+        "validFeedback": "Looks good!",
+        "deleteImage": "Delete?",
+        "updateButton": "Update Project",
+        "backButton": "Back To {{context}}"
+    },
+    "index": {
+        "tagline": "Chuck an idea, into reality.",
+        "subtitle": "ON BOOMERANG:",
+        "box1": "projects funded",
+        "box2": "towards creative work",
+        "box3": "pledges",
+        "heading1": "Recommended Projects",
+        "daysLeft": "days left",
+        "deadlinePassed": "Deadline passed",
+        "viewButton": "View",
+        "heading2": "About Us",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi natus aspernatur corporis deleniti quidem qui aliquam quae est.",
+        "infoBox1": {
+            "heading": "No-Cost Access",
+            "description": "Open and free access to everyone with varying background"
+        },
+        "infoBox2": {
+            "heading": "Daytime Viewing",
+            "description": "12-hour time difference to EST, allows live celestial observations"
+        },
+        "infoBox3": {
+            "heading": "Pristine Darkness",
+            "description": "Based in Bortle class 2 dark sky zone with an elevation of 3170m"
+        }
     }
 }

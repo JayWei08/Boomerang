@@ -48,22 +48,29 @@ module.exports.index = async (req, res) => {
     }
 
     try {
-        const { page = 1, limit = 15 } = req.query;
-        const skip = (page - 1) * limit;
-        const paginatedProjects = projects.slice(
-            skip,
-            skip + Number(limit)
-        );
-        const totalPages = Math.ceil(projects.length / limit);
+        const geoJsonProjects = {
+            type: "FeatureCollection",
+            features: projects.map((project) => ({
+                type: "Feature",
+                geometry: project.geometry || {
+                    type: "Point",
+                    coordinates: [0, 0],
+                },
+                properties: {
+                    title: project.title,
+                    description: project.description,
+                    popUpMarkup: `<a href="/projects/${project._id}">${project.title}</a>`,
+                },
+            })),
+        };
+
         res.render("projects/index", {
-            projects: paginatedProjects,
-            currentPage: Number(page),
-            totalPages,
+            geoJsonProjects,
+            projects: allProjects.slice(0, 3 * 15), // Example for paginated data
         });
-    } catch (error) {
-        console.error("Error in processing projects:", error);
-        req.flash("error", "Unable to fetch projects. Please try again.");
-        res.redirect("/projects");
+    } catch (err) {
+        console.error("Error loading projects:", err);
+        res.redirect("/");
     }
 };
 

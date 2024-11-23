@@ -1,1 +1,45 @@
-{}
+{
+    "boomerang": "Boomerang",
+    "footer": {
+        "title": "Boomerang",
+        "description": "Discover and support creative projects around the world. Together, we bring ideas to life and make a difference. Join us today!",
+        "about": {
+            "title": "About",
+            "aboutUs": "About Us",
+            "howItWorks": "How Boomerang Works",
+            "stats": "Stats",
+            "press": "Press"
+        },
+        "links": {
+            "title": "Useful Links",
+            "helpCenter": "Help Center",
+            "rules": "Our Rules",
+            "payment": "Payment",
+            "resources": "Creator Resources"
+        },
+        "contact": {
+            "title": "Contact",
+            "address": "New York, NY 10012, US",
+            "email": "info@example.com",
+            "phone": "+ 01 234 567 88",
+            "fax": "+ 01 234 567 89"
+        },
+        "copyright": {
+            "year": "2025",
+            "text": "Copyright:",
+            "link": "Boomerang.com"
+        }
+    },
+    "navbar": {
+        "brand": "Boomerang",
+        "toggle": "Toggle navigation",
+        "projects": "Projects",
+        "search": "Search",
+        "searchPlaceholder": "Search projects",
+        "startProject": "Start a project",
+        "login": "Login",
+        "myProjects": "My Projects",
+        "library": "Library",
+        "logout": "Logout"
+    }
+}

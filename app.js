@@ -204,6 +204,8 @@ app.use(async (req, res, next) => {
         console.error("Error syncing language", error);
         next(error);
     }
+
+    console.log(__('boomerang'));
 });
 
 

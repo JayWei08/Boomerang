@@ -66,7 +66,7 @@ module.exports.index = async (req, res) => {
 
         res.render("projects/index", {
             geoJsonProjects,
-            projects: allProjects.slice(0, 3 * 15), // Example for paginated data
+            projects: allProjects.slice(0, 30),
         });
     } catch (err) {
         console.error("Error loading projects:", err);

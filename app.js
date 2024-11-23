@@ -26,6 +26,7 @@ const dbUrl = process.env.DB_URL;
 
 const languageRoutes = require('./routes/languageRoutes');
 const currencyRoutes = require('./routes/currencyRoutes');
+const i18n = require("i18n");
 
 
 mongoose
@@ -80,10 +81,9 @@ app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());
-// Configure Local Strategy for username/password login
+
 passport.use(new LocalStrategy(User.authenticate()));
 
-// Configure Google Strategy for Google OAuth
 passport.use(
     new GoogleStrategy(
         {
@@ -125,6 +125,7 @@ passport.use(
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+
 const availableLanguages = ['en', 'th'];
 const availableCurrencies = ['USD', 'THB'];
 
@@ -137,7 +138,6 @@ app.use((req, res, next) => {
     next();
 });
 
-// Middleware to ensure language is synchronized with the database and session
 app.use(async (req, res, next) => {
     try {
         let language = req.query.lang || req.session.language || 'th';
@@ -168,6 +168,44 @@ app.use(async (req, res, next) => {
         next(error);
     }
 });
+
+i18n.configure({
+    locales: ["en", "th"],
+    directory: path.join(__dirname, "utils/language"),
+    defaultLocale: "th",
+    queryParameter: "lang",
+    cookie: "language",
+    autoReload: true,
+    updateFiles: false,
+    syncFiles: false,
+    objectNotation: true,
+});
+
+app.use(i18n.init);
+
+app.use(async (req, res, next) => {
+    try {
+        let language = req.query.lang || req.session.language || "th";
+
+        if (req.isAuthenticated()) {
+            const user = await User.findById(req.user._id);
+            if (user && user.language) {
+                language = user.language;
+            }
+        }
+
+        // Set the language for i18n
+        req.setLocale(language);
+        req.session.language = language;
+        res.locals.selectedLanguage = language;
+
+        next();
+    } catch (error) {
+        console.error("Error syncing language", error);
+        next(error);
+    }
+});
+
 
 app.use((req, res, next) => {
     console.log(req.session);

@@ -1,96 +1,96 @@
 {
-    "boomerang": "บูมเมอแรง",
+    "boomerang": "Boomerang",
     "footer": {
-        "title": "บูมเมอแรง",
-        "description": "ค้นหาและสนับสนุนโปรเจกต์สร้างสรรค์ทั่วโลก ร่วมกันเราจะเปลี่ยนความคิดให้เป็นจริงและสร้างความแตกต่าง เข้าร่วมกับเราวันนี้!",
+        "title": "Boomerang",
+        "description": "Discover and support creative projects around the world. Together, we bring ideas to life and make a difference. Join us today!",
         "about": {
-            "title": "เกี่ยวกับ",
-            "aboutUs": "เกี่ยวกับเรา",
-            "howItWorks": "วิธีการทำงานของบูมเมอแรง",
-            "stats": "สถิติ",
-            "press": "ข่าวประชาสัมพันธ์"
+            "title": "About",
+            "aboutUs": "About Us",
+            "howItWorks": "How Boomerang Works",
+            "stats": "Stats",
+            "press": "Press"
         },
         "links": {
-            "title": "ลิงก์ที่มีประโยชน์",
-            "helpCenter": "ศูนย์ช่วยเหลือ",
-            "rules": "กฎของเรา",
-            "payment": "การชำระเงิน",
-            "resources": "แหล่งข้อมูลสำหรับผู้สร้าง"
+            "title": "Useful Links",
+            "helpCenter": "Help Center",
+            "rules": "Our Rules",
+            "payment": "Payment",
+            "resources": "Creator Resources"
         },
         "contact": {
-            "title": "ติดต่อ",
-            "address": "นิวยอร์ก, NY 10012, สหรัฐอเมริกา",
+            "title": "Contact",
+            "address": "New York, NY 10012, US",
             "email": "info@example.com",
             "phone": "+ 01 234 567 88",
             "fax": "+ 01 234 567 89"
         },
         "copyright": {
             "year": "2025",
-            "text": "ลิขสิทธิ์:",
+            "text": "Copyright:",
             "link": "Boomerang.com"
         }
     },
     "navbar": {
-        "brand": "บูมเมอแรง",
-        "toggle": "สลับการนำทาง",
-        "projects": "โปรเจกต์",
-        "search": "ค้นหา",
-        "searchPlaceholder": "ค้นหาโปรเจกต์",
-        "startProject": "เริ่มโปรเจกต์",
-        "login": "เข้าสู่ระบบ",
-        "myProjects": "โปรเจกต์ของฉัน",
-        "library": "คลังข้อมูล",
-        "logout": "ออกจากระบบ"
+        "brand": "Boomerang",
+        "toggle": "Toggle navigation",
+        "projects": "Projects",
+        "search": "Search",
+        "searchPlaceholder": "Search projects",
+        "startProject": "Start a project",
+        "login": "Login",
+        "myProjects": "My Projects",
+        "library": "Library",
+        "logout": "Logout"
     },
     "drafts": {
-        "heading": "แบบร่างของคุณ",
-        "untitled": "แบบร่างไม่มีชื่อ",
-        "lastSaved": "บันทึกล่าสุด",
-        "location": "สถานที่",
-        "notSpecified": "ไม่ได้ระบุ",
-        "resume": "ดำเนินการต่อ",
-        "delete": "ลบ",
-        "noDrafts": "คุณไม่มีแบบร่างที่บันทึกไว้",
-        "createNew": "สร้างโปรเจกต์ใหม่"
+        "heading": "Your Drafts",
+        "untitled": "Untitled Draft",
+        "lastSaved": "Last Saved",
+        "location": "Location",
+        "notSpecified": "Not specified",
+        "resume": "Resume",
+        "delete": "Delete",
+        "noDrafts": "You have no saved drafts.",
+        "createNew": "Create New Project"
     },
     "editProject": {
-        "heading": "แก้ไขโปรเจกต์",
-        "title": "ชื่อเรื่อง",
-        "location": "สถานที่",
-        "addImages": "เพิ่มภาพ",
-        "description": "คำอธิบาย",
-        "fundingGoal": "เป้าหมายเงินทุน",
-        "currencySelection": "การเลือกสกุลเงิน",
-        "deadline": "วันสิ้นสุด",
-        "status": "สถานะ",
-        "validFeedback": "ดูดี!",
-        "deleteImage": "ลบ?",
-        "updateButton": "อัปเดตโปรเจกต์",
-        "backButton": "กลับไปที่ {{context}}"
+        "heading": "Edit Project",
+        "title": "Title",
+        "location": "Location",
+        "addImages": "Add Images",
+        "description": "Description",
+        "fundingGoal": "Funding Goal",
+        "currencySelection": "Currency selection",
+        "deadline": "Deadline",
+        "status": "Status",
+        "validFeedback": "Looks good!",
+        "deleteImage": "Delete?",
+        "updateButton": "Update Project",
+        "backButton": "Back To {{context}}"
     },
     "index": {
-        "tagline": "ขว้างความคิด สู่ความจริง",
-        "subtitle": "ที่บูมเมอแรง:",
-        "box1": "โปรเจกต์ที่ได้รับเงินทุน",
-        "box2": "เพื่อสนับสนุนงานสร้างสรรค์",
-        "box3": "คำมั่นสัญญา",
-        "heading1": "โปรเจกต์แนะนำ",
-        "daysLeft": "วันที่เหลือ",
-        "deadlinePassed": "หมดเขตแล้ว",
-        "viewButton": "ดู",
-        "heading2": "เกี่ยวกับเรา",
+        "tagline": "Chuck an idea, into reality.",
+        "subtitle": "ON BOOMERANG:",
+        "box1": "projects funded",
+        "box2": "towards creative work",
+        "box3": "pledges",
+        "heading1": "Recommended Projects",
+        "daysLeft": "days left",
+        "deadlinePassed": "Deadline passed",
+        "viewButton": "View",
+        "heading2": "About Us",
         "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi natus aspernatur corporis deleniti quidem qui aliquam quae est.",
         "infoBox1": {
-            "heading": "การเข้าถึงที่ไม่มีค่าใช้จ่าย",
-            "description": "เปิดกว้างและเข้าถึงได้ฟรีสำหรับทุกคน"
+            "heading": "No-Cost Access",
+            "description": "Open and free access to everyone with varying background"
         },
         "infoBox2": {
-            "heading": "การดูในช่วงกลางวัน",
-            "description": "ต่างจากเวลามาตรฐาน EST 12 ชั่วโมง เหมาะสำหรับการสังเกตการณ์ท้องฟ้า"
+            "heading": "Daytime Viewing",
+            "description": "12-hour time difference to EST, allows live celestial observations"
         },
         "infoBox3": {
-            "heading": "ความมืดที่บริสุทธิ์",
-            "description": "ตั้งอยู่ในโซนท้องฟ้ามืดระดับ Bortle คลาส 2 สูงจากระดับน้ำทะเล 3170 เมตร"
+            "heading": "Pristine Darkness",
+            "description": "Based in Bortle class 2 dark sky zone with an elevation of 3170m"
         }
     }
 }

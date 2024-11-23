@@ -14,6 +14,7 @@ module.exports.index = async (req, res) => {
 
     const allProjects = await Project.find({});
     const projects = allProjects.map((project) => ({
+        _id: project._id,
         titleText: project.title.get(language),
         descriptionText: project.description.get(language),
         images: project.images,

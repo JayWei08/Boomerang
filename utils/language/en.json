@@ -92,5 +92,101 @@
             "heading": "Pristine Darkness",
             "description": "Based in Bortle class 2 dark sky zone with an elevation of 3170m"
         }
+    },
+    "aboutUs": {
+        "heading": "About Us",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi natus aspernatur corporis deleniti quidem qui aliquam quae est.",
+        "infoBox1": {
+            "heading": "No-Cost Access",
+            "description": "Open and free access to everyone with varying background"
+        },
+        "infoBox2": {
+            "heading": "Daytime Viewing",
+            "description": "12-hour time difference to EST, allows live celestial observations"
+        },
+        "infoBox3": {
+            "heading": "Pristine Darkness",
+            "description": "Based in Bortle class 2 dark sky zone with an elevation of 3170m"
+        }
+    },
+    "savedProjects": {
+        "heading": "My Saved Projects",
+        "daysLeft": "days left",
+        "deadlinePassed": "Deadline passed",
+        "viewButton": "View",
+        "errorToggleSave": "Error toggling project save status."
+    },
+    "myProjects": {
+        "heading": "My Projects",
+        "projectCount": "You have made {{count}} project(s).",
+        "daysLeft": "days left",
+        "deadlinePassed": "Deadline passed",
+        "viewButton": "View",
+        "draftsHeading": "Your Drafts",
+        "draftCount": "You have {{count}} draft(s).",
+        "untitledDraft": "Untitled Draft",
+        "noDescription": "No description available.",
+        "noLocation": "No location specified.",
+        "lastSaved": "Last saved",
+        "resumeDraft": "Resume Draft",
+        "deleteButton": "Delete"
+    },
+    "createProject": {
+        "heading": "Create New Project",
+        "step1": {
+            "heading": "Step 1: Basics",
+            "titleLabel": "Title",
+            "locationLabel": "Location"
+        },
+        "step2": {
+            "heading": "Step 2: Details",
+            "addImagesLabel": "Add Images",
+            "descriptionLabel": "Description",
+            "savedImagesLabel": "Saved Images",
+            "deleteImageLabel": "Delete"
+        },
+        "step3": {
+            "heading": "Step 3: Funding",
+            "fundingGoalLabel": "Funding Goal",
+            "deadlineLabel": "Deadline"
+        },
+        "nextButton": "Next",
+        "previousButton": "Previous",
+        "submitButton": "Submit Project",
+        "saveDraftButton": "Save Draft",
+        "allProjectsLink": "All projects"
+    },
+    "projectSearch": {
+        "heading": "Project Search",
+        "searchPlaceholder": "Search for a project...",
+        "searchButton": "Search",
+        "resultsFound": "Displaying <strong>{{count}}</strong> results for \"<strong>{{keyword}}</strong>\".",
+        "noResults": "No projects found for \"<strong>{{keyword}}</strong>\". Please try a different keyword.",
+        "welcomeMessage": "Welcome to Project Search",
+        "instructions": "Enter a keyword above to search for projects.",
+        "daysLeft": "days left",
+        "deadlinePassed": "Deadline passed",
+        "viewButton": "View",
+        "errorToggleSave": "Error toggling project save status."
+    },
+    "show": {
+        "imageAlt": "Project Image",
+        "previous": "Previous",
+        "next": "Next",
+        "fundingGoal": "Funding Goal",
+        "submittedBy": "Submitted by",
+        "deadline": "Deadline",
+        "createdAt": "Created At",
+        "updatedAt": "Updated At",
+        "status": "Status",
+        "editButton": "Edit",
+        "deleteButton": "Delete",
+        "leaveComment": "Leave A Comment",
+        "commentLabel": "Comment",
+        "commentValid": "Looks good!",
+        "submitButton": "Submit",
+        "commentBy": "By: {{author}}",
+        "commentBody": "Comment: {{body}}",
+        "deleteComment": "Delete"
     }
 }

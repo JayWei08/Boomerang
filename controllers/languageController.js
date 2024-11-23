@@ -22,6 +22,6 @@ exports.setLanguage = async (req, res) => {
     }
 
     req.session.language = language;
-    console.log(language)
+    // console.log(language);
     res.redirect('back');
 };

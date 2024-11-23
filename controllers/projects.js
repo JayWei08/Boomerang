@@ -9,7 +9,7 @@ const Multiset = require("../utils/Multiset");
 const currencyToken = process.env.CURRENCY_TOKEN;
 
 module.exports.index = async (req, res) => {
-    const language = req.language;
+    const language = req.session.language;
     const user = await get_user(Users, req);
 
     const allProjects = await Project.find({});
@@ -57,16 +57,16 @@ module.exports.index = async (req, res) => {
                     coordinates: [0, 0],
                 },
                 properties: {
-                    title: project.title,
-                    description: project.description,
-                    popUpMarkup: `<a href="/projects/${project._id}">${project.title}</a>`,
+                    title: project.titleText,
+                    description: project.descriptionText,
+                    popUpMarkup: `<a href="/projects/${project._id}">${project.titleText}</a>`,
                 },
             })),
         };
 
         res.render("projects/index", {
             geoJsonProjects,
-            projects: allProjects.slice(0, 30),
+            projects: projects.slice(0, 30),
         });
     } catch (err) {
         console.error("Error loading projects:", err);
@@ -156,7 +156,8 @@ module.exports.showProject = async (req, res) => {
             })
             .populate("author");
 
-        const language = req.language;
+        const language = req.session.language;
+        console.log('project', language);
         project.titleText = project.title.get(language) || project.title.get('th');
         project.description = project.description.get(language) || project.description.get('th');
 

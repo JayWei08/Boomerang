@@ -154,7 +154,6 @@ app.use(async (req, res, next) => {
             }
         }
 
-        req.language = language;
         req.session.language = language;
         res.locals.selectedLanguage = language;
 

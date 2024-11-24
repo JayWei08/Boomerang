@@ -264,7 +264,7 @@
 
 <!-- Remaining Projects -->
 <div class="container mt-5">
-    <div class="row">
+    <div class="row" id="project-container">
         <% for (let project of remainingProjects) { %>
         <div class="col-md-4 mb-4">
             <div class="card">
@@ -339,6 +339,9 @@
             </div>
         </div>
         <% } %>
+    </div>
+    <div id="load-more-container" class="text-center my-3">
+        <button id="load-more" class="btn btn-primary">Load More</button>
     </div>
 </div>
 
@@ -422,33 +425,37 @@
 
 <script>
     let currentPage = 1;
-    const limit = 15;
+    const limit = 15; // Number of projects to load per page
 
+    // Fetch projects from the server
     async function fetchProjects(page) {
         try {
             const response = await fetch(
-                "/projects/api/projects?page=2&limit=15"
+                `/projects/api/projects?page=${page}&limit=${limit}`
             );
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-
             const data = await response.json();
-
-            // Ensure `data` contains the expected structure
             if (!data.projects) {
                 throw new Error("API response is missing the 'projects' key.");
             }
-
             return data;
         } catch (error) {
             console.error("Error fetching projects:", error);
-            return null; // Return null to handle the error gracefully
+            return null;
         }
     }
 
+    // Append projects to the DOM
     function appendProjects(projects) {
         const container = document.getElementById("project-container");
+
+        if (!container) {
+            console.error("Project container not found in the DOM.");
+            return;
+        }
+
         projects.forEach((project) => {
             const projectHTML = `
             <div class="col-md-4 mb-4">
@@ -465,16 +472,18 @@
                     <div class="card-body">
                         <h5 class="card-title">${project.titleText}</h5>
                         <p class="card-text">${project.descriptionText}</p>
+                        <p class="card-text text-muted">${project.location}</p>
                         <a href="/projects/${
                             project._id
                         }" class="btn btn-primary">View</a>
                     </div>
                 </div>
-            </div>
-        `;
+            </div>`;
             container.insertAdjacentHTML("beforeend", projectHTML);
         });
     }
+
+    // Event listener for the "Load More" button
     document.getElementById("load-more").addEventListener("click", async () => {
         currentPage++;
 
@@ -483,7 +492,7 @@
         if (data && data.projects && data.projects.length > 0) {
             appendProjects(data.projects);
 
-            // Hide the load button if the last page is reached
+            // Hide the button if there are no more pages
             if (currentPage >= data.totalPages) {
                 document.getElementById("load-more-container").style.display =
                     "none";

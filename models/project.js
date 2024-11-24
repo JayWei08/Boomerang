@@ -106,7 +106,7 @@ const ProjectSchema = new Schema(
             },
         ],
         relevanceScore: { type: Number },
-        isDraft: { type: Boolean, default: true },
+        isDraft: { type: Boolean, default: false },
         lastSavedAt: { type: Date, default: Date.now },
     },
     opts

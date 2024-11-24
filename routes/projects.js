@@ -55,6 +55,7 @@ router.get("/new", isLoggedIn, projects.renderNewForm);
 // Route to view "My Projects" page
 router.get("/my-projects", isLoggedIn, async (req, res) => {
     try {
+        const language = req.session.language || "en"; // Default to 'en' if no language is set
         const projects = await Project.find({
             author: req.user._id,
             isDraft: false,
@@ -63,7 +64,7 @@ router.get("/my-projects", isLoggedIn, async (req, res) => {
             author: req.user._id,
             isDraft: true,
         });
-        res.render("projects/my-projects", { projects, drafts });
+        res.render("projects/my-projects", { projects, drafts, language });
     } catch (error) {
         req.flash("error", "Unable to load your projects.");
         res.redirect("/projects");

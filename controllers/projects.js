@@ -96,8 +96,23 @@ module.exports.renderNewForm = async (req, res) => {
 
 module.exports.createProject = async (req, res, next) => {
     try {
-        const { draftId } = req.body; // Retrieve draftId
+        const { draftId } = req.body;
         let project;
+
+        if (
+            req.body.project.title &&
+            typeof req.body.project.title === "string"
+        ) {
+            req.body.project.title = new Map([["en", req.body.project.title]]);
+        }
+        if (
+            req.body.project.description &&
+            typeof req.body.project.description === "string"
+        ) {
+            req.body.project.description = new Map([
+                ["en", req.body.project.description],
+            ]);
+        }
 
         if (draftId) {
             project = await Project.findById(draftId);
@@ -126,6 +141,7 @@ module.exports.createProject = async (req, res, next) => {
             const geoData = await geocoder
                 .forwardGeocode({ query: req.body.project.location, limit: 1 })
                 .send();
+
             project = new Project({
                 ...req.body.project,
                 geometry: geoData.body.features[0].geometry,
@@ -151,6 +167,7 @@ module.exports.createProject = async (req, res, next) => {
         res.redirect("/projects/new");
     }
 };
+
 module.exports.showProject = async (req, res) => {
     try {
         const project = await Project.findById(req.params.id)
@@ -161,8 +178,10 @@ module.exports.showProject = async (req, res) => {
             .populate("author");
 
         const language = req.session.language;
-        project.titleText = project.title.get(language) || project.title.get('th');
-        project.description = project.description.get(language) || project.description.get('th');
+        project.titleText =
+            project.title.get(language) || project.title.get("th");
+        project.description =
+            project.description.get(language) || project.description.get("th");
 
         if (!project) {
             req.flash("error", "Cannot find that project!");
@@ -311,53 +330,60 @@ module.exports.saveDraft = async (req, res) => {
     const { draftId, deleteImages, ...draftData } = req.body;
 
     try {
-        // Ensure `images` array is always present and handle uploaded files
+        // Transform `title` and `description` into `Map` format
+        if (draftData.title && typeof draftData.title === "string") {
+            draftData.title = new Map([["en", draftData.title]]);
+        }
+        if (
+            draftData.description &&
+            typeof draftData.description === "string"
+        ) {
+            draftData.description = new Map([["en", draftData.description]]);
+        }
+
         const uploadedImages = Array.isArray(req.files)
             ? req.files.map((file) => ({
-                url: file.path,
-                filename: file.filename,
-            }))
-            : []; // Fallback to an empty array if no files are uploaded
+                  url: file.path,
+                  filename: file.filename,
+              }))
+            : [];
 
         let project;
 
         if (draftId) {
-            // Find and update an existing draft
             project = await Project.findById(draftId);
 
             if (!project) {
                 return res.status(404).json({ error: "Draft not found." });
             }
 
-            // Handle image deletions
             if (deleteImages && Array.isArray(deleteImages)) {
                 for (let filename of deleteImages) {
-                    await cloudinary.uploader.destroy(filename); // Remove image from Cloudinary
+                    await cloudinary.uploader.destroy(filename);
                 }
                 await project.updateOne({
-                    $pull: { images: { filename: { $in: deleteImages } } }, // Remove image references from database
+                    $pull: { images: { filename: { $in: deleteImages } } },
                 });
             }
 
-            // Update the draft with new data
             project.set({
                 ...draftData,
-                isDraft: true, // Explicitly set as draft
+                isDraft: true,
                 lastSavedAt: Date.now(),
             });
 
-            // Add new uploaded images to the draft
             if (uploadedImages.length > 0) {
                 project.images.push(...uploadedImages);
             }
 
-            await project.save(); // Save the updated draft
+            await project.save();
         } else {
-            // Create a new draft if no `draftId` is provided
             project = new Project({
                 ...draftData,
-                images: uploadedImages, // Include uploaded images
-                isDraft: true, // Explicitly set as draft
+                title: draftData.title,
+                description: draftData.description,
+                images: uploadedImages,
+                isDraft: true,
                 author: req.user._id,
                 lastSavedAt: Date.now(),
             });
@@ -383,11 +409,11 @@ module.exports.deleteDraft = async (req, res) => {
         const { id } = req.params;
         await Project.findByIdAndDelete(id);
         req.flash("success", "Draft deleted successfully.");
-        res.redirect("/projects/drafts");
+        res.redirect("/projects/my-projects");
     } catch (error) {
         console.error("Failed to delete draft:", error);
         req.flash("error", "Failed to delete draft.");
-        res.redirect("/projects/drafts");
+        res.redirect("/projects/my-projects");
     }
 };
 

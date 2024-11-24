@@ -49,7 +49,7 @@
                 action="/search"
                 method="GET"
                 class="d-flex"
-                style="<%= !currentUser ? 'width: 600px;' : 'width: 400px;' %> margin-left: 20px; margin-right: 20px"
+                style="<%= !currentUser ? 'width: 600px;' : 'width: 600px;' %> margin-left: 20px; margin-right: 20px"
             >
                 <div class="position-relative w-100">
                     <input
@@ -144,7 +144,17 @@
             </div>
             <% if (!currentUser) { %>
             <!-- Login Link -->
-            <a href="/login" class="nav-link"> <%= __('navbar.login') %> </a>
+            <a
+                href="/login"
+                class="btn btn-outline-primary px-3 py-1 ms-3"
+                style="
+                    border-radius: 5px;
+                    font-weight: bold;
+                    text-decoration: none;
+                "
+            >
+                <%= __('navbar.login') %>
+            </a>
             <% } else { %>
             <!-- Profile Dropdown -->
             <div class="dropdown ms-3">

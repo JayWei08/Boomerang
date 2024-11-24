@@ -1,5 +1,5 @@
 <% layout('layouts/boilerplate') %> <% function getCurrencySymbol(currency) {
-const currencySymbols={ USD: "$" , THB: "฿" }; return currencySymbols[currency]
+const currencySymbols = { USD: "$", THB: "฿" }; return currencySymbols[currency]
 || currency; } function getExchangeRates(userCurrency, projectCurrency,
 projectAmount, exchangeRates) { return (projectAmount *
 (exchangeRates.data[userCurrency] /
@@ -21,7 +21,7 @@ exchangeRates.data[projectCurrency])).toFixed(2); } %>
                 </div>
                 <% }); %>
             </div>
-            <% if (project.images.length> 1) { %>
+            <% if (project.images.length > 1) { %>
             <button
                 class="carousel-control-prev"
                 type="button"
@@ -87,7 +87,8 @@ exchangeRates.data[projectCurrency])).toFixed(2); } %>
                     <%= project.status %>
                 </li>
             </ul>
-            <% if (currentUser) { %>
+            <% if (currentUser && currentUser._id.toString() ===
+            project.author._id.toString()) { %>
             <div class="card-body">
                 <a
                     class="card-link btn btn-info"
@@ -150,7 +151,8 @@ exchangeRates.data[projectCurrency])).toFixed(2); } %>
                 <p class="card-text">
                     <%= __('show.commentBody', { body: comment.body }) %>
                 </p>
-                <% if (currentUser) { %>
+                <% if (currentUser && currentUser._id.toString() ===
+                comment.author._id.toString()) { %>
                 <form
                     action="/projects/<%= project._id %>/comments/<%= comment._id %>?_method=DELETE"
                     method="POST"

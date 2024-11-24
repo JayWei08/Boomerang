@@ -125,13 +125,24 @@
                             <button type="button" class="btn btn-secondary" onclick="previousStep(2)">
                                 <%= __('createProject.previousButton') %>
                             </button>
-                            <button type="submit" class="btn btn-success">
-                                <%= __('createProject.submitButton') %>
+                            <button type="button" class="btn btn-primary" onclick="nextStep(4)">
+                                <%= __('createProject.nextButton') %>
                             </button>
                             <button type="button" class="btn btn-secondary" onclick="saveDraft()">
                                 <%= __('createProject.saveDraftButton') %>
                             </button>
                         </div>
+                          <!-- Step 4: Categories and Keywords -->
+            <div id="step-4" class="form-step" style="display: none;">
+                <h2><%= __('createProject.step4.heading') %></h2>
+                <div id="categories-container">
+                    <p>Loading categories...</p>
+                </div>
+                <p>Selected Keywords: <span id="selected-count">0</span>/15</p>
+                <button type="button" class="btn btn-secondary" onclick="previousStep(3)"><%= __('createProject.previousButton') %></button>
+                <button type="submit" class="btn btn-success"> <%= __('createProject.submitButton') %> </button>
+                <button type="button" class="btn btn-secondary" onclick="saveDraft()"><%= __('createProject.saveDraftButton') %></button>
+            </div>
             </form>
             <a href="/projects">
                 <%= __('createProject.allProjectsLink') %>
@@ -139,7 +150,7 @@
         </div>
     </div>
 
-
+    <script src="/javascripts/categories.js"></script>
     <script>
         let currentStep = 1;
 
@@ -207,4 +218,82 @@
                 alert("Failed to save draft.");
             }
         }
+
+        const selectedKeywords = new Set(); // To store selected keywords
+const maxKeywords = 15; // Maximum allowed keywords
+
+        function renderCategories() {
+    const container = document.getElementById("categories-container");
+    container.innerHTML = ""; // Clear existing content
+    Object.keys(categories).forEach((category) => {
+        // Create a styled card for each category
+        const categoryCard = document.createElement("div");
+        categoryCard.className = "card mb-3 shadow-sm";
+
+        // Add a card header for the category name
+        const categoryHeader = `
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">${category}</h5>
+            </div>
+        `;
+
+        // Add a card body with keywords
+        const keywordBody = document.createElement("div");
+        keywordBody.className = "card-body";
+        const keywordList = document.createElement("div");
+        keywordList.className = "row";
+
+        categories[category].forEach((keyword) => {
+            const keywordItem = document.createElement("div");
+            keywordItem.className = "col-md-6 col-lg-4 mb-2"; // Adjust column size for responsiveness
+            keywordItem.innerHTML = `
+                <div class="form-check">
+                    <input 
+                        type="checkbox" 
+                        class="form-check-input" 
+                        id="${keyword}" 
+                        name="project[keywords][]" 
+                        value="${keyword}" 
+                        onchange="handleKeywordSelection(event)" 
+                    />
+                    <label class="form-check-label" for="${keyword}">
+                        ${keyword}
+                    </label>
+                </div>
+            `;
+            keywordList.appendChild(keywordItem);
+        });
+
+        keywordBody.appendChild(keywordList);
+
+        // Append header and body to the card
+        categoryCard.innerHTML = categoryHeader;
+        categoryCard.appendChild(keywordBody);
+
+        // Add the card to the container
+        container.appendChild(categoryCard);
+    });
+}
+
+
+function handleKeywordSelection(event) {
+    const keyword = event.target.value;
+    if (event.target.checked) {
+        if (selectedKeywords.size < maxKeywords) {
+            selectedKeywords.add(keyword); // Add the keyword
+        } else {
+            event.target.checked = false; // Prevent selecting more than max allowed
+            alert(`You can only select up to ${maxKeywords} keywords.`);
+        }
+    } else {
+        selectedKeywords.delete(keyword); // Remove the keyword
+    }
+
+    // Update the counter display
+    document.getElementById("selected-count").textContent = selectedKeywords.size;
+}
+
+
+
+    document.addEventListener("DOMContentLoaded", renderCategories);
     </script>

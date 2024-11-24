@@ -45,12 +45,11 @@
             </div>
 
             <!-- Search Bar -->
-            <!-- Search Bar -->
             <form
                 action="/search"
                 method="GET"
                 class="d-flex"
-                style="<%= !currentUser ? 'width: 600px;' : 'width: 400px;' %> margin-left: 20px; margin-right: 20px"
+                style="<%= !currentUser ? 'width: 600px;' : 'width: 600px;' %> margin-left: 20px; margin-right: 20px"
             >
                 <div class="position-relative w-100">
                     <input
@@ -85,49 +84,6 @@
                 >
                     <%= __('navbar.startProject') %>
                 </a>
-
-                <% if (!currentUser) { %>
-                <!-- Login Link -->
-                <a href="/login" class="nav-link">
-                    <%= __('navbar.login') %>
-                </a>
-                <% } else { %>
-                <!-- Dashboard Dropdown -->
-                <div class="dropdown">
-                    <button
-                        class="btn btn-secondary dropdown-toggle"
-                        type="button"
-                        id="dashboardDropdown"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                    >
-                        <%= __('navbar.dashboard') %>
-                    </button>
-                    <ul
-                        class="dropdown-menu"
-                        aria-labelledby="dashboardDropdown"
-                    >
-                        <li>
-                            <a
-                                class="dropdown-item"
-                                href="/projects/my-projects"
-                            >
-                                <%= __('navbar.myProjects') %>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="/projects/library">
-                                <%= __('navbar.library') %>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <!-- Logout Link -->
-                <a href="/logout" class="nav-link ms-3">
-                    <%= __('navbar.logout') %>
-                </a>
-                <% } %>
-
                 <!-- Language Dropdown -->
                 <div class="dropdown ms-3">
                     <button
@@ -185,6 +141,66 @@
                         <% }) %>
                     </ul>
                 </div>
+
+                <% if (!currentUser) { %>
+                <!-- Login Link -->
+                <a href="/login" class="nav-link">
+                    <%= __('navbar.login') %>
+                </a>
+                <% } else { %>
+                <!-- Profile Dropdown -->
+                <div class="dropdown ms-3">
+                    <button
+                        class="btn btn-secondary dropdown-toggle d-flex align-items-center"
+                        type="button"
+                        id="profileDropdown"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        style="
+                            background: none;
+                            border: none;
+                            color: inherit;
+                            padding: 0;
+                        "
+                    >
+                        <!-- Profile Icon -->
+                        <img
+                            src="https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png"
+                            alt="Profile"
+                            style="
+                                width: 30px;
+                                height: 30px;
+                                border-radius: 50%;
+                                object-fit: cover;
+                            "
+                        />
+                    </button>
+                    <ul
+                        class="dropdown-menu dropdown-menu-end"
+                        aria-labelledby="profileDropdown"
+                    >
+                        <li>
+                            <a
+                                class="dropdown-item"
+                                href="/projects/my-projects"
+                            >
+                                <%= __('navbar.myProjects') %>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/projects/library">
+                                <%= __('navbar.library') %>
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="/logout">
+                                <%= __('navbar.logout') %>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <% } %>
             </div>
         </div>
     </div>

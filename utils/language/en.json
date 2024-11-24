@@ -70,7 +70,7 @@
         "backButton": "Back To {{context}}"
     },
     "index": {
-        "tagline": "Chuck an idea, into reality.",
+        "tagline": "Launch an idea, into reality.",
         "subtitle": "ON BOOMERANG:",
         "box1": "projects funded",
         "box2": "towards creative work",
@@ -92,7 +92,8 @@
         "infoBox3": {
             "heading": "Pristine Darkness",
             "description": "Based in Bortle class 2 dark sky zone with an elevation of 3170m"
-        }
+        },
+        "myProjectsHeading": "My Projects"
     },
     "aboutUs": {
         "heading": "About Us",

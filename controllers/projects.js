@@ -96,14 +96,16 @@ module.exports.renderNewForm = async (req, res) => {
 
 module.exports.createProject = async (req, res, next) => {
     try {
-        const { draftId } = req.body;
+        const { draftId } = req.body; // Retrieve draftId from the request
         let project;
 
+        // Ensure `title` and `description` are stored as `Map` in the required format
         if (
             req.body.project.title &&
             typeof req.body.project.title === "string"
         ) {
             req.body.project.title = new Map([["en", req.body.project.title]]);
+            req.body.project.titleText = req.body.project.title.get("en"); // Set titleText
         }
         if (
             req.body.project.description &&
@@ -112,9 +114,12 @@ module.exports.createProject = async (req, res, next) => {
             req.body.project.description = new Map([
                 ["en", req.body.project.description],
             ]);
+            req.body.project.descriptionText =
+                req.body.project.description.get("en"); // Set descriptionText
         }
 
         if (draftId) {
+            // Update an existing draft
             project = await Project.findById(draftId);
             if (!project) {
                 req.flash("error", "Draft not found.");
@@ -122,37 +127,45 @@ module.exports.createProject = async (req, res, next) => {
             }
 
             project.set({
-                ...req.body.project,
-                isDraft: false,
-                updatedAt: Date.now(),
+                ...req.body.project, // Update fields from form
+                titleText: req.body.project.titleText,
+                descriptionText: req.body.project.descriptionText,
+                isDraft: false, // Mark the project as published
+                updatedAt: Date.now(), // Update timestamp
             });
 
+            // Geocode location
             const geoData = await geocoder
                 .forwardGeocode({ query: req.body.project.location, limit: 1 })
                 .send();
             project.geometry = geoData.body.features[0].geometry;
 
+            // Add uploaded images
             const imgs = req.files.map((f) => ({
                 url: f.path,
                 filename: f.filename,
             }));
             project.images.push(...imgs);
         } else {
+            // Create a new project
             const geoData = await geocoder
                 .forwardGeocode({ query: req.body.project.location, limit: 1 })
                 .send();
 
             project = new Project({
-                ...req.body.project,
-                geometry: geoData.body.features[0].geometry,
+                ...req.body.project, // Use form data
+                titleText: req.body.project.titleText,
+                descriptionText: req.body.project.descriptionText,
+                geometry: geoData.body.features[0].geometry, // Add location geometry
                 images: req.files.map((f) => ({
                     url: f.path,
                     filename: f.filename,
                 })),
-                author: req.user._id,
+                author: req.user._id, // Associate with the current user
             });
         }
 
+        // Save the project
         await project.save();
         req.flash(
             "success",
@@ -160,11 +173,20 @@ module.exports.createProject = async (req, res, next) => {
                 ? "Draft successfully published!"
                 : "Successfully created a new project!"
         );
-        return res.redirect(`/projects/${project._id}`);
+        return res.redirect(`/projects/${project._id}`); // Redirect to the project page
     } catch (error) {
-        console.error("Error in createProject:", error.message);
-        req.flash("error", "Failed to create or update the project.");
-        res.redirect("/projects/new");
+        // Improved error logging
+        console.error("Error in createProject:", {
+            message: error.message,
+            stack: error.stack,
+            body: req.body,
+        });
+
+        req.flash(
+            "error",
+            "Failed to create or update the project. Please ensure all required fields are filled."
+        );
+        res.redirect("/projects/new"); // Redirect back to the form
     }
 };
 

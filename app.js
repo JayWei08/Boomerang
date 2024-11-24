@@ -223,6 +223,11 @@ app.use("/", authRoutes);
 // Register the search route
 app.use("/", searchRoute);
 
+// Redirects user to /projects page if they go to /
+app.get("/", (req, res) => {
+    res.redirect("/projects");
+});
+
 app.get("/about", (req, res) => {
     res.render("about/about.ejs");
 });

@@ -93,6 +93,15 @@
             "heading": "Pristine Darkness",
             "description": "Based in Bortle class 2 dark sky zone with an elevation of 3170m"
         },
+        "infoBox4": {
+            "heading": "Launch Your Next Big Idea",
+            "description": "At Boomerang, we empower creators to bring their ideas to life. Join our platform and connect with a community ready to support your journey. Whether you're starting out or scaling up, we're here to help you succeed.",
+            "learnMore": "Learn more"
+        },
+        "infoBox5": {
+            "heading": "Get Started Now",
+            "description": "Explore our comprehensive guides, tools, and tips designed to help you plan, launch, and grow your projects. From setting goals to engaging your supporters, our resources are crafted to ensure your success on Boomerang."
+        },
         "myProjectsHeading": "My Projects"
     },
     "aboutUs": {

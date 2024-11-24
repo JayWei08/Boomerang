@@ -100,7 +100,8 @@
         },
         "infoBox5": {
             "heading": "Get Started Now",
-            "description": "Explore our comprehensive guides, tools, and tips designed to help you plan, launch, and grow your projects. From setting goals to engaging your supporters, our resources are crafted to ensure your success on Boomerang."
+            "description": "Explore our comprehensive guides, tools, and tips designed to help you plan, launch, and grow your projects. From setting goals to engaging your supporters, our resources are crafted to ensure your success on Boomerang.",
+            "learnMore": "Learn more"
         },
         "myProjectsHeading": "My Projects"
     },

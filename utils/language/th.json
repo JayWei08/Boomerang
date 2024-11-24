@@ -1,17 +1,17 @@
 {
-    "boomerang": "บูมเมอแรง",
+    "boomerang": "Boomerang",
     "footer": {
-        "title": "บูมเมอแรง",
-        "description": "ค้นพบและสนับสนุนโครงการสร้างสรรค์ทั่วโลก ร่วมกันเราทำให้ไอเดียกลายเป็นจริงและสร้างความเปลี่ยนแปลง ร่วมเป็นส่วนหนึ่งกับเราได้วันนี้!",
+        "title": "Boomerang",
+        "description": "ค้นพบและสนับสนุนโปรเจ็กต์สร้างสรรค์จากทั่วโลก ร่วมกันทำให้ไอเดียกลายเป็นความจริงและสร้างความเปลี่ยนแปลง เข้าร่วมกับเราวันนี้!",
         "about": {
             "title": "เกี่ยวกับ",
             "aboutUs": "เกี่ยวกับเรา",
-            "howItWorks": "วิธีการทำงานของบูมเมอแรง",
+            "howItWorks": "วิธีการทำงานของ Boomerang",
             "stats": "สถิติ",
-            "press": "สื่อ"
+            "press": "ข่าวประชาสัมพันธ์"
         },
         "links": {
-            "title": "ลิงก์ที่เป็นประโยชน์",
+            "title": "ลิงก์ที่มีประโยชน์",
             "helpCenter": "ศูนย์ช่วยเหลือ",
             "rules": "กฎของเรา",
             "payment": "การชำระเงิน",
@@ -21,8 +21,8 @@
             "title": "ติดต่อ",
             "address": "นิวยอร์ก, NY 10012, สหรัฐอเมริกา",
             "email": "info@example.com",
-            "phone": "+ 01 234 567 88",
-            "fax": "+ 01 234 567 89"
+            "phone": "+01 234 567 88",
+            "fax": "+01 234 567 89"
         },
         "copyright": {
             "year": "2025",
@@ -31,51 +31,51 @@
         }
     },
     "navbar": {
-        "brand": "บูมเมอแรง",
+        "brand": "Boomerang",
         "toggle": "สลับการนำทาง",
-        "projects": "โครงการ",
+        "projects": "โปรเจ็กต์",
         "search": "ค้นหา",
-        "searchPlaceholder": "ค้นหาโครงการ",
-        "startProject": "เริ่มโครงการ",
+        "searchPlaceholder": "ค้นหาโปรเจ็กต์",
+        "startProject": "เริ่มโปรเจ็กต์",
         "login": "เข้าสู่ระบบ",
-        "dashboard": "แดชบอร์ดของฉัน",
-        "myProjects": "โครงการของฉัน",
-        "library": "คลังข้อมูล",
+        "Dashboard": "แดชบอร์ดของฉัน",
+        "myProjects": "โปรเจ็กต์ของฉัน",
+        "library": "คลัง",
         "logout": "ออกจากระบบ"
     },
     "drafts": {
         "heading": "ร่างของคุณ",
         "untitled": "ร่างไม่มีชื่อ",
         "lastSaved": "บันทึกล่าสุด",
-        "location": "ที่ตั้ง",
+        "location": "สถานที่",
         "notSpecified": "ไม่ได้ระบุ",
         "resume": "ดำเนินการต่อ",
         "delete": "ลบ",
-        "noDrafts": "คุณไม่มีร่างที่บันทึกไว้",
-        "createNew": "สร้างโครงการใหม่"
+        "noDrafts": "คุณยังไม่มีร่างที่บันทึกไว้",
+        "createNew": "สร้างโปรเจ็กต์ใหม่"
     },
     "editProject": {
-        "heading": "แก้ไขโครงการ",
-        "title": "ชื่อเรื่อง",
-        "location": "ที่ตั้ง",
+        "heading": "แก้ไขโปรเจ็กต์",
+        "title": "ชื่อ",
+        "location": "สถานที่",
         "addImages": "เพิ่มรูปภาพ",
         "description": "คำอธิบาย",
         "fundingGoal": "เป้าหมายการระดมทุน",
-        "currencySelection": "การเลือกสกุลเงิน",
+        "currencySelection": "เลือกสกุลเงิน",
         "deadline": "กำหนดเวลา",
         "status": "สถานะ",
         "validFeedback": "ดูดี!",
         "deleteImage": "ลบ?",
-        "updateButton": "อัปเดตโครงการ",
-        "backButton": "กลับไปที่ {{context}}"
+        "updateButton": "อัปเดตโปรเจ็กต์",
+        "backButton": "กลับไปยัง {{context}}"
     },
     "index": {
-        "tagline": "เปลี่ยนไอเดียให้เป็นจริง",
-        "subtitle": "ในบูมเมอแรง:",
-        "box1": "โครงการที่ได้รับทุน",
-        "box2": "เพื่อการสร้างสรรค์",
+        "tagline": "เปลี่ยนไอเดียให้เป็นความจริง",
+        "subtitle": "บน BOOMERANG:",
+        "box1": "โปรเจ็กต์ที่ได้รับทุน",
+        "box2": "เพื่อผลงานสร้างสรรค์",
         "box3": "คำมั่นสัญญา",
-        "heading1": "โครงการที่แนะนำ",
+        "heading1": "โปรเจ็กต์แนะนำ",
         "daysLeft": "วันคงเหลือ",
         "deadlinePassed": "หมดเขตแล้ว",
         "viewButton": "ดู",
@@ -83,15 +83,15 @@
         "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi natus aspernatur corporis deleniti quidem qui aliquam quae est.",
         "infoBox1": {
             "heading": "เข้าถึงฟรี",
-            "description": "การเข้าถึงแบบเปิดและฟรีสำหรับทุกคนที่มีพื้นฐานหลากหลาย"
+            "description": "เปิดให้ทุกคนเข้าถึงได้ฟรี ไม่ว่าคุณจะมีพื้นฐานอย่างไร"
         },
         "infoBox2": {
             "heading": "ดูในเวลากลางวัน",
-            "description": "แตกต่างเวลา 12 ชั่วโมงจาก EST ช่วยให้สังเกตการณ์ท้องฟ้าได้แบบสด"
+            "description": "ต่างจากเวลามาตรฐานตะวันออก (EST) 12 ชั่วโมง ช่วยให้คุณสังเกตการณ์ท้องฟ้าได้แบบสด"
         },
         "infoBox3": {
             "heading": "ความมืดที่บริสุทธิ์",
-            "description": "ตั้งอยู่ในโซนท้องฟ้ามืดระดับ Bortle Class 2 ที่ระดับความสูง 3170 เมตร"
+            "description": "ตั้งอยู่ในโซนท้องฟ้ามืดระดับ Bortle Class 2 ที่ระดับความสูง 3,170 เมตร"
         }
     },
     "aboutUs": {
@@ -99,27 +99,27 @@
         "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi natus aspernatur corporis deleniti quidem qui aliquam quae est.",
         "infoBox1": {
             "heading": "เข้าถึงฟรี",
-            "description": "การเข้าถึงแบบเปิดและฟรีสำหรับทุกคนที่มีพื้นฐานหลากหลาย"
+            "description": "เปิดให้ทุกคนเข้าถึงได้ฟรี ไม่ว่าคุณจะมีพื้นฐานอย่างไร"
         },
         "infoBox2": {
             "heading": "ดูในเวลากลางวัน",
-            "description": "แตกต่างเวลา 12 ชั่วโมงจาก EST ช่วยให้สังเกตการณ์ท้องฟ้าได้แบบสด"
+            "description": "ต่างจากเวลามาตรฐานตะวันออก (EST) 12 ชั่วโมง ช่วยให้คุณสังเกตการณ์ท้องฟ้าได้แบบสด"
         },
         "infoBox3": {
             "heading": "ความมืดที่บริสุทธิ์",
-            "description": "ตั้งอยู่ในโซนท้องฟ้ามืดระดับ Bortle Class 2 ที่ระดับความสูง 3170 เมตร"
+            "description": "ตั้งอยู่ในโซนท้องฟ้ามืดระดับ Bortle Class 2 ที่ระดับความสูง 3,170 เมตร"
         }
     },
     "savedProjects": {
-        "heading": "โครงการที่ฉันบันทึกไว้",
+        "heading": "โปรเจ็กต์ที่ฉันบันทึกไว้",
         "daysLeft": "วันคงเหลือ",
         "deadlinePassed": "หมดเขตแล้ว",
         "viewButton": "ดู",
-        "errorToggleSave": "เกิดข้อผิดพลาดในการเปลี่ยนสถานะการบันทึกโครงการ"
+        "errorToggleSave": "เกิดข้อผิดพลาดในการเปลี่ยนสถานะการบันทึกโปรเจ็กต์"
     },
     "myProjects": {
-        "heading": "โครงการของฉัน",
-        "projectCount": "คุณได้สร้างโครงการ {{count}} โครงการ",
+        "heading": "โปรเจ็กต์ของฉัน",
+        "projectCount": "คุณได้สร้างโปรเจ็กต์ {{count}} โปรเจ็กต์",
         "daysLeft": "วันคงเหลือ",
         "deadlinePassed": "หมดเขตแล้ว",
         "viewButton": "ดู",
@@ -127,17 +127,17 @@
         "draftCount": "คุณมีร่าง {{count}} ฉบับ",
         "untitledDraft": "ร่างไม่มีชื่อ",
         "noDescription": "ไม่มีคำอธิบาย",
-        "noLocation": "ไม่มีการระบุที่ตั้ง",
+        "noLocation": "ไม่ได้ระบุสถานที่",
         "lastSaved": "บันทึกล่าสุด",
         "resumeDraft": "ดำเนินการต่อร่าง",
         "deleteButton": "ลบ"
     },
     "createProject": {
-        "heading": "สร้างโครงการใหม่",
+        "heading": "สร้างโปรเจ็กต์ใหม่",
         "step1": {
             "heading": "ขั้นตอนที่ 1: พื้นฐาน",
-            "titleLabel": "ชื่อเรื่อง",
-            "locationLabel": "ที่ตั้ง"
+            "titleLabel": "ชื่อ",
+            "locationLabel": "สถานที่"
         },
         "step2": {
             "heading": "ขั้นตอนที่ 2: รายละเอียด",
@@ -153,25 +153,25 @@
         },
         "nextButton": "ถัดไป",
         "previousButton": "ก่อนหน้า",
-        "submitButton": "ส่งโครงการ",
+        "submitButton": "ส่งโปรเจ็กต์",
         "saveDraftButton": "บันทึกร่าง",
-        "allProjectsLink": "โครงการทั้งหมด"
+        "allProjectsLink": "โปรเจ็กต์ทั้งหมด"
     },
     "projectSearch": {
-        "heading": "ค้นหาโครงการ",
-        "searchPlaceholder": "ค้นหาโครงการ...",
+        "heading": "ค้นหาโปรเจ็กต์",
+        "searchPlaceholder": "ค้นหาโปรเจ็กต์...",
         "searchButton": "ค้นหา",
-        "resultsFound": "แสดง <strong>{{count}}</strong> ผลลัพธ์สำหรับ \"<strong>{{keyword}}</strong>\".",
-        "noResults": "ไม่พบโครงการสำหรับ \"<strong>{{keyword}}</strong>\". โปรดลองคำค้นหาอื่น",
-        "welcomeMessage": "ยินดีต้อนรับสู่การค้นหาโครงการ",
-        "instructions": "ใส่คำค้นหาด้านบนเพื่อค้นหาโครงการ",
+        "resultsFound": "แสดงผลลัพธ์ <strong>{{count}}</strong> รายการสำหรับ \"<strong>{{keyword}}</strong>\"",
+        "noResults": "ไม่พบโปรเจ็กต์สำหรับ \"<strong>{{keyword}}</strong>\" กรุณาลองใช้คำค้นหาอื่น",
+        "welcomeMessage": "ยินดีต้อนรับสู่การค้นหาโปรเจ็กต์",
+        "instructions": "ใส่คำค้นหาด้านบนเพื่อค้นหาโปรเจ็กต์",
         "daysLeft": "วันคงเหลือ",
         "deadlinePassed": "หมดเขตแล้ว",
         "viewButton": "ดู",
-        "errorToggleSave": "เกิดข้อผิดพลาดในการเปลี่ยนสถานะการบันทึกโครงการ"
+        "errorToggleSave": "เกิดข้อผิดพลาดในการเปลี่ยนสถานะการบันทึกโปรเจ็กต์"
     },
     "show": {
-        "imageAlt": "ภาพโครงการ",
+        "imageAlt": "ภาพโปรเจ็กต์",
         "previous": "ก่อนหน้า",
         "next": "ถัดไป",
         "fundingGoal": "เป้าหมายการระดมทุน",
@@ -186,6 +186,8 @@
         "commentLabel": "ความคิดเห็น",
         "commentValid": "ดูดี!",
         "submitButton": "ส่ง",
-        "commentBy": "โดย"
+        "commentBy": "โดย: {{author}}",
+        "commentBody": "ความคิดเห็น: {{body}}",
+        "deleteComment": "ลบ"
     }
 }

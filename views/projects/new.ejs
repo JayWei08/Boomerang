@@ -150,63 +150,61 @@
         </div>
     </div>
 
-    <script src="/javascripts/categories.js"></script>
-    <script>
-        let currentStep = 1;
-
+    <script type="module">
+        import { categories } from "/javascripts/categories.js";
+    
+        let currentStep = 1; // Keeps track of the current step in the multi-step form
+        const selectedKeywords = new Set(); // Stores selected keywords
+        const maxKeywords = 15; // Maximum allowed keywords
+    
         function nextStep(step) {
             document.getElementById(`step-${currentStep}`).style.display = "none";
             document.getElementById(`step-${step}`).style.display = "block";
             currentStep = step;
         }
-
+    
         function previousStep(step) {
             document.getElementById(`step-${currentStep}`).style.display = "none";
             document.getElementById(`step-${step}`).style.display = "block";
             currentStep = step;
         }
-
+    
         async function saveDraft() {
             const formData = new FormData();
-
-            // Append the draft ID if it exists
+    
             const draftId = document.querySelector('input[name="draftId"]')?.value;
-            if (draftId) {
-                formData.append("draftId", draftId);
-            }
-
-            // Append text fields
-            formData.append("title", document.getElementById("title").value);
-            formData.append("location", document.getElementById("location").value);
-            formData.append("description", document.getElementById("description").value);
-            formData.append("fundingGoal", document.getElementById("fundingGoal").value);
-            formData.append("currency", document.getElementById("currency").value);
-            formData.append("deadline", document.getElementById("deadline").value);
-            formData.append("isDraft", true);
-
-            // Append files from the file input field
+            if (draftId) formData.append("draftId", draftId);
+    
+            formData.append("project[title]", document.getElementById("title").value);
+            formData.append("project[location]", document.getElementById("location").value);
+            formData.append("project[description]", document.getElementById("description").value);
+            formData.append("project[fundingGoal]", document.getElementById("fundingGoal").value);
+            formData.append("project[currency]", document.getElementById("currency").value);
+            formData.append("project[deadline]", document.getElementById("deadline").value);
+            formData.append("project[isDraft]", true);
+    
             const imageInput = document.getElementById("image");
             if (imageInput && imageInput.files.length > 0) {
                 for (let i = 0; i < imageInput.files.length; i++) {
                     formData.append("image", imageInput.files[i]);
                 }
             }
-
-            // Append deleted image filenames
+    
             const deleteImages = document.querySelectorAll(
                 'input[name="deleteImages[]"]:checked'
             );
             deleteImages.forEach((checkbox) => {
                 formData.append("deleteImages[]", checkbox.value);
             });
-
+    
             try {
                 const response = await fetch("/projects/save-draft", {
                     method: "POST",
                     body: formData,
                 });
-
+    
                 if (response.ok) {
+                    const data = await response.json();
                     alert("Draft saved successfully!");
                 } else {
                     const error = await response.json();
@@ -218,82 +216,80 @@
                 alert("Failed to save draft.");
             }
         }
-
-        const selectedKeywords = new Set(); // To store selected keywords
-const maxKeywords = 15; // Maximum allowed keywords
-
+    
         function renderCategories() {
-    const container = document.getElementById("categories-container");
-    container.innerHTML = ""; // Clear existing content
-    Object.keys(categories).forEach((category) => {
-        // Create a styled card for each category
-        const categoryCard = document.createElement("div");
-        categoryCard.className = "card mb-3 shadow-sm";
-
-        // Add a card header for the category name
-        const categoryHeader = `
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">${category}</h5>
-            </div>
-        `;
-
-        // Add a card body with keywords
-        const keywordBody = document.createElement("div");
-        keywordBody.className = "card-body";
-        const keywordList = document.createElement("div");
-        keywordList.className = "row";
-
-        categories[category].forEach((keyword) => {
-            const keywordItem = document.createElement("div");
-            keywordItem.className = "col-md-6 col-lg-4 mb-2"; // Adjust column size for responsiveness
-            keywordItem.innerHTML = `
-                <div class="form-check">
-                    <input 
-                        type="checkbox" 
-                        class="form-check-input" 
-                        id="${keyword}" 
-                        name="project[keywords][]" 
-                        value="${keyword}" 
-                        onchange="handleKeywordSelection(event)" 
-                    />
-                    <label class="form-check-label" for="${keyword}">
-                        ${keyword}
-                    </label>
-                </div>
-            `;
-            keywordList.appendChild(keywordItem);
-        });
-
-        keywordBody.appendChild(keywordList);
-
-        // Append header and body to the card
-        categoryCard.innerHTML = categoryHeader;
-        categoryCard.appendChild(keywordBody);
-
-        // Add the card to the container
-        container.appendChild(categoryCard);
-    });
-}
-
-
-function handleKeywordSelection(event) {
-    const keyword = event.target.value;
-    if (event.target.checked) {
-        if (selectedKeywords.size < maxKeywords) {
-            selectedKeywords.add(keyword); // Add the keyword
-        } else {
-            event.target.checked = false; // Prevent selecting more than max allowed
-            alert(`You can only select up to ${maxKeywords} keywords.`);
+            const container = document.getElementById("categories-container");
+            container.innerHTML = ""; // Clear existing content
+    
+            Object.keys(categories).forEach((category) => {
+                const categoryCard = document.createElement("div");
+                categoryCard.className = "card mb-3 shadow-sm";
+    
+                const categoryHeader = `
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">${category}</h5>
+                    </div>
+                `;
+    
+                const keywordBody = document.createElement("div");
+                keywordBody.className = "card-body";
+                const keywordList = document.createElement("div");
+                keywordList.className = "row";
+    
+                categories[category].forEach((keyword) => {
+                    const keywordItem = document.createElement("div");
+                    keywordItem.className = "col-md-6 col-lg-4 mb-2";
+                    keywordItem.innerHTML = `
+                        <div class="form-check">
+                            <input 
+                                type="checkbox" 
+                                class="form-check-input" 
+                                id="${keyword}" 
+                                name="project[keywords][]" 
+                                value="${keyword}" 
+                                onchange="handleKeywordSelection(event)" 
+                            />
+                            <label class="form-check-label" for="${keyword}">
+                                ${keyword}
+                            </label>
+                        </div>
+                    `;
+                    keywordList.appendChild(keywordItem);
+                });
+    
+                keywordBody.appendChild(keywordList);
+    
+                categoryCard.innerHTML = categoryHeader;
+                categoryCard.appendChild(keywordBody);
+    
+                container.appendChild(categoryCard);
+            });
         }
-    } else {
-        selectedKeywords.delete(keyword); // Remove the keyword
-    }
-
-    // Update the counter display
-    document.getElementById("selected-count").textContent = selectedKeywords.size;
-}
-
-
-
-    document.addEventListener("DOMContentLoaded", renderCategories);
+    
+        function handleKeywordSelection(event) {
+            const keyword = event.target.value;
+            if (event.target.checked) {
+                if (selectedKeywords.size < maxKeywords) {
+                    selectedKeywords.add(keyword); // Add the keyword
+                } else {
+                    event.target.checked = false; // Prevent selecting more than max allowed
+                    alert(`You can only select up to ${maxKeywords} keywords.`);
+                }
+            } else {
+                selectedKeywords.delete(keyword); // Remove the keyword
+            }
+    
+            // Update the counter display
+            document.getElementById("selected-count").textContent =
+                selectedKeywords.size;
+        }
+    
+        // Attach functions to the global `window` object
+        window.nextStep = nextStep;
+        window.previousStep = previousStep;
+        window.handleKeywordSelection = handleKeywordSelection;
+        window.saveDraft = saveDraft;
+        // Initialize the categories rendering on page load
+        document.addEventListener("DOMContentLoaded", renderCategories);
     </script>
+    

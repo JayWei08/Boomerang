@@ -375,18 +375,21 @@ module.exports.saveDraft = async (req, res) => {
     console.log("Draft Data:", req.body); // Debug log for incoming data
     console.log("Uploaded Files:", req.files); // Debug log for uploaded files
 
-    const { draftId, deleteImages, ...draftData } = req.body;
+    const { draftId, deleteImages, project } = req.body;
+
+    if (!project || !project.title) {
+        return res
+            .status(400)
+            .json({ error: "Title is required for saving draft." });
+    }
 
     try {
         // Transform `title` and `description` into `Map` format
-        if (draftData.title && typeof draftData.title === "string") {
-            draftData.title = new Map([["en", draftData.title]]);
+        if (project.title && typeof project.title === "string") {
+            project.title = new Map([["en", project.title]]);
         }
-        if (
-            draftData.description &&
-            typeof draftData.description === "string"
-        ) {
-            draftData.description = new Map([["en", draftData.description]]);
+        if (project.description && typeof project.description === "string") {
+            project.description = new Map([["en", project.description]]);
         }
 
         const uploadedImages = Array.isArray(req.files)
@@ -396,52 +399,55 @@ module.exports.saveDraft = async (req, res) => {
               }))
             : [];
 
-        let project;
+        let draft;
 
         if (draftId) {
-            project = await Project.findById(draftId);
+            draft = await Project.findById(draftId);
 
-            if (!project) {
+            if (!draft) {
                 return res.status(404).json({ error: "Draft not found." });
             }
 
+            // Delete images if requested
             if (deleteImages && Array.isArray(deleteImages)) {
                 for (let filename of deleteImages) {
                     await cloudinary.uploader.destroy(filename);
                 }
-                await project.updateOne({
+                await draft.updateOne({
                     $pull: { images: { filename: { $in: deleteImages } } },
                 });
             }
 
-            project.set({
-                ...draftData,
+            // Update the draft
+            draft.set({
+                ...project,
                 isDraft: true,
                 lastSavedAt: Date.now(),
             });
 
             if (uploadedImages.length > 0) {
-                project.images.push(...uploadedImages);
+                draft.images.push(...uploadedImages);
             }
 
-            await project.save();
+            await draft.save();
         } else {
-            project = new Project({
-                ...draftData,
-                title: draftData.title,
-                description: draftData.description,
+            // Create a new draft
+            draft = new Project({
+                ...project,
+                title: project.title,
+                description: project.description,
                 images: uploadedImages,
                 isDraft: true,
                 author: req.user._id,
                 lastSavedAt: Date.now(),
             });
 
-            await project.save();
+            await draft.save();
         }
 
         res.status(200).json({
             message: "Draft saved successfully",
-            projectId: project._id,
+            projectId: draft._id,
         });
     } catch (error) {
         console.error("Failed to save draft:", error.message);

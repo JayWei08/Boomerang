@@ -1,4 +1,4 @@
-const categories = {
+export const categories = {
     Technology: [
         "AI",
         "Blockchain",
@@ -170,6 +170,3 @@ const categories = {
         "Fundraising",
     ],
 };
-
-// Export the categories object
-module.exports = categories;

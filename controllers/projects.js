@@ -9,9 +9,10 @@ const Multiset = require("../utils/Multiset");
 const currencyToken = process.env.CURRENCY_TOKEN;
 
 module.exports.index = async (req, res) => {
-    const language = req.session.language;
+    const language = req.session.language || "en"; // Default to 'en' if no language is set
     const user = await get_user(Users, req);
 
+    // Fetch all projects
     const allProjects = await Project.find({});
     const projects = allProjects.map((project) => ({
         _id: project._id,
@@ -50,11 +51,34 @@ module.exports.index = async (req, res) => {
         projects.sort((a, b) => b.relevanceScore - a.relevanceScore);
     }
 
+    // Fetch user's own projects if logged in
+    let myProjects = [];
+    if (req.user) {
+        const userProjects = await Project.find({
+            author: req.user._id,
+            isDraft: false, // Exclude drafts
+        });
+        myProjects = userProjects.map((project) => ({
+            _id: project._id,
+            titleText: project.title.get(language),
+            descriptionText: project.description.get(language),
+            images: project.images,
+            geometry: project.geometry,
+            location: project.location,
+            deadline: project.deadline,
+        }));
+    }
+
     // Convert projects to GeoJSON format
     try {
+        // Filter out only published projects (not drafts)
+        const publishedProjects = projects.filter(
+            (project) => !project.isDraft
+        );
+
         const geoJsonProjects = {
             type: "FeatureCollection",
-            features: projects.map((project) => ({
+            features: publishedProjects.map((project) => ({
                 type: "Feature",
                 geometry: project.geometry || {
                     type: "Point",
@@ -71,7 +95,9 @@ module.exports.index = async (req, res) => {
         // Render the projects/index template
         res.render("projects/index", {
             geoJsonProjects,
-            projects: projects.slice(0, 30),
+            projects: publishedProjects,
+            // projects: projects.slice(0, 30), // Pass the top 30 projects
+            myProjects, // Pass user's own projects
         });
     } catch (err) {
         console.error("Error loading projects:", err);

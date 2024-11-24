@@ -92,7 +92,8 @@
         "infoBox3": {
             "heading": "Pristine Darkness",
             "description": "Based in Bortle class 2 dark sky zone with an elevation of 3170m"
-        }
+        },
+        "myProjectsHeading": "My Projects"
     },
     "aboutUs": {
         "heading": "About Us",

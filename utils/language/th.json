@@ -36,9 +36,9 @@
         "projects": "โปรเจ็กต์",
         "search": "ค้นหา",
         "searchPlaceholder": "ค้นหาโปรเจ็กต์",
-        "startProject": "เริ่มโปรเจ็กต์",
+        "startProject": "โครงการใหม่",
         "login": "เข้าสู่ระบบ",
-        "Dashboard": "แดชบอร์ดของฉัน",
+        "dashboard": "แดชบอร์ดของฉัน",
         "myProjects": "โปรเจ็กต์ของฉัน",
         "library": "คลัง",
         "logout": "ออกจากระบบ"

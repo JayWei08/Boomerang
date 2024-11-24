@@ -180,7 +180,7 @@ module.exports.showProject = async (req, res) => {
         const language = req.session.language;
         project.titleText =
             project.title.get(language) || project.title.get("th");
-        project.description =
+        project.descriptionText =
             project.description.get(language) || project.description.get("th");
 
         if (!project) {

@@ -2,7 +2,7 @@ const Project = require("../models/project");
 
 exports.searchProjects = async (req, res) => {
     const keyword = req.query.keyword;
-    const language = req.session.language || "en"; // Default to 'en' if no language is set
+    const language = req.session.language || "en"; // Default to 'en'
 
     if (!keyword || keyword.trim() === "") {
         return res.render("projects/search", {
@@ -14,20 +14,32 @@ exports.searchProjects = async (req, res) => {
     }
 
     try {
-        // Attempt a text search on title, description, and location
-        let projects = await Project.find({
+        // First, search with $text for title and description
+        const textResults = await Project.find({
             $text: { $search: keyword },
         });
 
-        // If no projects are found with text search, try a regex search on location
-        if (projects.length === 0) {
-            projects = await Project.find({
-                location: new RegExp(keyword, "i"), // Case-insensitive match for location
-            });
-        }
+        // Then, search with regex for location, categories, and keywords
+        const regexResults = await Project.find({
+            $or: [
+                { location: new RegExp(keyword, "i") },
+                { categories: new RegExp(keyword, "i") },
+                { keywords: new RegExp(keyword, "i") },
+            ],
+        });
 
-        // Transform projects to include language-specific title and description
-        const transformedProjects = projects.map((project) => ({
+        // Combine the two result sets and remove duplicates
+        const combinedResults = [
+            ...new Map(
+                [...textResults, ...regexResults].map((project) => [
+                    project._id.toString(),
+                    project,
+                ])
+            ).values(),
+        ];
+
+        // Transform projects for the frontend
+        const transformedProjects = combinedResults.map((project) => ({
             _id: project._id,
             titleText: project.title.get(language) || project.title.get("en"),
             descriptionText:
@@ -45,11 +57,12 @@ exports.searchProjects = async (req, res) => {
             status: project.status,
             comments: project.comments,
             keywords: project.keywords,
+            categories: project.categories,
             isDraft: project.isDraft,
             lastSavedAt: project.lastSavedAt,
         }));
 
-        // Convert projects to GeoJSON format for map display
+        // Convert projects to GeoJSON format
         const geoJsonProjects = {
             type: "FeatureCollection",
             features: transformedProjects
@@ -65,7 +78,6 @@ exports.searchProjects = async (req, res) => {
                 })),
         };
 
-        // Render the search results with the transformed projects and GeoJSON data
         res.render("projects/search", {
             projects: transformedProjects,
             geoJsonProjects,

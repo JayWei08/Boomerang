@@ -6,16 +6,29 @@
 </form>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container" style="height: 90px; display: flex; align-items: center">
+    <div
+        class="container"
+        style="height: 90px; display: flex; align-items: center"
+    >
         <!-- Brand -->
         <a class="navbar-brand" href="/projects" style="margin-right: 20px">
-            <img src="/images/Boomerang Logo.png" alt="Boomerang Logo"
-                style="height: 20px; width: auto; margin-top: -7px" />
+            <img
+                src="/images/Boomerang Logo.png"
+                alt="Boomerang Logo"
+                style="height: 20px; width: auto; margin-top: -7px"
+            />
         </a>
 
         <!-- Toggle Button for Mobile -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="<%= __('navbar.toggle') %>">
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup"
+            aria-expanded="false"
+            aria-label="<%= __('navbar.toggle') %>"
+        >
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -32,17 +45,30 @@
             </div>
 
             <!-- Search Bar -->
-            <form action="/search" method="GET" class="d-flex"
-                style="<%= !currentUser ? 'width: 600px;' : 'width: 600px;' %> margin-left: 20px; margin-right: 20px">
+            <form
+                action="/search"
+                method="GET"
+                class="d-flex"
+                style="<%= !currentUser ? 'width: 600px;' : 'width: 600px;' %> margin-left: 20px; margin-right: 20px"
+            >
                 <div class="position-relative w-100">
-                    <input type="text" name="keyword" class="form-control shadow-sm"
-                        placeholder="<%= __('navbar.searchPlaceholder') %>" required style="padding-left: 2.5rem" />
-                    <span class="position-absolute text-muted" style="
+                    <input
+                        type="text"
+                        name="keyword"
+                        class="form-control shadow-sm"
+                        placeholder="<%= __('navbar.searchPlaceholder') %>"
+                        required
+                        style="padding-left: 2.5rem"
+                    />
+                    <span
+                        class="position-absolute text-muted"
+                        style="
                             top: 50%;
                             left: 10px;
                             transform: translateY(-50%);
                             pointer-events: none;
-                        ">
+                        "
+                    >
                         <i class="fas fa-search"></i>
                     </span>
                 </div>
@@ -51,96 +77,247 @@
             <!-- Right-Side Links -->
             <div class="navbar-nav d-flex align-items-center">
                 <!-- Start Project Button -->
-                <a class="btn btn-primary me-3" href="/projects/new" style="font-weight: 600">
+                <a
+                    class="btn btn-primary me-3"
+                    href="/projects/new"
+                    style="font-weight: 600"
+                >
                     <%= __('navbar.startProject') %>
                 </a>
                 <!-- Language Dropdown -->
                 <div class="dropdown ms-3">
-                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="languageDropdown"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <button
+                        class="btn btn-outline-secondary dropdown-toggle"
+                        type="button"
+                        id="languageDropdown"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                    >
                         <%= selectedLanguage.toUpperCase() %>
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                    <ul
+                        class="dropdown-menu"
+                        aria-labelledby="languageDropdown"
+                    >
                         <% availableLanguages.forEach(lang=> { %>
-                            <li>
-                                <a class="dropdown-item" href="#" onclick="setLanguage('<%= lang %>')">
-                                    <%= lang.toUpperCase() %>
-                                </a>
-                            </li>
-                            <% }) %>
+                        <li>
+                            <a
+                                class="dropdown-item"
+                                href="#"
+                                onclick="setLanguage('<%= lang %>')"
+                            >
+                                <%= lang.toUpperCase() %>
+                            </a>
+                        </li>
+                        <% }) %>
                     </ul>
                 </div>
 
                 <!-- Currency Dropdown -->
                 <div class="dropdown ms-3">
-                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="currencyDropdown"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <button
+                        class="btn btn-outline-secondary dropdown-toggle"
+                        type="button"
+                        id="currencyDropdown"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                    >
                         <%= selectedCurrency.toUpperCase() %>
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="currencyDropdown">
+                    <ul
+                        class="dropdown-menu"
+                        aria-labelledby="currencyDropdown"
+                    >
                         <% availableCurrencies.forEach(cur=> { %>
-                            <li>
-                                <a class="dropdown-item" href="#" onclick="setCurrency('<%= cur %>')">
-                                    <%= cur.toUpperCase() %>
-                                </a>
-                            </li>
-                            <% }) %>
+                        <li>
+                            <a
+                                class="dropdown-item"
+                                href="#"
+                                onclick="setCurrency('<%= cur %>')"
+                            >
+                                <%= cur.toUpperCase() %>
+                            </a>
+                        </li>
+                        <% }) %>
                     </ul>
                 </div>
             </div>
             <% if (!currentUser) { %>
-                <!-- Login Link -->
-                <a href="/login" class="btn btn-outline-primary px-3 py-1 ms-3" style="
+            <!-- Login Link -->
+            <a
+                href="/login"
+                class="btn btn-outline-primary px-3 py-1 ms-3"
+                style="
                     border-radius: 5px;
                     font-weight: 600;
                     text-decoration: none;
-                ">
-                    <%= __('navbar.login') %>
-                </a>
-                <% } else { %>
-                    <!-- Profile Dropdown -->
-                    <div class="dropdown ms-3">
-                        <button class="btn btn-secondary dropdown-toggle d-flex align-items-center" type="button"
-                            id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="
+                "
+            >
+                <%= __('navbar.login') %>
+            </a>
+            <% } else { %>
+            <!-- Profile Dropdown -->
+            <div class="dropdown ms-3">
+                <button
+                    class="btn btn-secondary dropdown-toggle d-flex align-items-center"
+                    type="button"
+                    id="profileDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    style="
                         background: none;
                         border: none;
                         color: inherit;
                         padding: 0;
-                    ">
-                            <!-- Profile Icon -->
-                            <img src="https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png"
-                                alt="Profile" style="
+                    "
+                >
+                    <!-- Profile Icon -->
+                    <img
+                        src="https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png"
+                        alt="Profile"
+                        style="
                             width: 30px;
                             height: 30px;
                             border-radius: 50%;
                             object-fit: cover;
-                        " />
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                            <li>
-                                <a class="dropdown-item" href="/projects/my-projects">
-                                    <%= __('navbar.myProjects') %>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="/projects/library">
-                                    <%= __('navbar.library') %>
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider" />
-                            </li>
-                            <li>
-                                <a class="dropdown-item text-danger" href="/logout">
-                                    <%= __('navbar.logout') %>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <% } %>
+                        "
+                    />
+                </button>
+                <ul
+                    class="dropdown-menu dropdown-menu-end"
+                    aria-labelledby="profileDropdown"
+                >
+                    <li>
+                        <a class="dropdown-item" href="/projects/my-projects">
+                            <%= __('navbar.myProjects') %>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="/projects/library">
+                            <%= __('navbar.library') %>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
+                    <li>
+                        <a class="dropdown-item text-danger" href="/logout">
+                            <%= __('navbar.logout') %>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <% } %>
         </div>
     </div>
 </nav>
+<!-- Category Links -->
+<div class="container-fluid bg-light py-2">
+    <div class="container d-flex justify-content-center">
+        <ul
+            class="nav nav-pills"
+            style="flex-wrap: nowrap; overflow-x: auto; white-space: nowrap"
+        >
+            <li class="nav-item mx-2">
+                <a
+                    class="nav-link category-link"
+                    href="/projects/category/Technology"
+                    >Technology</a
+                >
+            </li>
+            <li class="nav-item mx-2">
+                <a
+                    class="nav-link category-link"
+                    href="/projects/category/Art%20%26%20Design"
+                    >Art & Design</a
+                >
+            </li>
+            <li class="nav-item mx-2">
+                <a
+                    class="nav-link category-link"
+                    href="/projects/category/Film%20%26%20Video"
+                    >Film & Video</a
+                >
+            </li>
+            <li class="nav-item mx-2">
+                <a
+                    class="nav-link category-link"
+                    href="/projects/category/Music"
+                    >Music</a
+                >
+            </li>
+            <li class="nav-item mx-2">
+                <a
+                    class="nav-link category-link"
+                    href="/projects/category/Cooking%20%26%20Food"
+                    >Cooking & Food</a
+                >
+            </li>
+            <li class="nav-item mx-2">
+                <a
+                    class="nav-link category-link"
+                    href="/projects/category/Writing%20%26%20Publishing"
+                    >Writing & Publishing</a
+                >
+            </li>
+            <li class="nav-item mx-2">
+                <a
+                    class="nav-link category-link"
+                    href="/projects/category/Gaming"
+                    >Gaming</a
+                >
+            </li>
+            <li class="nav-item mx-2">
+                <a
+                    class="nav-link category-link"
+                    href="/projects/category/Health%20%26%20Wellness"
+                    >Health & Wellness</a
+                >
+            </li>
+            <li class="nav-item mx-2">
+                <a
+                    class="nav-link category-link"
+                    href="/projects/category/Education"
+                    >Education</a
+                >
+            </li>
+            <li class="nav-item mx-2">
+                <a
+                    class="nav-link category-link"
+                    href="/projects/category/Social%20Impact"
+                    >Social Impact</a
+                >
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- Inline CSS -->
+<style>
+    .nav-pills {
+        justify-content: center; /* Center the links */
+        flex-wrap: nowrap; /* Prevent wrapping */
+        overflow-x: auto; /* Enable horizontal scrolling if necessary */
+        white-space: nowrap; /* Keep all items on a single line */
+    }
+
+    .nav-pills .nav-link {
+        font-size: 14px; /* Smaller font size for compact layout */
+        color: black; /* Default color */
+        text-decoration: none; /* Remove underline */
+        font-weight: 500; /* Slightly bold for better readability */
+        transition: color 0.3s ease; /* Smooth hover effect */
+    }
+
+    .nav-pills .nav-link:hover {
+        color: blue; /* Change color on hover */
+    }
+
+    .nav-item {
+        margin-left: 0.3rem; /* Adjust margins for better spacing */
+        margin-right: 0.3rem;
+    }
+</style>
 
 <script>
     function setLanguage(language) {

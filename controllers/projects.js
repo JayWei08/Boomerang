@@ -7,6 +7,7 @@ const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
 const { cloudinary } = require("../cloudinary");
 const Multiset = require("../utils/Multiset");
 const currencyToken = process.env.CURRENCY_TOKEN;
+const { categories } = require("../utils/categories.js"); // Import the categories data
 
 module.exports.index = async (req, res) => {
     const language = req.session.language || "th"; // Default to 'en' if no language is set
@@ -106,18 +107,22 @@ module.exports.index = async (req, res) => {
 };
 
 module.exports.renderNewForm = async (req, res) => {
-    const { draftId } = req.query; // Check if a draft ID is provided
+    const { draftId } = req.query;
     let draft = null;
 
     if (draftId) {
-        draft = await Project.findById(draftId); // Load the draft data
+        draft = await Project.findById(draftId);
         if (!draft) {
             req.flash("error", "Draft not found.");
             return res.redirect("/projects/drafts");
         }
     }
 
-    res.render("projects/new", { draft }); // Pass draft data to the form
+    // Pass categories as JSON directly to avoid conversion issues
+    res.render("projects/new", {
+        draft,
+        categories: JSON.stringify(categories),
+    });
 };
 
 // TODO: change where the input text is being stored from project.title to project.titleText
@@ -127,16 +132,40 @@ module.exports.createProject = async (req, res, next) => {
         let project;
 
         // Ensure `title` and `description` are stored as `Map` in the required format
-        if (req.body.project.title && typeof req.body.project.title === "string") {
+        if (
+            req.body.project.title &&
+            typeof req.body.project.title === "string"
+        ) {
             req.body.project.title = new Map([["en", req.body.project.title]]);
             req.body.project.titleText = req.body.project.title.get("en"); // Set titleText
-            // req.body.project.title = translate_text(req.body.project.title, res.locals.availableLanguages);
         }
-        if (req.body.project.description && typeof req.body.project.description === "string") {
-            req.body.project.description = new Map([["en", req.body.project.description]]);
-            req.body.project.descriptionText = req.body.project.description.get("en"); // Set descriptionText
-            // req.body.project.description = translate_text(req.body.project.description, res.locals.availableLanguages);
+        if (
+            req.body.project.description &&
+            typeof req.body.project.description === "string"
+        ) {
+            req.body.project.description = new Map([
+                ["en", req.body.project.description],
+            ]);
+            req.body.project.descriptionText =
+                req.body.project.description.get("en"); // Set descriptionText
         }
+
+        // Automatically determine categories based on selected keywords
+        const selectedKeywords = req.body.project.keywords || [];
+        const determinedCategories = [];
+
+        for (const [category, keywords] of Object.entries(categories)) {
+            // Check if any of the selected keywords belong to this category
+            const matchingKeywords = selectedKeywords.filter((keyword) =>
+                keywords.includes(keyword)
+            );
+            if (matchingKeywords.length > 0) {
+                determinedCategories.push(category);
+            }
+        }
+
+        // Assign the determined categories to the project data
+        req.body.project.categories = determinedCategories;
 
         if (draftId) {
             // Update an existing draft
@@ -181,6 +210,7 @@ module.exports.createProject = async (req, res, next) => {
                     url: f.path,
                     filename: f.filename,
                 })),
+                categories: determinedCategories, // Automatically assigned categories
                 author: req.user._id, // Associate with the current user
             });
         }
@@ -218,7 +248,10 @@ async function translate_text(text, availableLanguages) {
             continue;
         }
 
-        const [translation, metadata] = await translate.translate(text, language);
+        const [translation, metadata] = await translate.translate(
+            text,
+            language
+        );
         textMap.set(language, translation);
 
         const detectedLanguage = metadata.detectedSourceLanguage;
@@ -298,6 +331,50 @@ module.exports.showProject = async (req, res) => {
         console.error("Error in showProject:", error);
         req.flash("error", "Something went wrong!");
         res.redirect("/projects");
+    }
+};
+
+module.exports.getProjectsByCategory = async (req, res) => {
+    const { category } = req.params;
+    const language = req.session.language || "en"; // Default language
+
+    try {
+        // Find projects in the specified category
+        const projects = await Project.find({
+            categories: category,
+        });
+
+        const transformedProjects = projects.map((project) => ({
+            _id: project._id,
+            titleText: project.title.get(language) || project.title.get("en"),
+            descriptionText:
+                project.description.get(language) ||
+                project.description.get("en"),
+            images: project.images,
+            geometry: project.geometry,
+            currency: project.currency,
+            fundingGoal: project.fundingGoal,
+            location: project.location,
+            deadline: project.deadline,
+            createdAt: project.createdAt,
+            updatedAt: project.updatedAt,
+            author: project.author,
+            status: project.status,
+            comments: project.comments,
+            keywords: project.keywords,
+            categories: project.categories,
+            isDraft: project.isDraft,
+            lastSavedAt: project.lastSavedAt,
+        }));
+
+        // Render category-specific projects page
+        res.render("projects/category", {
+            projects: transformedProjects,
+            category,
+        });
+    } catch (error) {
+        console.error("Error fetching projects by category:", error);
+        res.status(500).send("Error loading projects for this category.");
     }
 };
 
@@ -424,9 +501,9 @@ module.exports.saveDraft = async (req, res) => {
 
         const uploadedImages = Array.isArray(req.files)
             ? req.files.map((file) => ({
-                url: file.path,
-                filename: file.filename,
-            }))
+                  url: file.path,
+                  filename: file.filename,
+              }))
             : [];
 
         let draft;

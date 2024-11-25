@@ -6,6 +6,7 @@ const { isLoggedIn, isAuthor, validateProject } = require("../middleware");
 const multer = require("multer");
 const { storage } = require("../cloudinary");
 const upload = multer({ storage });
+const { getProjectsByCategory } = require("../controllers/projects");
 
 const catchAsync = require("../utils/catchAsync");
 
@@ -40,6 +41,9 @@ router.get("/my-projects", isLoggedIn, async (req, res) => {
         res.redirect("/projects");
     }
 });
+
+// Route to display projects by category
+router.get("/category/:category", getProjectsByCategory);
 
 router.post(
     "/save-draft",

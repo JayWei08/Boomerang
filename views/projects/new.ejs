@@ -20,7 +20,7 @@
                                 <label class="form-label" for="title">
                                     <%= __('createProject.step1.titleLabel') %>
                                 </label>
-                                <input class="form-control" type="text" id="title" name="project[title]"
+                                <input class="form-control" type="text" id="title" name="project[titleText]"
                                     value="<%= draft ? draft.title : '' %>" required />
                             </div>
                             <div class="mb-3">
@@ -53,7 +53,7 @@
                                 <label class="form-label" for="description">
                                     <%= __('createProject.step2.descriptionLabel') %>
                                 </label>
-                                <textarea class="form-control" id="description" name="project[description]"
+                                <textarea class="form-control" id="description" name="project[descriptionText]"
                                     required><%= draft ? draft.description : '' %></textarea>
                             </div>
 

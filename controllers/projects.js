@@ -132,25 +132,13 @@ module.exports.createProject = async (req, res, next) => {
         let project;
 
         // Ensure `title` and `description` are stored as `Map` in the required format
-        if (
-            req.body.project.title &&
-            typeof req.body.project.title === "string"
-        ) {
+        if (req.body.project.titleText && typeof req.body.project.titleText === "string") {
             req.body.project.title = new Map([["en", req.body.project.title]]);
-            req.body.project.titleText = req.body.project.title.get("en"); // Set titleText
         }
-        if (
-            req.body.project.description &&
-            typeof req.body.project.description === "string"
-        ) {
-            req.body.project.description = new Map([
-                ["en", req.body.project.description],
-            ]);
-            req.body.project.descriptionText =
-                req.body.project.description.get("en"); // Set descriptionText
+        if (req.body.project.descriptionText && typeof req.body.project.descriptionText === "string") {
+            req.body.project.description = new Map([["en", req.body.project.descriptionText],]);
         }
 
-        // Automatically determine categories based on selected keywords
         const selectedKeywords = req.body.project.keywords || [];
         const determinedCategories = [];
 

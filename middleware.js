@@ -20,7 +20,7 @@ module.exports.storeReturnTo = (req, res, next) => {
 };
 
 module.exports.validateProject = (req, res, next) => {
-    console.log(req.body);
+    console.log(req.body.project);
     const { error } = projectSchema.validate(req.body);
     if (error) {
         const msg = error.details.map((el) => el.message).join(",");

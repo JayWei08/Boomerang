@@ -4,10 +4,10 @@ const Joi = require("joi");
 module.exports.projectSchema = Joi.object({
     draftId: Joi.string().optional(), // Optional draft ID for updating drafts
     project: Joi.object({
-        title: Joi.string().required().messages({
+        titleText: Joi.string().required().messages({
             "string.empty": "Title is required.",
         }),
-        description: Joi.string().required().messages({
+        descriptionText: Joi.string().required().messages({
             "string.empty": "Description is required.",
         }),
         location: Joi.string().required().messages({

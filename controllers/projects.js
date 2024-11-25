@@ -9,7 +9,7 @@ const Multiset = require("../utils/Multiset");
 const currencyToken = process.env.CURRENCY_TOKEN;
 
 module.exports.index = async (req, res) => {
-    const language = req.session.language || "en"; // Default to 'en' if no language is set
+    const language = req.session.language || "th"; // Default to 'en' if no language is set
     const user = await get_user(Users, req);
 
     // Fetch all projects
@@ -34,7 +34,7 @@ module.exports.index = async (req, res) => {
         lastSavedAt: project.lastSavedAt,
     }));
 
-    // Calculate relevance if user has keywords
+    // Sort projects by relevance
     if (user && user.keywords instanceof Map) {
         const keywords = user.keywords;
         projects.forEach((project) => {
@@ -120,28 +120,18 @@ module.exports.renderNewForm = async (req, res) => {
     res.render("projects/new", { draft }); // Pass draft data to the form
 };
 
+// TODO: change where the input text is being stored from project.title to project.titleText
 module.exports.createProject = async (req, res, next) => {
     try {
         const { draftId } = req.body; // Retrieve draftId from the request
         let project;
 
         // Ensure `title` and `description` are stored as `Map` in the required format
-        if (
-            req.body.project.title &&
-            typeof req.body.project.title === "string"
-        ) {
-            req.body.project.title = new Map([["en", req.body.project.title]]);
-            req.body.project.titleText = req.body.project.title.get("en"); // Set titleText
+        if (req.body.project.title && typeof req.body.project.title === "string") {
+            req.body.project.title = translate_text(req.body.project.title, res.locals.availableLanguages);
         }
-        if (
-            req.body.project.description &&
-            typeof req.body.project.description === "string"
-        ) {
-            req.body.project.description = new Map([
-                ["en", req.body.project.description],
-            ]);
-            req.body.project.descriptionText =
-                req.body.project.description.get("en"); // Set descriptionText
+        if (req.body.project.description && typeof req.body.project.description === "string") {
+            req.body.project.description = translate_text(req.body.project.description, res.locals.availableLanguages);
         }
 
         if (draftId) {
@@ -216,6 +206,26 @@ module.exports.createProject = async (req, res, next) => {
     }
 };
 
+async function translate_text(text, availableLanguages) {
+    let textMap = new Map();
+
+    for (let language of availableLanguages) {
+        if (textMap.has(language)) {
+            continue;
+        }
+
+        const [translation, metadata] = await translate.translate(text, language);
+        textMap.set(language, translation);
+
+        const detectedLanguage = metadata.detectedSourceLanguage;
+        if (!textMap.has(detectedLanguage)) {
+            textMap.set(detectedLanguage, text);
+        }
+    }
+
+    return textMap;
+}
+
 module.exports.showProject = async (req, res) => {
     try {
         const project = await Project.findById(req.params.id)
@@ -286,6 +296,22 @@ module.exports.showProject = async (req, res) => {
         res.redirect("/projects");
     }
 };
+
+async function add_user_keywords(req, project, Users) {
+    const user = await get_user(Users, req);
+    if (user) {
+        const userKeywords = new Multiset(user.keywords || new Map()); // Initialize if undefined
+
+        const projectKeywords = Array.isArray(project.keywords)
+            ? project.keywords
+            : [];
+        userKeywords.add_list(projectKeywords);
+
+        user.keywords = userKeywords.export(); // Ensure the format matches expectations
+
+        await user.save();
+    }
+}
 
 module.exports.renderEditForm = async (req, res) => {
     const { id } = req.params;
@@ -394,9 +420,9 @@ module.exports.saveDraft = async (req, res) => {
 
         const uploadedImages = Array.isArray(req.files)
             ? req.files.map((file) => ({
-                  url: file.path,
-                  filename: file.filename,
-              }))
+                url: file.path,
+                filename: file.filename,
+            }))
             : [];
 
         let draft;
@@ -470,41 +496,6 @@ module.exports.deleteDraft = async (req, res) => {
         res.redirect("/projects/my-projects");
     }
 };
-
-async function add_user_keywords(req, project, Users) {
-    const user = await get_user(Users, req);
-    if (user) {
-        const userKeywords = new Multiset(user.keywords || new Map()); // Initialize if undefined
-
-        const projectKeywords = Array.isArray(project.keywords)
-            ? project.keywords
-            : [];
-        userKeywords.add_list(projectKeywords);
-
-        user.keywords = userKeywords.export(); // Ensure the format matches expectations
-
-        await user.save();
-    }
-}
-
-async function process_projects(projects, user) {
-    if (user && user.keywords instanceof Map) {
-        const keywords = user.keywords;
-        projects.forEach((project) => {
-            const projectKeywords = Array.isArray(project.keywords)
-                ? project.keywords
-                : [];
-            project.relevanceScore = calculateRelevance(
-                projectKeywords,
-                keywords
-            );
-        });
-
-        projects.sort((a, b) => b.relevanceScore - a.relevanceScore);
-    }
-
-    return projects;
-}
 
 async function get_user(Users, req) {
     let user = null;

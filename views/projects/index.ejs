@@ -1,487 +1,583 @@
 <% layout('layouts/boilerplate') %>
 
-    <header class="container mb-4" style="
+<header
+    class="container mb-4"
+    style="
         width: 100%;
         height: auto;
         background-image: url('');
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-    ">
-        <h1 class="display-5 text-center mb-5">
-            <%= __('index.tagline') %>
-        </h1>
-        <p class="text-center text-muted">
-            <%= __('index.subtitle') %>
-        </p>
-        <!-- Box Infographic -->
-        <div class="container mt-4">
-            <div class="row g-0 text-center">
-                <!-- Box 1 -->
-                <div class="col-md-4">
-                    <div class="p-4 border shadow-sm" style="
+    "
+>
+    <h1 class="display-5 text-center mb-5"><%= __('index.tagline') %></h1>
+    <p class="text-center text-muted"><%= __('index.subtitle') %></p>
+    <!-- Box Infographic -->
+    <div class="container mt-4">
+        <div class="row g-0 text-center">
+            <!-- Box 1 -->
+            <div class="col-md-4">
+                <div
+                    class="p-4 border shadow-sm"
+                    style="
                         border-top-left-radius: 8px;
                         border-bottom-left-radius: 8px;
                         border-right: none;
-                    ">
-                        <h2 class="text-primary">29,449</h2>
-                        <p class="text-muted mb-0">
-                            <%= __('index.box1') %>
-                        </p>
-                    </div>
+                    "
+                >
+                    <h2 class="text-primary">29,449</h2>
+                    <p class="text-muted mb-0"><%= __('index.box1') %></p>
                 </div>
-                <!-- Box 2 -->
-                <div class="col-md-4">
-                    <div class="p-4 border shadow-sm" style="
+            </div>
+            <!-- Box 2 -->
+            <div class="col-md-4">
+                <div
+                    class="p-4 border shadow-sm"
+                    style="
                         border-radius: 0;
                         border-right: none;
                         border-left: none;
-                    ">
-                        <h2 class="text-primary">$8,433,853</h2>
-                        <p class="text-muted mb-0">
-                            <%= __('index.box2') %>
-                        </p>
-                    </div>
+                    "
+                >
+                    <h2 class="text-primary">$8,433,853</h2>
+                    <p class="text-muted mb-0"><%= __('index.box2') %></p>
                 </div>
-                <!-- Box 3 -->
-                <div class="col-md-4">
-                    <div class="p-4 border shadow-sm" style="
+            </div>
+            <!-- Box 3 -->
+            <div class="col-md-4">
+                <div
+                    class="p-4 border shadow-sm"
+                    style="
                         border-top-right-radius: 8px;
                         border-bottom-right-radius: 8px;
                         border-left: none;
-                    ">
-                        <h2 class="text-primary">9,228,469</h2>
-                        <p class="text-muted mb-0">
-                            <%= __('index.box3') %>
-                        </p>
-                    </div>
+                    "
+                >
+                    <h2 class="text-primary">9,228,469</h2>
+                    <p class="text-muted mb-0"><%= __('index.box3') %></p>
                 </div>
             </div>
-        </div>
-    </header>
-
-    <!-- recommendedProjects -->
-
-    <div class="container mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="mb-0">
-                <%= __('index.heading1') %>
-            </h4>
-            <div>
-                <button class="btn btn-outline-dark btn-sm me-2" onclick="scrollLeftRecommendedProjects()">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <button class="btn btn-outline-dark btn-sm" onclick="scrollRightRecommendedProjects()">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-            </div>
-        </div>
-        <div id="scrollableProjects" class="d-flex overflow-auto" style="gap: 20px; scroll-behavior: smooth">
-            <% const firstNineProjects=projects.slice(0, 9);%>
-                <% const remainingProjects=projects.slice(9); %>
-                    <% for (let project of firstNineProjects) { %>
-                        <div class="card" style="min-width: 300px; max-width: 300px; flex: 0 0 auto">
-                            <img src="<%= project.images && project.images[0] ? project.images[0].url : 'https://res.cloudinary.com/dei5hbjfg/image/upload/v1730665603/Boomerang/ujp5lxrxohzvkutf5oos.jpg' %>"
-                                class="card-img-top" alt="<%= project.titleText %>"
-                                style="height: 180px; object-fit: cover" />
-                            <div class="card-body">
-                                <h5 class="card-title">
-                                    <%= project.titleText %>
-                                </h5>
-                                <% if (currentUser) { %>
-                                    <form action="/projects/<%= project._id %>/toggleSave" method="POST"
-                                        style="margin: 0">
-                                        <button type="submit" class="btn btn-link p-0"
-                                            style="font-size: 1rem; color: #007bff">
-                                            <% if (currentUser.savedProjects &&
-                                                currentUser.savedProjects.includes(project._id.toString())) { %>
-                                                <i class="fas fa-bookmark"></i>
-                                                <% } else { %>
-                                                    <i class="far fa-bookmark"></i>
-                                                    <% } %>
-                                        </button>
-                                    </form>
-                                    <% } %>
-                                        <p class="card-text text-muted">
-                                            <small>
-                                                <%= project.location %>
-                                            </small>
-                                        </p>
-                                        <% const deadlineDate=new Date(project.deadline); const currentDate=new Date();
-                                            const timeDifference=deadlineDate - currentDate; const
-                                            daysLeft=Math.ceil(timeDifference / (1000 * 60 * 60 * 24)); %>
-                                            <p class="card-text">
-                                                <small class="text-muted">
-                                                    <% if (daysLeft> 0) { %>
-                                                        <i class="fas fa-clock"></i>
-                                                        <%= daysLeft %>
-                                                            <%= __('index.daysLeft') %>
-                                                                <% } else { %>
-                                                                    <span class="text-danger">
-                                                                        <%= __('recommendedProjects.deadlinePassed') %>
-                                                                    </span>
-                                                                    <% } %>
-                                                </small>
-                                            </p>
-                                            <a href="/projects/<%= project._id %>" class="btn btn-primary">
-                                                <%= __('index.viewButton') %>
-                                            </a>
-                            </div>
-                        </div>
-                        <% } %>
         </div>
     </div>
+</header>
 
-    <hr class="mt-5" />
+<!-- recommendedProjects -->
 
-    <section class="py-3 py-md-4 m-3">
-        <div class="container">
-            <div class="row gy-3 gy-md-4 gy-lg-0 align-items-lg-center">
-                <div class="col-12 col-lg-7 col-xl-5">
-                    <div id="map" style="width: 100%; height: 500px"></div>
-                </div>
-                <div class="col-12 col-lg-5 col-xl-7">
-                    <div class="row justify-content-xl-center">
-                        <div class="col-12 col-xl-11">
-                            <h2 class="mb-3">
-                                <%= __('index.heading2') %>
-                            </h2>
-                            <p class="lead fs-5 text-secondary-custom mb-5">
-                                <%= __('index.description') %>
-                            </p>
-                            <div class="row gy-4 gy-md-0 gx-xxl-5X">
-                                <!-- Info-box number one -->
-                                <div class="col-12 col-md-4">
-                                    <div class="d-flex">
-                                        <div class="me-4 text-primary">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35"
-                                                fill="currentColor" class="bi bi-key-fill" viewBox="0 0 16 16">
-                                                <path
-                                                    d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2M2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <h2 class="h4 mb-3">
-                                                <%= __('index.infoBox1.heading') %>
-                                            </h2>
-                                            <p class="text-secondary-custom mb-0">
-                                                <%= __('index.infoBox1.description') %>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Info-box number two -->
-                                <div class="col-12 col-md-4">
-                                    <div class="d-flex">
-                                        <div class="me-4 text-primary">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
-                                                fill="currentColor" class="bi bi-clock-fill" viewBox="0 0 16 16">
-                                                <path
-                                                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <h2 class="h4 mb-3">
-                                                <%= __('index.infoBox2.heading') %>
-                                            </h2>
-                                            <p class="text-secondary-custom mb-0">
-                                                <%= __('index.infoBox2.description') %>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Info-box number three -->
-                                <div class="col-12 col-md-4">
-                                    <div class="d-flex">
-                                        <div class="me-4 text-primary">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
-                                                fill="currentColor" class="bi bi-moon-stars-fill" viewBox="0 0 16 16">
-                                                <path
-                                                    d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278" />
-                                                <path
-                                                    d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.73 1.73 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.73 1.73 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.73 1.73 0 0 0 1.097-1.097zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <h2 class="h4 mb-3">
-                                                <%= __('index.infoBox3.heading') %>
-                                            </h2>
-                                            <p class="text-secondary-custom mb-0">
-                                                <%= __('index.infoBox3.description') %>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0"><%= __('index.heading1') %></h4>
+        <div>
+            <button
+                class="btn btn-outline-dark btn-sm me-2"
+                onclick="scrollLeftRecommendedProjects()"
+            >
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button
+                class="btn btn-outline-dark btn-sm"
+                onclick="scrollRightRecommendedProjects()"
+            >
+                <i class="fas fa-chevron-right"></i>
+            </button>
         </div>
-    </section>
-
-    <!-- My Projects Carousel (Only visible if signed in) -->
-
-    <% if (currentUser && myProjects && myProjects.length> 0) { %>
-
-        <hr class="mt-3" />
-
-        <div class="container mt-5">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="mb-0">
-                    <%= __('index.myProjectsHeading') %>
-                </h4>
-                <div class="ms-auto">
-                    <button class="btn btn-outline-dark btn-sm me-2" onclick="scrollLeftMyProjects()">
-                        <i class="fas fa-chevron-left"></i>
+    </div>
+    <div
+        id="scrollableProjects"
+        class="d-flex overflow-auto"
+        style="gap: 20px; scroll-behavior: smooth"
+    >
+        <% const firstNineProjects=projects.slice(0, 9);%> <% const
+        remainingProjects=projects.slice(9); %> <% for (let project of
+        firstNineProjects) { %>
+        <div
+            class="card"
+            style="min-width: 300px; max-width: 300px; flex: 0 0 auto"
+        >
+            <img
+                src="<%= project.images && project.images[0] ? project.images[0].url : 'https://res.cloudinary.com/dei5hbjfg/image/upload/v1730665603/Boomerang/ujp5lxrxohzvkutf5oos.jpg' %>"
+                class="card-img-top"
+                alt="<%= project.titleText %>"
+                style="height: 180px; object-fit: cover"
+            />
+            <div class="card-body">
+                <h5 class="card-title"><%= project.titleText %></h5>
+                <% if (currentUser) { %>
+                <form
+                    action="/projects/<%= project._id %>/toggleSave"
+                    method="POST"
+                    style="margin: 0"
+                >
+                    <button
+                        type="submit"
+                        class="btn btn-link p-0"
+                        style="font-size: 1rem; color: #007bff"
+                    >
+                        <% if (currentUser.savedProjects &&
+                        currentUser.savedProjects.includes(project._id.toString()))
+                        { %>
+                        <i class="fas fa-bookmark"></i>
+                        <% } else { %>
+                        <i class="far fa-bookmark"></i>
+                        <% } %>
                     </button>
-                    <button class="btn btn-outline-dark btn-sm" onclick="scrollRightMyProjects()">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
-            <div id="scrollableMyProjects" class="d-flex overflow-auto" style="gap: 20px; scroll-behavior: smooth">
-                <% for (let project of myProjects) { %>
-                    <div class="card" style="min-width: 300px; max-width: 300px; flex: 0 0 auto">
-                        <img src="<%= project.images && project.images[0] ? project.images[0].url : 'https://res.cloudinary.com/dei5hbjfg/image/upload/v1730665603/Boomerang/ujp5lxrxohzvkutf5oos.jpg' %>"
-                            class="card-img-top" alt="<%= project.titleText %>"
-                            style="height: 180px; object-fit: cover" />
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <%= project.titleText %>
-                            </h5>
-                            <p class="card-text text-muted">
-                                <small>
-                                    <%= project.location %>
-                                </small>
-                            </p>
-                            <% const deadlineDate=new Date(project.deadline); const currentDate=new Date(); const
-                                timeDifference=deadlineDate - currentDate; const daysLeft=Math.ceil(timeDifference /
-                                (1000 * 60 * 60 * 24)); %>
-                                <p class="card-text">
-                                    <small class="text-muted">
-                                        <% if (daysLeft> 0) { %>
-                                            <i class="fas fa-clock"></i>
-                                            <%= daysLeft %>
-                                                <%= __('index.daysLeft') %>
-                                                    <% } else { %>
-                                                        <span class="text-danger">
-                                                            <%= __('recommendedProjects.deadlinePassed') %>
-                                                        </span>
-                                                        <% } %>
-                                    </small>
-                                </p>
-                                <a href="/projects/<%= project._id %>" class="btn btn-primary">
-                                    <%= __('index.viewButton') %>
-                                </a>
-                        </div>
-                    </div>
-                    <% } %>
+                </form>
+                <% } %>
+                <p class="card-text text-muted">
+                    <small> <%= project.location %> </small>
+                </p>
+                <% const deadlineDate=new Date(project.deadline); const
+                currentDate=new Date(); const timeDifference=deadlineDate -
+                currentDate; const daysLeft=Math.ceil(timeDifference / (1000 *
+                60 * 60 * 24)); %>
+                <p class="card-text">
+                    <small class="text-muted">
+                        <% if (daysLeft> 0) { %>
+                        <i class="fas fa-clock"></i>
+                        <%= daysLeft %> <%= __('index.daysLeft') %> <% } else {
+                        %>
+                        <span class="text-danger">
+                            <%= __('recommendedProjects.deadlinePassed') %>
+                        </span>
+                        <% } %>
+                    </small>
+                </p>
+                <a href="/projects/<%= project._id %>" class="btn btn-primary">
+                    <%= __('index.viewButton') %>
+                </a>
             </div>
         </div>
         <% } %>
+    </div>
+</div>
 
-            <hr class="mt-3 mb-5" />
+<hr class="mt-5" />
 
-            <!-- Featured Section -->
-            <section class="container my-5">
-                <div class="row">
-                    <!-- Left Featured Content -->
-                    <div class="col-md-6">
-                        <div class="card border-0 card-wrapper">
-                            <a href="/about" class="card-link" style="text-decoration: none; color: inherit">
-                                <img src="https://images.unsplash.com/photo-1731902062588-4dce45ccc0cb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8"
-                                    class="card-img-top" alt="Placeholder Image 1"
-                                    style="object-fit: cover; height: 260px" />
-                                <div class="card-body mt-3" style="
-                            position: relative;
-                            padding-left: 20px;
-                            padding-right: 20px;
-                        ">
-                                    <!-- Offset border -->
-                                    <div style="
-                                position: absolute;
-                                top: 15px;
-                                left: 0;
-                                width: 6px;
-                                height: calc(100% - 15px);
-                                background-color: #007bff;
-                            "></div>
-                                    <h2 class="card-title card-hover-title" style="max-width: 90%; margin-left: 15px">
-                                        <%= __('index.infoBox4.heading') %>
-                                    </h2>
-                                    <p class="card-text text-muted" style="max-width: 90%; margin-left: 15px">
-                                        <%= __('index.infoBox4.description') %>
-                                    </p>
+<section class="py-3 py-md-4 m-3">
+    <div class="container">
+        <div class="row gy-3 gy-md-4 gy-lg-0 align-items-lg-center">
+            <div class="col-12 col-lg-7 col-xl-5">
+                <div id="map" style="width: 100%; height: 500px"></div>
+            </div>
+            <div class="col-12 col-lg-5 col-xl-7">
+                <div class="row justify-content-xl-center">
+                    <div class="col-12 col-xl-11">
+                        <h2 class="mb-3"><%= __('index.heading2') %></h2>
+                        <p class="lead fs-5 text-secondary-custom mb-5">
+                            <%= __('index.description') %>
+                        </p>
+                        <div class="row gy-4 gy-md-0 gx-xxl-5X">
+                            <!-- Info-box number one -->
+                            <div class="col-12 col-md-4">
+                                <div class="d-flex">
+                                    <div class="me-4 text-primary">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="35"
+                                            height="35"
+                                            fill="currentColor"
+                                            class="bi bi-key-fill"
+                                            viewBox="0 0 16 16"
+                                        >
+                                            <path
+                                                d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2M2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2"
+                                            />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h2 class="h4 mb-3">
+                                            <%= __('index.infoBox1.heading') %>
+                                        </h2>
+                                        <p class="text-secondary-custom mb-0">
+                                            <%= __('index.infoBox1.description')
+                                            %>
+                                        </p>
+                                    </div>
                                 </div>
-                            </a>
-                        </div>
-                        <a href="/about" class="btn btn-link mt-3 link-hover" style="margin-left: 15px">
-                            <%= __('index.infoBox4.learnMore') %>
-                        </a>
-                    </div>
-
-                    <!-- Right Featured Content -->
-                    <div class="col-md-6">
-                        <div class="card border-0 card-wrapper">
-                            <a href="/creators" class="card-link" style="text-decoration: none; color: inherit">
-                                <img src="https://images.unsplash.com/photo-1731341711718-8696ebc3a2cb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxM3x8fGVufDB8fHx8fA%3D%3D"
-                                    class="card-img-top" alt="Placeholder Image 2"
-                                    style="object-fit: cover; height: 260px" />
-                                <div class="card-body mt-3" style="
-                            position: relative;
-                            padding-left: 20px;
-                            padding-right: 20px;
-                        ">
-                                    <!-- Offset border -->
-                                    <div style="
-                                position: absolute;
-                                top: 15px;
-                                left: 0;
-                                width: 6px;
-                                height: calc(100% - 15px);
-                                background-color: #007bff;
-                            "></div>
-                                    <h2 class="card-title card-hover-title" style="max-width: 90%; margin-left: 15px">
-                                        <%= __('index.infoBox5.heading') %>
-                                    </h2>
-                                    <p class="card-text text-muted" style="max-width: 90%; margin-left: 15px">
-                                        <%= __('index.infoBox5.description') %>
-                                    </p>
+                            </div>
+                            <!-- Info-box number two -->
+                            <div class="col-12 col-md-4">
+                                <div class="d-flex">
+                                    <div class="me-4 text-primary">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="32"
+                                            height="32"
+                                            fill="currentColor"
+                                            class="bi bi-clock-fill"
+                                            viewBox="0 0 16 16"
+                                        >
+                                            <path
+                                                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"
+                                            />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h2 class="h4 mb-3">
+                                            <%= __('index.infoBox2.heading') %>
+                                        </h2>
+                                        <p class="text-secondary-custom mb-0">
+                                            <%= __('index.infoBox2.description')
+                                            %>
+                                        </p>
+                                    </div>
                                 </div>
-                            </a>
+                            </div>
+                            <!-- Info-box number three -->
+                            <div class="col-12 col-md-4">
+                                <div class="d-flex">
+                                    <div class="me-4 text-primary">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="32"
+                                            height="32"
+                                            fill="currentColor"
+                                            class="bi bi-moon-stars-fill"
+                                            viewBox="0 0 16 16"
+                                        >
+                                            <path
+                                                d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278"
+                                            />
+                                            <path
+                                                d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.73 1.73 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.73 1.73 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.73 1.73 0 0 0 1.097-1.097zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z"
+                                            />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h2 class="h4 mb-3">
+                                            <%= __('index.infoBox3.heading') %>
+                                        </h2>
+                                        <p class="text-secondary-custom mb-0">
+                                            <%= __('index.infoBox3.description')
+                                            %>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <a href="/creators" class="btn btn-link mt-3 link-hover" style="margin-left: 15px">
-                            <%=__('index.infoBox5.learnMore') %>
-                        </a>
                     </div>
                 </div>
-            </section>
+            </div>
+        </div>
+    </div>
+</section>
 
-            <!-- Pass Project Data to ClusterMap.js as GeoJSON -->
-            <script>
-                const mapToken = "<%= process.env.MAPBOX_TOKEN || '' %>";
-                if (!mapToken) {
-                    console.error("MAPBOX_TOKEN is not defined. Check your server configuration.");
-                }
-                const projects = <% - JSON.stringify(geoJsonProjects) %>;
-            </script>
+<!-- My Projects Carousel (Only visible if signed in) -->
 
-            <!-- Include ClusterMap JavaScript -->
-            <script src="/javascripts/clusterMap.js"></script>
+<% if (currentUser && myProjects && myProjects.length> 0) { %>
 
-            <!-- Script for AJAX Bookmark Toggle -->
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    const saveIcons = document.querySelectorAll(".save-icon");
+<hr class="mt-3" />
 
-                    saveIcons.forEach((icon) => {
-                        icon.addEventListener("click", async function (event) {
-                            event.preventDefault();
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0"><%= __('index.myProjectsHeading') %></h4>
+        <div class="ms-auto">
+            <button
+                class="btn btn-outline-dark btn-sm me-2"
+                onclick="scrollLeftMyProjects()"
+            >
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button
+                class="btn btn-outline-dark btn-sm"
+                onclick="scrollRightMyProjects()"
+            >
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+    <div
+        id="scrollableMyProjects"
+        class="d-flex overflow-auto"
+        style="gap: 20px; scroll-behavior: smooth"
+    >
+        <% for (let project of myProjects) { %>
+        <div
+            class="card"
+            style="min-width: 300px; max-width: 300px; flex: 0 0 auto"
+        >
+            <img
+                src="<%= project.images && project.images[0] ? project.images[0].url : 'https://res.cloudinary.com/dei5hbjfg/image/upload/v1730665603/Boomerang/ujp5lxrxohzvkutf5oos.jpg' %>"
+                class="card-img-top"
+                alt="<%= project.titleText %>"
+                style="height: 180px; object-fit: cover"
+            />
+            <div class="card-body">
+                <h5 class="card-title"><%= project.titleText %></h5>
+                <p class="card-text text-muted">
+                    <small> <%= project.location %> </small>
+                </p>
+                <% const deadlineDate=new Date(project.deadline); const
+                currentDate=new Date(); const timeDifference=deadlineDate -
+                currentDate; const daysLeft=Math.ceil(timeDifference / (1000 *
+                60 * 60 * 24)); %>
+                <p class="card-text">
+                    <small class="text-muted">
+                        <% if (daysLeft> 0) { %>
+                        <i class="fas fa-clock"></i>
+                        <%= daysLeft %> <%= __('index.daysLeft') %> <% } else {
+                        %>
+                        <span class="text-danger">
+                            <%= __('recommendedProjects.deadlinePassed') %>
+                        </span>
+                        <% } %>
+                    </small>
+                </p>
+                <a href="/projects/<%= project._id %>" class="btn btn-primary">
+                    <%= __('index.viewButton') %>
+                </a>
+            </div>
+        </div>
+        <% } %>
+    </div>
+</div>
+<% } %>
 
-                            const projectId = this.getAttribute("data-project-id");
-                            const iconElement = this.querySelector("i");
+<hr class="mt-3 mb-5" />
 
-                            try {
-                                const response = await fetch(
-                                    `/projects/${projectId}/toggleSave`,
-                                    {
-                                        method: "POST",
-                                        headers: {
-                                            "Content-Type": "application/json",
-                                            "X-Requested-With": "XMLHttpRequest",
-                                        },
-                                    }
-                                );
-                                const result = await response.json();
+<!-- Featured Section -->
+<section class="container my-5">
+    <div class="row">
+        <!-- Left Featured Content -->
+        <div class="col-md-6">
+            <div class="card border-0 card-wrapper">
+                <a
+                    href="/about"
+                    class="card-link"
+                    style="text-decoration: none; color: inherit"
+                >
+                    <img
+                        src="https://images.unsplash.com/photo-1731902062588-4dce45ccc0cb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8"
+                        class="card-img-top"
+                        alt="Placeholder Image 1"
+                        style="object-fit: cover; height: 260px"
+                    />
+                    <div
+                        class="card-body mt-3"
+                        style="
+                            position: relative;
+                            padding-left: 20px;
+                            padding-right: 20px;
+                        "
+                    >
+                        <!-- Offset border -->
+                        <div
+                            style="
+                                position: absolute;
+                                top: 15px;
+                                left: 0;
+                                width: 6px;
+                                height: calc(100% - 15px);
+                                background-color: #007bff;
+                            "
+                        ></div>
+                        <h2
+                            class="card-title card-hover-title"
+                            style="max-width: 90%; margin-left: 15px"
+                        >
+                            <%= __('index.infoBox4.heading') %>
+                        </h2>
+                        <p
+                            class="card-text text-muted"
+                            style="max-width: 90%; margin-left: 15px"
+                        >
+                            <%= __('index.infoBox4.description') %>
+                        </p>
+                    </div>
+                </a>
+            </div>
+            <a
+                href="/about"
+                class="btn btn-link mt-3 link-hover"
+                style="margin-left: 15px"
+            >
+                <%= __('index.infoBox4.learnMore') %>
+            </a>
+        </div>
 
-                                // Toggle the icon based on the save status
-                                if (result.status === "saved") {
-                                    iconElement.classList.remove("far");
-                                    iconElement.classList.add("fas");
-                                } else if (result.status === "unsaved") {
-                                    iconElement.classList.remove("fas");
-                                    iconElement.classList.add("far");
-                                }
-                            } catch (error) {
-                                console.error("Error toggling project save:", error);
-                            }
-                        });
-                    });
-                });
-            </script>
+        <!-- Right Featured Content -->
+        <div class="col-md-6">
+            <div class="card border-0 card-wrapper">
+                <a
+                    href="/creators"
+                    class="card-link"
+                    style="text-decoration: none; color: inherit"
+                >
+                    <img
+                        src="https://images.unsplash.com/photo-1731341711718-8696ebc3a2cb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxM3x8fGVufDB8fHx8fA%3D%3D"
+                        class="card-img-top"
+                        alt="Placeholder Image 2"
+                        style="object-fit: cover; height: 260px"
+                    />
+                    <div
+                        class="card-body mt-3"
+                        style="
+                            position: relative;
+                            padding-left: 20px;
+                            padding-right: 20px;
+                        "
+                    >
+                        <!-- Offset border -->
+                        <div
+                            style="
+                                position: absolute;
+                                top: 15px;
+                                left: 0;
+                                width: 6px;
+                                height: calc(100% - 15px);
+                                background-color: #007bff;
+                            "
+                        ></div>
+                        <h2
+                            class="card-title card-hover-title"
+                            style="max-width: 90%; margin-left: 15px"
+                        >
+                            <%= __('index.infoBox5.heading') %>
+                        </h2>
+                        <p
+                            class="card-text text-muted"
+                            style="max-width: 90%; margin-left: 15px"
+                        >
+                            <%= __('index.infoBox5.description') %>
+                        </p>
+                    </div>
+                </a>
+            </div>
+            <a
+                href="/creators"
+                class="btn btn-link mt-3 link-hover"
+                style="margin-left: 15px"
+            >
+                <%=__('index.infoBox5.learnMore') %>
+            </a>
+        </div>
+    </div>
+</section>
 
-            <script>
-                // Scroll functions for recommended projects
-                function scrollLeftRecommendedProjects() {
-                    const scrollable = document.getElementById("scrollableProjects");
-                    if (scrollable.scrollLeft > 0) {
-                        scrollable.scrollLeft -= scrollable.offsetWidth; // Scroll by container width
-                    }
-                    console.log(
-                        "Scrolled Left on Recommended Projects:",
-                        scrollable.scrollLeft
+<!-- Pass Project Data to ClusterMap.js as GeoJSON -->
+<script>
+    const mapToken = "<%= process.env.MAPBOX_TOKEN || '' %>";
+    if (!mapToken) {
+        console.error("MAPBOX_TOKEN is not defined. Check your server configuration.");
+    }
+    const projects = <%- JSON.stringify(geoJsonProjects) %>;
+</script>
+
+<!-- Include ClusterMap JavaScript -->
+<script src="/javascripts/clusterMap.js"></script>
+
+<!-- Script for AJAX Bookmark Toggle -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const saveIcons = document.querySelectorAll(".save-icon");
+
+        saveIcons.forEach((icon) => {
+            icon.addEventListener("click", async function (event) {
+                event.preventDefault();
+
+                const projectId = this.getAttribute("data-project-id");
+                const iconElement = this.querySelector("i");
+
+                try {
+                    const response = await fetch(
+                        `/projects/${projectId}/toggleSave`,
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-Requested-With": "XMLHttpRequest",
+                            },
+                        }
                     );
-                }
+                    const result = await response.json();
 
-                function scrollRightRecommendedProjects() {
-                    const scrollable = document.getElementById("scrollableProjects");
-                    if (
-                        scrollable.scrollLeft <
-                        scrollable.scrollWidth - scrollable.offsetWidth
-                    ) {
-                        scrollable.scrollLeft += scrollable.offsetWidth; // Scroll by container width
+                    // Toggle the icon based on the save status
+                    if (result.status === "saved") {
+                        iconElement.classList.remove("far");
+                        iconElement.classList.add("fas");
+                    } else if (result.status === "unsaved") {
+                        iconElement.classList.remove("fas");
+                        iconElement.classList.add("far");
                     }
-                    console.log(
-                        "Scrolled Right on Recommended Projects:",
-                        scrollable.scrollLeft
-                    );
+                } catch (error) {
+                    console.error("Error toggling project save:", error);
                 }
+            });
+        });
+    });
+</script>
 
-                // Scroll functions for my projects
-                function scrollLeftMyProjects() {
-                    const scrollable = document.getElementById("scrollableMyProjects");
-                    if (scrollable.scrollLeft > 0) {
-                        scrollable.scrollLeft -= scrollable.offsetWidth; // Scroll by container width
-                    }
-                    console.log("Scrolled Left on My Projects:", scrollable.scrollLeft);
-                }
+<script>
+    // Scroll functions for recommended projects
+    function scrollLeftRecommendedProjects() {
+        const scrollable = document.getElementById("scrollableProjects");
+        if (scrollable.scrollLeft > 0) {
+            scrollable.scrollLeft -= scrollable.offsetWidth; // Scroll by container width
+        }
+        console.log(
+            "Scrolled Left on Recommended Projects:",
+            scrollable.scrollLeft
+        );
+    }
 
-                function scrollRightMyProjects() {
-                    const scrollable = document.getElementById("scrollableMyProjects");
-                    if (
-                        scrollable.scrollLeft <
-                        scrollable.scrollWidth - scrollable.offsetWidth
-                    ) {
-                        scrollable.scrollLeft += scrollable.offsetWidth; // Scroll by container width
-                    }
-                    console.log("Scrolled Right on My Projects:", scrollable.scrollLeft);
-                }
-            </script>
+    function scrollRightRecommendedProjects() {
+        const scrollable = document.getElementById("scrollableProjects");
+        if (
+            scrollable.scrollLeft <
+            scrollable.scrollWidth - scrollable.offsetWidth
+        ) {
+            scrollable.scrollLeft += scrollable.offsetWidth; // Scroll by container width
+        }
+        console.log(
+            "Scrolled Right on Recommended Projects:",
+            scrollable.scrollLeft
+        );
+    }
 
-            <!-- CSS Styles -->
-            <style>
-                .card-link {
-                    text-decoration: none;
-                    color: inherit;
-                }
+    // Scroll functions for my projects
+    function scrollLeftMyProjects() {
+        const scrollable = document.getElementById("scrollableMyProjects");
+        if (scrollable.scrollLeft > 0) {
+            scrollable.scrollLeft -= scrollable.offsetWidth; // Scroll by container width
+        }
+        console.log("Scrolled Left on My Projects:", scrollable.scrollLeft);
+    }
 
-                .card-link:hover {
-                    text-decoration: none;
-                }
+    function scrollRightMyProjects() {
+        const scrollable = document.getElementById("scrollableMyProjects");
+        if (
+            scrollable.scrollLeft <
+            scrollable.scrollWidth - scrollable.offsetWidth
+        ) {
+            scrollable.scrollLeft += scrollable.offsetWidth; // Scroll by container width
+        }
+        console.log("Scrolled Right on My Projects:", scrollable.scrollLeft);
+    }
+</script>
 
-                .card-link:hover .card-hover-title {
-                    text-decoration: underline;
-                    color: #0056b3;
-                    /* Slightly darker shade of blue */
-                }
+<!-- CSS Styles -->
+<style>
+    .card-link {
+        text-decoration: none;
+        color: inherit;
+    }
 
-                .btn.link-hover {
-                    text-decoration: none;
-                    color: #007bff;
-                }
+    .card-link:hover {
+        text-decoration: none;
+    }
 
-                .btn.link-hover:hover {
-                    text-decoration: underline;
-                }
-            </style>
+    .card-link:hover .card-hover-title {
+        text-decoration: underline;
+        color: #0056b3;
+        /* Slightly darker shade of blue */
+    }
+
+    .btn.link-hover {
+        text-decoration: none;
+        color: #007bff;
+    }
+
+    .btn.link-hover:hover {
+        text-decoration: underline;
+    }
+</style>

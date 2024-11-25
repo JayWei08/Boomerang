@@ -100,6 +100,23 @@ const ProjectSchema = new Schema(
                 ref: "Comment",
             },
         ],
+        categories: [
+            {
+                type: String,
+                enum: [
+                    "Technology",
+                    "Art & Design",
+                    "Film & Video",
+                    "Music",
+                    "Cooking & Food",
+                    "Writing & Publishing",
+                    "Gaming",
+                    "Health & Wellness",
+                    "Education",
+                    "Social Impact",
+                ], // Restrict to predefined categories
+            },
+        ],
         keywords: [
             {
                 type: String,
@@ -111,6 +128,24 @@ const ProjectSchema = new Schema(
     },
     opts
 );
+
+// // Categories list
+// const categories = require("../path/to/categories.js");
+
+// // Virtual field to determine categories dynamically
+// ProjectSchema.virtual("categories").get(function () {
+//     const projectKeywords = this.keywords || [];
+//     const matchingCategories = [];
+
+//     // Iterate through categories and check for keyword matches
+//     for (const [category, keywords] of Object.entries(categories)) {
+//         if (projectKeywords.some((keyword) => keywords.includes(keyword))) {
+//             matchingCategories.push(category);
+//         }
+//     }
+
+//     return matchingCategories;
+// });
 
 // Text index for enabling full-text search
 ProjectSchema.index({ title: "text", description: "text", location: "text" });

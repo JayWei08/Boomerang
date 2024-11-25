@@ -57,6 +57,7 @@ const seedDB = async () => {
                 },
             ],
             status: "active",
+            categories: randomProject.categories,
             keywords: randomProject.keywords,
         });
         await project.save();

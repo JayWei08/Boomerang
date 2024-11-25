@@ -128,10 +128,14 @@ module.exports.createProject = async (req, res, next) => {
 
         // Ensure `title` and `description` are stored as `Map` in the required format
         if (req.body.project.title && typeof req.body.project.title === "string") {
-            req.body.project.title = translate_text(req.body.project.title, res.locals.availableLanguages);
+            req.body.project.title = new Map([["en", req.body.project.title]]);
+            req.body.project.titleText = req.body.project.title.get("en"); // Set titleText
+            // req.body.project.title = translate_text(req.body.project.title, res.locals.availableLanguages);
         }
         if (req.body.project.description && typeof req.body.project.description === "string") {
-            req.body.project.description = translate_text(req.body.project.description, res.locals.availableLanguages);
+            req.body.project.description = new Map([["en", req.body.project.description]]);
+            req.body.project.descriptionText = req.body.project.description.get("en"); // Set descriptionText
+            // req.body.project.description = translate_text(req.body.project.description, res.locals.availableLanguages);
         }
 
         if (draftId) {

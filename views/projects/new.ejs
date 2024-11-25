@@ -132,17 +132,21 @@
                                 <%= __('createProject.saveDraftButton') %>
                             </button>
                         </div>
-                          <!-- Step 4: Categories and Keywords -->
-            <div id="step-4" class="form-step" style="display: none;">
-                <h2><%= __('createProject.step4.heading') %></h2>
-                <div id="categories-container">
-                    <p>Loading categories...</p>
-                </div>
-                <p>Selected Keywords: <span id="selected-count">0</span>/15</p>
-                <button type="button" class="btn btn-secondary" onclick="previousStep(3)"><%= __('createProject.previousButton') %></button>
-                <button type="submit" class="btn btn-success"> <%= __('createProject.submitButton') %> </button>
-                <button type="button" class="btn btn-secondary" onclick="saveDraft()"><%= __('createProject.saveDraftButton') %></button>
-            </div>
+                        <div id="step-4" class="form-step" style="display: none;">
+                            <h2><%= __('createProject.step4.heading') %></h2>
+                            <div id="categories-container"></div>
+                            <p>Selected Keywords: <span id="selected-count">0</span>/15</p>
+                            <button type="button" class="btn btn-secondary" onclick="previousStep(3)">
+                                <%= __('createProject.previousButton') %>
+                            </button>
+                            <button type="submit" class="btn btn-success">
+                                <%= __('createProject.submitButton') %>
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="saveDraft()">
+                                <%= __('createProject.saveDraftButton') %>
+                            </button>
+                        </div>
+                        
             </form>
             <a href="/projects">
                 <%= __('createProject.allProjectsLink') %>
@@ -151,11 +155,11 @@
     </div>
 
     <script type="module">
-        import { categories } from "/javascripts/categories.js";
+        const categories = <%- categories %>; // Ensure categories is defined correctly as JSON.
     
-        let currentStep = 1; // Keeps track of the current step in the multi-step form
-        const selectedKeywords = new Set(); // Stores selected keywords
-        const maxKeywords = 15; // Maximum allowed keywords
+        let currentStep = 1; // Keeps track of the current step in the form
+        const selectedKeywords = new Set(); // Tracks selected keywords
+        const maxKeywords = 15; // Max number of keywords allowed
     
         function nextStep(step) {
             document.getElementById(`step-${currentStep}`).style.display = "none";
@@ -221,7 +225,7 @@
             const container = document.getElementById("categories-container");
             container.innerHTML = ""; // Clear existing content
     
-            Object.keys(categories).forEach((category) => {
+            Object.entries(categories).forEach(([category, keywords]) => {
                 const categoryCard = document.createElement("div");
                 categoryCard.className = "card mb-3 shadow-sm";
     
@@ -236,7 +240,7 @@
                 const keywordList = document.createElement("div");
                 keywordList.className = "row";
     
-                categories[category].forEach((keyword) => {
+                keywords.forEach((keyword) => {
                     const keywordItem = document.createElement("div");
                     keywordItem.className = "col-md-6 col-lg-4 mb-2";
                     keywordItem.innerHTML = `
@@ -265,7 +269,6 @@
                 container.appendChild(categoryCard);
             });
         }
-        
     
         function handleKeywordSelection(event) {
             const keyword = event.target.value;
@@ -285,12 +288,12 @@
                 selectedKeywords.size;
         }
     
-        // Attach functions to the global `window` object
+        // Initialize the categories rendering on page load
+        document.addEventListener("DOMContentLoaded", renderCategories);
+    
+        // Attach functions to global window object
         window.nextStep = nextStep;
         window.previousStep = previousStep;
         window.handleKeywordSelection = handleKeywordSelection;
         window.saveDraft = saveDraft;
-        // Initialize the categories rendering on page load
-        document.addEventListener("DOMContentLoaded", renderCategories);
     </script>
-    

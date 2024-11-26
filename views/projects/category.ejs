@@ -1,38 +1,43 @@
+// i18n
+
 <% layout('layouts/boilerplate') %>
 
-<div class="container mt-5">
-    <h1 class="text-center">Projects in <%= category %></h1>
-    <% if (projects.length > 0) { %>
-    <div class="row">
-        <% projects.forEach(project => { %>
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <img
-                    src="<%= project.images && project.images[0] ? project.images[0].url : 'default-image-url.jpg' %>"
-                    class="card-img-top"
-                    alt="<%= project.titleText %>"
-                />
-                <div class="card-body">
-                    <h5 class="card-title"><%= project.titleText %></h5>
-                    <p class="card-text"><%= project.descriptionText %></p>
-                    <p class="card-text">
-                        <small class="text-muted">
-                            Location: <%= project.location %><br />
-                            Deadline: <%= new
-                            Date(project.deadline).toDateString() %>
-                        </small>
-                    </p>
-                    <a
-                        href="/projects/<%= project._id %>"
-                        class="btn btn-primary"
-                        >View Project</a
-                    >
-                </div>
+    <div class="container mt-5">
+        <h1 class="text-center">
+            <%= __('categoryProjects.heading', { category: category }) %>
+        </h1>
+        <% if (projects.length> 0) { %>
+            <div class="row">
+                <% projects.forEach(project=> { %>
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img src="<%= project.images && project.images[0] ? project.images[0].url : 'default-image-url.jpg' %>"
+                                class="card-img-top" alt="<%= project.titleText %>" />
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <%= project.titleText %>
+                                </h5>
+                                <p class="card-text">
+                                    <%= project.descriptionText %>
+                                </p>
+                                <p class="card-text">
+                                    <small class="text-muted">
+                                        <%= __('categoryProjects.location') %>: <%= project.location %><br />
+                                                <%= __('categoryProjects.deadline') %>: <%= new
+                                                        Date(project.deadline).toDateString() %>
+                                    </small>
+                                </p>
+                                <a href="/projects/<%= project._id %>" class="btn btn-primary">
+                                    <%= __('categoryProjects.viewButton') %>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <% }) %>
             </div>
-        </div>
-        <% }) %>
+            <% } else { %>
+                <p class="text-center">
+                    <%= __('categoryProjects.noProjects') %>
+                </p>
+                <% } %>
     </div>
-    <% } else { %>
-    <p class="text-center">No projects found in this category.</p>
-    <% } %>
-</div>

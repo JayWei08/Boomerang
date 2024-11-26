@@ -200,5 +200,104 @@
         "commentBy": "By: {{author}}",
         "commentBody": "Comment: {{body}}",
         "deleteComment": "Delete"
+    },
+    "categoryProjects": {
+        "heading": "Projects in {{category}}",
+        "location": "Location",
+        "deadline": "Deadline",
+        "viewButton": "View Project",
+        "noProjects": "No projects found in this category."
+  },
+  "login": { // CHECK THAI
+    "logo": "Logo",
+    "heading": "Log in",
+    "usernameLabel": "Username",
+    "passwordLabel": "Password",
+    "validFeedback": "Looks good!",
+    "googleButton": "Continue with Google",
+    "submitButton": "Login",
+    "noAccountPrompt": "Don't have an account?",
+    "signupLink": "Sign up",
+    "imageAlt": "Login image"
+  },
+  "register": { // CHECK THAI
+    "logo": "Logo",
+    "heading": "Register",
+    "usernameLabel": "Username",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "validFeedback": "Looks good!",
+    "googleButton": "Continue with Google",
+    "submitButton": "Register",
+    "imageAlt": "Register image"
+  },
+  "about": {
+    "heading": "About Us",
+    "mission": {
+      "heading": "Our Mission",
+      "description": "Boomerang was built to launch ideas into reality by empowering creators worldwide through innovative platforms and community."
+    },
+    "platform": {
+      "heading": "Our Platform",
+      "description": "Boomerang is where ideas find their wings. It's a place where creators share their inspirations, and communities unite to make them a reality. From the spark of an idea to its shining moment, Boomerang connects you directly with those who share your passion."
+    },
+    "community": {
+      "heading": "Our Community",
+      "description": "It all begins with you. Your spark ignites a movement. Friends become supporters, and supporters become champions. Together, we create a ripple effect. Our community unites creators and backers alike, bound by a shared love for innovation and artistry."
+    },
+    "values": {
+      "heading": "Our Values",
+      "description": "Your vision. Your voice. No compromises. No exhaustive grant applications. No demands to alter your message. At Boomerang, you hold the reins of your creation. Backers join you on your journey, becoming part of something extraordinary."
+    },
+    "commitment": {
+      "heading": "Our Commitment",
+      "description": "We're dedicated to cultivating a space where creativity thrives. By removing barriers and empowering creators, we democratize the artistic process. We prioritize meaningful impact over all else, ensuring our actions reflect our core values."
+    },
+    "team": {
+      "heading": "Our Team",
+      "description": "We're a collective of dreamers and doers—designers, developers, artists, and athletes—all passionate about supporting the creative ecosystem. We've navigated the path of bringing ideas to life, and we're here to help you every step of the way."
+    },
+    "journey": {
+      "heading": "Our Journey Has Just Begun...",
+      "description": "Join us as we continue to empower creators and communities around the world."
     }
+  },
+  "howItWorks": {
+    "heading": "How Boomerang Works",
+    "shareVision": {
+      "heading": "Share Your Vision",
+      "description": "Introduce your creative idea to the world. Set a funding goal and choose a campaign duration between 1 and 90 days. Offer unique rewards that backers will receive when your project comes to life."
+    },
+    "engageCommunity": {
+      "heading": "Engage Your Community",
+      "description": "Reach out to friends, family, and fans to support your journey. Boomerang's all-or-nothing funding model ensures you have the necessary resources to realize your vision. A simple 5% fee applies only if your project is successfully funded."
+    },
+    "bringIdeas": {
+      "heading": "Bring Ideas to Life",
+      "description": "Receive your funds just one week after a successful campaign. Then, transform your idea into reality and share the experience with those who believed in you."
+    }
+  },
+  "whyBoomerang": {
+    "heading": "Why Boomerang?",
+    "builtForCreators": {
+      "heading": "Built for Creators",
+      "description": "Boomerang is a platform dedicated exclusively to creative projects. It's a place where your ideas find support, and your creativity finds a home."
+    },
+    "empoweringFunding": {
+      "heading": "Empowering Funding Model",
+      "description": {
+        "part1": "Our all-or-nothing approach means you begin your project fully equipped. For",
+        "part2": ", we offer flexible funding options tailored to your needs."
+      },
+      "link": "non-profit initiatives"
+    },
+    "supportiveCommunity": {
+      "heading": "A Supportive Community",
+      "description": "Your journey starts with a single step. As you share your idea, your community grows—friends become supporters, supporters become champions. Together, we turn inspiration into reality."
+    },
+    "committedDifference": {
+      "heading": "Committed to Making a Difference",
+      "description": "As a Public Benefit Corporation, we measure success by the positive impact we create. Our mission is to launch ideas into reality, empowering creators everywhere."
+    }
+  }
 }

@@ -33,26 +33,26 @@
     "navbar": {
         "brand": "Boomerang",
         "toggle": "สลับการนำทาง",
-        "projects": "โปรเจ็กต์",
+        "projects": "โครงการ",
         "search": "ค้นหา",
         "searchPlaceholder": "ค้นหาโปรเจ็กต์",
         "startProject": "โครงการใหม่",
-        "login": "เข้าสู่ระบบ",
+        "login": "ล็อกอิน",
         "dashboard": "แดชบอร์ดของฉัน",
         "myProjects": "โปรเจ็กต์ของฉัน",
         "library": "คลัง",
         "logout": "ออกจากระบบ",
         "categories": {
             "technology": "เทคโนโลยี",
-            "artDesign": "ศิลปะและการออกแบบ",
-            "filmVideo": "ภาพยนตร์และวิดีโอ",
+            "artDesign": "ศิลปะ & ออกแบบ",
+            "filmVideo": "ภาพยนตร์ & วิดีโอ",
             "music": "ดนตรี",
-            "cookingFood": "การทำอาหารและอาหาร",
-            "writingPublishing": "การเขียนและการเผยแพร่",
+            "cookingFood": "อาหาร & ทำอาหาร",
+            "writingPublishing": "เขียน & เผยแพร่",
             "gaming": "เกม",
-            "healthWellness": "สุขภาพและความเป็นอยู่ที่ดี",
+            "healthWellness": "สุขภาพ & ความเป็นอยู่",
             "education": "การศึกษา",
-            "socialImpact": "ผลกระทบทางสังคม"
+            "socialImpact": "สังคม"
         }
     },
     "drafts": {

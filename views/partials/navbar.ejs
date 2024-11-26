@@ -27,7 +27,7 @@
             data-bs-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup"
             aria-expanded="false"
-            aria-label="<%= __('navbar.toggle') %>"
+            aria-label="Toggle navigation"
         >
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -44,12 +44,107 @@
                 </a>
             </div>
 
+            <!-- Categories Dropdown for Mobile -->
+            <div class="dropdown d-lg-none d-block">
+                <button
+                    class="btn btn-outline-secondary dropdown-toggle w-100"
+                    type="button"
+                    id="categoriesDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                >
+                    Categories
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="categoriesDropdown">
+                    <li>
+                        <a
+                            class="dropdown-item"
+                            href="/projects/category/Technology"
+                        >
+                            <%= __('navbar.categories.technology') %>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            class="dropdown-item"
+                            href="/projects/category/Art%20%26%20Design"
+                        >
+                            <%= __('navbar.categories.artDesign') %>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            class="dropdown-item"
+                            href="/projects/category/Film%20%26%20Video"
+                        >
+                            <%= __('navbar.categories.filmVideo') %>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            class="dropdown-item"
+                            href="/projects/category/Music"
+                        >
+                            <%= __('navbar.categories.music') %>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            class="dropdown-item"
+                            href="/projects/category/Cooking%20%26%20Food"
+                        >
+                            <%= __('navbar.categories.cookingFood') %>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            class="dropdown-item"
+                            href="/projects/category/Writing%20%26%20Publishing"
+                        >
+                            <%= __('navbar.categories.writingPublishing') %>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            class="dropdown-item"
+                            href="/projects/category/Gaming"
+                        >
+                            <%= __('navbar.categories.gaming') %>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            class="dropdown-item"
+                            href="/projects/category/Health%20%26%20Wellness"
+                        >
+                            <%= __('navbar.categories.healthWellness') %>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            class="dropdown-item"
+                            href="/projects/category/Education"
+                        >
+                            <%= __('navbar.categories.education') %>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            class="dropdown-item"
+                            href="/projects/category/Social%20Impact"
+                        >
+                            <%= __('navbar.categories.socialImpact') %>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
             <!-- Search Bar -->
             <form
                 action="/search"
                 method="GET"
-                class="d-flex"
-                style="<%= !currentUser ? 'width: 600px;' : 'width: 600px;' %> margin-left: 20px; margin-right: 20px"
+                class="d-flex w-100 my-2 my-lg-0"
+                style="margin-left: 20px; margin-right: 20px"
             >
                 <div class="position-relative w-100">
                     <input
@@ -80,7 +175,7 @@
                 <a
                     class="btn btn-primary me-3"
                     href="/projects/new"
-                    style="font-weight: 600"
+                    style="font-weight: 600; white-space: nowrap"
                 >
                     <%= __('navbar.startProject') %>
                 </a>
@@ -142,75 +237,10 @@
                     </ul>
                 </div>
             </div>
-            <% if (!currentUser) { %>
-            <!-- Login Link -->
-            <a
-                href="/login"
-                class="btn btn-outline-primary px-3 py-1 ms-3"
-                style="
-                    border-radius: 5px;
-                    font-weight: 600;
-                    text-decoration: none;
-                "
-            >
-                <%= __('navbar.login') %>
-            </a>
-            <% } else { %>
-            <!-- Profile Dropdown -->
-            <div class="dropdown ms-3">
-                <button
-                    class="btn btn-secondary dropdown-toggle d-flex align-items-center"
-                    type="button"
-                    id="profileDropdown"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    style="
-                        background: none;
-                        border: none;
-                        color: inherit;
-                        padding: 0;
-                    "
-                >
-                    <!-- Profile Icon -->
-                    <img
-                        src="https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png"
-                        alt="Profile"
-                        style="
-                            width: 30px;
-                            height: 30px;
-                            border-radius: 50%;
-                            object-fit: cover;
-                        "
-                    />
-                </button>
-                <ul
-                    class="dropdown-menu dropdown-menu-end"
-                    aria-labelledby="profileDropdown"
-                >
-                    <li>
-                        <a class="dropdown-item" href="/projects/my-projects">
-                            <%= __('navbar.myProjects') %>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="/projects/library">
-                            <%= __('navbar.library') %>
-                        </a>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider" />
-                    </li>
-                    <li>
-                        <a class="dropdown-item text-danger" href="/logout">
-                            <%= __('navbar.logout') %>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <% } %>
         </div>
     </div>
 </nav>
+
 <!-- Category Links -->
 <div class="container-fluid bg-light py-2">
     <div class="container d-flex justify-content-center">

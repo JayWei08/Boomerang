@@ -183,7 +183,7 @@ app.use(i18n.init);
 
 app.use(async (req, res, next) => {
     try {
-        let language = req.query.lang || req.session.language || "th";
+        let language = req.session.language || "th";
 
         if (req.isAuthenticated()) {
             const user = await User.findById(req.user._id);
@@ -192,8 +192,8 @@ app.use(async (req, res, next) => {
             }
         }
 
-        // Set the language for i18n
         req.setLocale(language);
+        req.query.language = language;
         req.session.language = language;
         res.locals.selectedLanguage = language;
 

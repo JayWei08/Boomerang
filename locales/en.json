@@ -221,7 +221,6 @@
         "noProjects": "No projects found in this category."
     },
     "login": {
-        // CHECK THAI
         "logo": "Logo",
         "heading": "Log in",
         "usernameLabel": "Username",
@@ -234,7 +233,6 @@
         "imageAlt": "Login image"
     },
     "register": {
-        // CHECK THAI
         "logo": "Logo",
         "heading": "Register",
         "usernameLabel": "Username",

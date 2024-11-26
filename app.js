@@ -124,54 +124,13 @@ passport.use(
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-const availableLanguages = ["en", "th"];
+const availableLanguages = ['en', 'th'];
 const availableCurrencies = ["USD", "THB"];
 
-app.use((req, res, next) => {
-    res.locals.availableLanguages = availableLanguages;
-    res.locals.selectedLanguage =
-        req.query.lang || req.session.language || "th";
-
-    res.locals.availableCurrencies = availableCurrencies;
-    res.locals.selectedCurrency = req.session.currency || "THB";
-    next();
-});
-
-app.use(async (req, res, next) => {
-    try {
-        let language = req.query.lang || req.session.language || "th";
-        let currency = req.session.currency || "THB"; // Default to 'en'
-
-        if (req.isAuthenticated()) {
-            // Fetch the language from the database for authenticated users
-            const user = await User.findById(req.user._id);
-            if (user && user.language) {
-                language = user.language;
-            }
-            if (user && user.currency) {
-                currency = user.currency;
-            }
-        }
-
-        req.session.language = language;
-        res.locals.selectedLanguage = language;
-
-        req.currency = currency;
-        req.session.currency = currency;
-        res.locals.selectedCurrency = currency;
-
-        next();
-    } catch (error) {
-        console.error("Error syncing", error);
-        next(error);
-    }
-});
-
 i18n.configure({
-    locales: ["en", "th"],
-    directory: path.join(__dirname, "utils/language"),
+    locales: ['en', 'th'],
+    directory: path.join(__dirname, "locales"),
     defaultLocale: "th",
-    queryParameter: "lang",
     cookie: "language",
     autoReload: true,
     updateFiles: false,
@@ -183,23 +142,36 @@ app.use(i18n.init);
 
 app.use(async (req, res, next) => {
     try {
-        let language = req.session.language || "th";
+        let language = req.query.language || req.session.language || "th";
+        let currency = req.query.language || req.session.currency || "THB";
 
         if (req.isAuthenticated()) {
+            // Fetch the language from the database for authenticated users
             const user = await User.findById(req.user._id);
             if (user && user.language) {
                 language = user.language;
             }
+            if (user && user.currency) {
+                currency = user.currency;
+            }
         }
-
+        
+        console.log(language);
+        console.log(availableLanguages.includes(language));
         req.setLocale(language);
-        req.query.language = language;
+        console.log(language + " " + req.getLocale());
         req.session.language = language;
         res.locals.selectedLanguage = language;
+        res.locals.availableLanguages = availableLanguages;
+        
+        req.currency = currency;
+        req.session.currency = currency;
+        res.locals.selectedCurrency = currency;
+        res.locals.availableCurrencies = availableCurrencies;
 
         next();
     } catch (error) {
-        console.error("Error syncing language", error);
+        console.error("Error syncing", error);
         next(error);
     }
 });

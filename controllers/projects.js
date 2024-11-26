@@ -9,6 +9,12 @@ const Multiset = require("../utils/Multiset");
 const currencyToken = process.env.CURRENCY_TOKEN;
 const { categories } = require("../utils/categories.js"); // Import the categories data
 
+const { Translate } = require('@google-cloud/translate').v2;
+
+const translate = new Translate({keyFilename: 'path/to/service-account-key.json'});
+const translate = new Translate({key: 'YOUR_API_KEY'}); // TODO
+const { Translate } = require('@google-cloud/translate').v2;
+
 module.exports.index = async (req, res) => {
     const language = req.session.language || "th"; // Default to 'en' if no language is set
     const user = await get_user(Users, req);
@@ -131,7 +137,6 @@ module.exports.createProject = async (req, res, next) => {
         const { draftId } = req.body; // Retrieve draftId from the request
         let project;
 
-        // Ensure `title` and `description` are stored as `Map` in the required format
         if (req.body.project.titleText && typeof req.body.project.titleText === "string") {
             req.body.project.title = new Map([["en", req.body.project.title]]);
         }
@@ -143,7 +148,6 @@ module.exports.createProject = async (req, res, next) => {
         const determinedCategories = [];
 
         for (const [category, keywords] of Object.entries(categories)) {
-            // Check if any of the selected keywords belong to this category
             const matchingKeywords = selectedKeywords.filter((keyword) =>
                 keywords.includes(keyword)
             );
@@ -152,11 +156,9 @@ module.exports.createProject = async (req, res, next) => {
             }
         }
 
-        // Assign the determined categories to the project data
         req.body.project.categories = determinedCategories;
 
         if (draftId) {
-            // Update an existing draft
             project = await Project.findById(draftId);
             if (!project) {
                 req.flash("error", "Draft not found.");
@@ -236,10 +238,7 @@ async function translate_text(text, availableLanguages) {
             continue;
         }
 
-        const [translation, metadata] = await translate.translate(
-            text,
-            language
-        );
+        const [translation, metadata] = await translate.translate(text, language);
         textMap.set(language, translation);
 
         const detectedLanguage = metadata.detectedSourceLanguage;

@@ -236,6 +236,75 @@
                         <% }) %>
                     </ul>
                 </div>
+                <% if (!currentUser) { %>
+                <!-- Login Link -->
+                <a
+                    href="/login"
+                    class="btn btn-outline-primary px-3 py-1 ms-3"
+                    style="
+                        border-radius: 5px;
+                        font-weight: 600;
+                        text-decoration: none;
+                    "
+                >
+                    <%= __('navbar.login') %>
+                </a>
+                <% } else { %>
+                <!-- Profile Dropdown -->
+                <div class="dropdown ms-3">
+                    <button
+                        class="btn btn-secondary dropdown-toggle d-flex align-items-center"
+                        type="button"
+                        id="profileDropdown"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        style="
+                            background: none;
+                            border: none;
+                            color: inherit;
+                            padding: 0;
+                        "
+                    >
+                        <!-- Profile Icon -->
+                        <img
+                            src="https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png"
+                            alt="Profile"
+                            style="
+                                width: 30px;
+                                height: 30px;
+                                border-radius: 50%;
+                                object-fit: cover;
+                            "
+                        />
+                    </button>
+                    <ul
+                        class="dropdown-menu dropdown-menu-end"
+                        aria-labelledby="profileDropdown"
+                    >
+                        <li>
+                            <a
+                                class="dropdown-item"
+                                href="/projects/my-projects"
+                            >
+                                <%= __('navbar.myProjects') %>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/projects/library">
+                                <%= __('navbar.library') %>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="/logout">
+                                <%= __('navbar.logout') %>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <% } %>
             </div>
         </div>
     </div>

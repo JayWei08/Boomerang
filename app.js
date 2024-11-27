@@ -155,11 +155,8 @@ app.use(async (req, res, next) => {
                 currency = user.currency;
             }
         }
-        
-        console.log(language);
-        console.log(availableLanguages.includes(language));
+    
         req.setLocale(language);
-        console.log(language + " " + req.getLocale());
         req.session.language = language;
         res.locals.selectedLanguage = language;
         res.locals.availableLanguages = availableLanguages;

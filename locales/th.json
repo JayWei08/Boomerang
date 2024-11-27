@@ -44,15 +44,15 @@
         "logout": "ออกจากระบบ",
         "categories": {
             "technology": "เทคโนโลยี",
-            "artDesign": "ศิลปะ & ออกแบบ",
-            "filmVideo": "ภาพยนตร์ & วิดีโอ",
+            "artDesign": "ศิลปะและการออกแบบ",
+            "filmVideo": "ภาพยนตร์และวิดีโอ",
             "music": "ดนตรี",
-            "cookingFood": "อาหาร & ทำอาหาร",
-            "writingPublishing": "เขียน & เผยแพร่",
-            "gaming": "เกม",
-            "healthWellness": "สุขภาพ & ความเป็นอยู่",
+            "cookingFood": "อาหาร",
+            "writingPublishing": "งานเขียน",
+            "gaming": "เกมและอีสปอร์ต",
+            "healthWellness": "สุขภาพและความงาม",
             "education": "การศึกษา",
-            "socialImpact": "สังคม"
+            "socialImpact": "การพัฒนาสังคม"
         }
     },
     "drafts": {

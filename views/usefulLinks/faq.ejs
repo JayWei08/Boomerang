@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate') %>
 
 <div class="container mt-3 mb-5">
-    <h1 class="text-center mb-4">Frequently Asked Questions</h1>
+    <h1 class="text-center mb-4"><%= __('FAQ.heading') %></h1>
 
     <div class="accordion" id="faqAccordion">
         <!-- FAQ 1 -->
@@ -15,7 +15,7 @@
                     aria-expanded="true"
                     aria-controls="faqCollapse1"
                 >
-                    Who can launch a project on Boomerang?
+                    <%= __('FAQ.faq1.question') %>
                 </button>
             </h2>
             <div
@@ -25,18 +25,12 @@
                 data-bs-parent="#faqAccordion"
             >
                 <div class="accordion-body">
-                    Project creation is available to individuals and
-                    organizations in Thailand who meet these criteria:
+                    <%= __('FAQ.faq1.answer') %>
                     <ul>
-                        <li>Age: 18 years or older.</li>
-                        <li>Residency: Permanent resident of Thailand.</li>
-                        <li>
-                            Identification: Valid address, bank account, and
-                            government-issued ID in Thailand.
-                        </li>
-                        <li>
-                            Financial: Possess a major credit or debit card.
-                        </li>
+                        <li><%= __('FAQ.faq1.points')[0] %></li>
+                        <li><%= __('FAQ.faq1.points')[1] %></li>
+                        <li><%= __('FAQ.faq1.points')[2] %></li>
+                        <li><%= __('FAQ.faq1.points')[3] %></li>
                     </ul>
                 </div>
             </div>
@@ -53,7 +47,7 @@
                     aria-expanded="false"
                     aria-controls="faqCollapse2"
                 >
-                    What if Boomerang isn't available in my country yet?
+                    <%= __('FAQ.faq2.question') %>
                 </button>
             </h2>
             <div
@@ -62,10 +56,7 @@
                 aria-labelledby="faqHeading2"
                 data-bs-parent="#faqAccordion"
             >
-                <div class="accordion-body">
-                    We're actively working to expand our platform to more
-                    countries. Stay tuned for updates.
-                </div>
+                <div class="accordion-body"><%= __('FAQ.faq2.answer') %></div>
             </div>
         </div>
 
@@ -80,7 +71,7 @@
                     aria-expanded="false"
                     aria-controls="faqCollapse3"
                 >
-                    How does Boomerang support creators?
+                    <%= __('FAQ.faq3.question') %>
                 </button>
             </h2>
             <div
@@ -89,12 +80,7 @@
                 aria-labelledby="faqHeading3"
                 data-bs-parent="#faqAccordion"
             >
-                <div class="accordion-body">
-                    We provide tools and resources at every stage of your
-                    journey. Our Creator Resources offer insights and best
-                    practices to help you plan, promote, and fulfill your
-                    project successfully.
-                </div>
+                <div class="accordion-body"><%= __('FAQ.faq3.answer') %></div>
             </div>
         </div>
 
@@ -109,7 +95,7 @@
                     aria-expanded="false"
                     aria-controls="faqCollapse4"
                 >
-                    How does all-or-nothing funding work?
+                    <%= __('FAQ.faq4.question') %>
                 </button>
             </h2>
             <div
@@ -118,11 +104,7 @@
                 aria-labelledby="faqHeading4"
                 data-bs-parent="#faqAccordion"
             >
-                <div class="accordion-body">
-                    Backers are only charged if your project reaches its funding
-                    goal within the set timeframe. This ensures you have the
-                    full budget needed to bring your idea to life.
-                </div>
+                <div class="accordion-body"><%= __('FAQ.faq4.answer') %></div>
             </div>
         </div>
 
@@ -137,7 +119,7 @@
                     aria-expanded="false"
                     aria-controls="faqCollapse5"
                 >
-                    Who can support my project?
+                    <%= __('FAQ.faq5.question') %>
                 </button>
             </h2>
             <div
@@ -146,11 +128,7 @@
                 aria-labelledby="faqHeading5"
                 data-bs-parent="#faqAccordion"
             >
-                <div class="accordion-body">
-                    Support often begins with friends, family, and fans. As your
-                    project gains momentum, word spreads, and more people who
-                    share your passion will join in.
-                </div>
+                <div class="accordion-body"><%= __('FAQ.faq5.answer') %></div>
             </div>
         </div>
 
@@ -165,7 +143,7 @@
                     aria-expanded="false"
                     aria-controls="faqCollapse6"
                 >
-                    What are the fees?
+                    <%= __('FAQ.faq6.question') %>
                 </button>
             </h2>
             <div
@@ -174,12 +152,7 @@
                 aria-labelledby="faqHeading6"
                 data-bs-parent="#faqAccordion"
             >
-                <div class="accordion-body">
-                    Upon successful funding, Boomerang applies a 5% fee to the
-                    funds raised. Our payment processor, 2C2P, also applies
-                    standard processing fees. No fees are collected if your
-                    project doesn't reach its goal.
-                </div>
+                <div class="accordion-body"><%= __('FAQ.faq6.answer') %></div>
             </div>
         </div>
 
@@ -194,7 +167,7 @@
                     aria-expanded="false"
                     aria-controls="faqCollapse7"
                 >
-                    What kinds of projects can I launch on Boomerang?
+                    <%= __('FAQ.faq7.question') %>
                 </button>
             </h2>
             <div
@@ -204,6 +177,7 @@
                 data-bs-parent="#faqAccordion"
             >
                 <div class="accordion-body">
+                    <!-- finish up faq 7 -->
                     Boomerang supports creative projects across categories like
                     art, design, technology, music, and film. We also support
                     <a href="/nonprofit-resources">non-profit fundraisers</a>

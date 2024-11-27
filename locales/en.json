@@ -191,7 +191,23 @@
         "daysLeft": "days left",
         "deadlinePassed": "Deadline passed",
         "viewButton": "View",
-        "errorToggleSave": "Error toggling project save status."
+        "errorToggleSave": "Error toggling project save status.",
+        "locationPlaceholder": "Search for a location...",
+        "allCategories": "All Categories",
+        "categories": {
+            "technology": "Technology",
+            "artDesign": "Art & Design",
+            "filmVideo": "Film & Video",
+            "music": "Music",
+            "cookingFood": "Cooking & Food",
+            "writingPublishing": "Writing & Publishing",
+            "gaming": "Gaming",
+            "healthWellness": "Health & Wellness",
+            "education": "Education",
+            "socialImpact": "Social Impact"
+        },
+        "sortMostRecent": "Most Recent",
+        "sortDeadline": "Deadline"
     },
     "show": {
         "imageAlt": "Project Image",

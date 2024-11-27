@@ -1,72 +1,60 @@
 const Project = require("../models/project");
+const categories = require("../utils/categories").categories;
 
 exports.searchProjects = async (req, res) => {
-    const keyword = req.query.keyword;
-    const language = req.session.language || "en"; // Default to 'en'
-
-    if (!keyword || keyword.trim() === "") {
-        return res.render("projects/search", {
-            projects: [],
-            geoJsonProjects: { type: "FeatureCollection", features: [] },
-            keyword: "",
-            message: "Please enter a keyword to search.",
-        });
-    }
+    const { keyword, category, location, sort } = req.query;
+    const language = req.session.language || "en";
 
     try {
-        // First, search with $text for title and description
-        const textResults = await Project.find({
-            $text: { $search: keyword },
-        });
-
-        // Then, search with regex for location, categories, and keywords
-        const regexResults = await Project.find({
-            $or: [
-                { location: new RegExp(keyword, "i") },
-                { categories: new RegExp(keyword, "i") },
+        const filters = {};
+        if (keyword && keyword.trim()) {
+            // Use computed property syntax for dynamic keys
+            filters.$or = [
+                { [`title.${language}`]: new RegExp(keyword, "i") },
+                { [`description.${language}`]: new RegExp(keyword, "i") },
                 { keywords: new RegExp(keyword, "i") },
-            ],
-        });
+                { location: new RegExp(keyword, "i") },
+            ];
+        }
+        if (category) {
+            filters.categories = { $in: [category] };
+        }
+        if (location) {
+            filters.location = new RegExp(location, "i");
+        }
 
-        // Combine the two result sets and remove duplicates
-        const combinedResults = [
-            ...new Map(
-                [...textResults, ...regexResults].map((project) => [
-                    project._id.toString(),
-                    project,
-                ])
-            ).values(),
-        ];
+        let query = Project.find(filters);
+        if (sort === "mostRecent") {
+            query = query.sort({ createdAt: -1 });
+        } else if (sort === "deadline") {
+            query = query.sort({ deadline: 1 });
+        }
 
-        // Transform projects for the frontend
-        const transformedProjects = combinedResults.map((project) => ({
+        const projects = await query.exec();
+
+        const transformedProjects = projects.map((project) => ({
             _id: project._id,
             titleText: project.title.get(language) || project.title.get("en"),
             descriptionText:
                 project.description.get(language) ||
                 project.description.get("en"),
             images: project.images,
-            geometry: project.geometry,
-            currency: project.currency,
-            fundingGoal: project.fundingGoal,
             location: project.location,
             deadline: project.deadline,
-            createdAt: project.createdAt,
-            updatedAt: project.updatedAt,
-            author: project.author,
-            status: project.status,
-            comments: project.comments,
-            keywords: project.keywords,
             categories: project.categories,
-            isDraft: project.isDraft,
-            lastSavedAt: project.lastSavedAt,
+            geometry: project.geometry, // Include geometry for map display
         }));
 
-        // Convert projects to GeoJSON format
         const geoJsonProjects = {
             type: "FeatureCollection",
             features: transformedProjects
-                .filter((project) => project.geometry) // Exclude projects without geometry
+                .filter(
+                    (project) =>
+                        project.geometry &&
+                        project.geometry.type === "Point" &&
+                        Array.isArray(project.geometry.coordinates) &&
+                        project.geometry.coordinates.length === 2
+                )
                 .map((project) => ({
                     type: "Feature",
                     geometry: project.geometry,
@@ -78,10 +66,19 @@ exports.searchProjects = async (req, res) => {
                 })),
         };
 
+        const categoryList = Object.keys(categories).map((key) => ({
+            key,
+            value: key,
+        }));
+
         res.render("projects/search", {
             projects: transformedProjects,
             geoJsonProjects,
             keyword,
+            category,
+            location,
+            sort,
+            categories: categoryList,
         });
     } catch (error) {
         console.error("Search error:", error);

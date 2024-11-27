@@ -1,127 +1,101 @@
-<!-- i18n -->
-
 <% layout('layouts/boilerplate') %>
 
-<div id="map" style="width: 100%; height: 500px"></div>
-<h1 class="mt-4"><%= __('projectSearch.heading') %></h1>
+<div id="map" style="width: 100%; height: 500px;"></div>
+<h1 class="mt-4 text-center"><%= __('projectSearch.heading') %></h1>
 
 <!-- Search Form -->
 <div class="container mt-4 mb-3">
-    <form
-        action="/search"
-        method="GET"
-        class="form-inline d-flex justify-content-center"
-    >
+    <form action="/search" method="GET" class="d-flex flex-wrap justify-content-center">
+        <!-- Keyword Input -->
         <input
             type="text"
             name="keyword"
-            class="form-control mr-2"
+            class="form-control mr-2 mb-2"
             placeholder="<%= __('projectSearch.searchPlaceholder') %>"
-            required
+            value="<%= keyword || '' %>"
+            aria-label="Search Keyword"
         />
-        <button type="submit" class="btn btn-primary">
+
+        <select name="category" class="form-control mr-2 mb-2" aria-label="Category">
+            <option value=""><%= __('projectSearch.allCategories') %></option>
+            <% categories.forEach((category) => { %>
+                <option value="<%= category.key %>" <%= category.key === category ? "selected" : "" %>>
+                    <%= category.value %> <!-- Display name for the dropdown -->
+                </option>
+            <% }); %>
+        </select>
+        
+        
+        
+
+        <!-- Location Input -->
+        <input
+            type="text"
+            name="location"
+            class="form-control mr-2 mb-2"
+            placeholder="<%= __('projectSearch.locationPlaceholder') %>"
+            value="<%= location || '' %>"
+            aria-label="Location"
+        />
+
+        <!-- Sort Dropdown -->
+        <select name="sort" class="form-control mr-2 mb-2" aria-label="Sort By">
+            <option value="mostRecent" <%= sort === "mostRecent" ? "selected" : "" %>>
+                <%= __('projectSearch.sortMostRecent') %>
+            </option>
+            <option value="deadline" <%= sort === "deadline" ? "selected" : "" %>>
+                <%= __('projectSearch.sortDeadline') %>
+            </option>
+        </select>
+
+        <!-- Search Button -->
+        <button type="submit" class="btn btn-primary mb-2">
             <%= __('projectSearch.searchButton') %>
         </button>
     </form>
 </div>
 
-<!-- Search Results Information Message -->
-<% if (keyword && projects) { %>
+<!-- Search Results -->
+<% if (keyword || category || location || sort) { %>
 <div class="container text-center mt-4 mb-5">
-    <% if (projects.length > 0) { %>
+    <% if (projects && projects.length > 0) { %>
     <p>
-        <%- __('projectSearch.resultsFound', { count: projects.length, keyword:
-        keyword }) %>
+        <strong><%= projects.length %></strong> <%= __('projectSearch.resultsFound', { keyword, category, location }) %>
     </p>
     <% } else { %>
-    <p><%- __('projectSearch.noResults', { keyword: keyword }) %></p>
+    <p><%= __('projectSearch.noResults', { keyword, category, location }) %></p>
     <% } %>
 </div>
-
 <% } else { %>
-<!-- Display a welcoming message if no search has been performed -->
 <div class="container text-center mt-5">
     <h2><%= __('projectSearch.welcomeMessage') %></h2>
     <p><%= __('projectSearch.instructions') %></p>
 </div>
-<% } %> <% if (projects && projects.length> 0) { %>
+<% } %>
+
+<!-- Display Projects -->
+<% if (projects && projects.length > 0) { %>
 <div class="container">
     <div class="row">
-        <% projects.forEach(project=> { %>
+        <% projects.forEach((project) => { %>
         <div class="col-md-4 mb-4">
             <div class="card">
                 <img
-                    src="<%= project.images && project.images[0] ? project.images[0].url : 'default-image-url.jpg' %>"
+                    src="<%= project.images?.[0]?.url || 'default-image-url.jpg' %>"
                     class="card-img-top"
-                    alt="<%= project.titleText %>"
+                    alt="<%= project.titleText || 'Project Image' %>"
                 />
                 <div class="card-body">
-                    <!-- Title and Bookmark in a Flex Container -->
-                    <div
-                        style="
-                            display: flex;
-                            justify-content: space-between;
-                            align-items: center;
-                        "
-                    >
-                        <h5 class="card-title" style="margin: 0">
-                            <%= project.titleText %>
-                        </h5>
-                        <% if (currentUser) { %>
-                        <form
-                            action="/projects/<%= project._id %>/toggleSave?keyword=<%= keyword %>"
-                            method="POST"
-                            style="margin: 0"
-                        >
-                            <button
-                                type="submit"
-                                class="btn btn-link p-0"
-                                style="font-size: 1rem; color: #007bff"
-                            >
-                                <% if (currentUser.savedProjects &&
-                                currentUser.savedProjects.includes(project._id.toString()))
-                                { %>
-                                <i class="fas fa-bookmark"></i>
-                                <% } else { %>
-                                <i class="far fa-bookmark"></i>
-                                <% } %>
-                            </button>
-                        </form>
-                        <% } %>
-                    </div>
+                    <h5 class="card-title"><%= project.titleText %></h5>
                     <p class="card-text"><%= project.descriptionText %></p>
-                    <p class="card-text">
-                        <small class="text-muted">
-                            <%= project.location %>
-                        </small>
-                    </p>
-                    <p class="card-text">
-                        <% const deadlineDate=new Date(project.deadline); const
-                        currentDate=new Date(); const
-                        timeDifference=deadlineDate - currentDate; const
-                        daysLeft=Math.ceil(timeDifference / (1000 * 60 * 60 *
-                        24)); %>
-                        <small class="text-muted">
-                            <% if (daysLeft> 0) { %>
-                            <i class="fas fa-clock"></i>
-                            <%= daysLeft %> <%= __('projectSearch.daysLeft') %>
-                            <% } else { %>
-                            <span class="text-danger">
-                                <%= __('projectSearch.deadlinePassed') %>
-                            </span>
-                            <% } %>
-                        </small>
-                    </p>
-                    <a
-                        href="/projects/<%= project._id %>"
-                        class="btn btn-primary"
-                    >
+                    <p class="card-text"><small class="text-muted"><%= project.location || 'Unknown Location' %></small></p>
+                    <a href="/projects/<%= project._id %>" class="btn btn-primary">
                         <%= __('projectSearch.viewButton') %>
                     </a>
                 </div>
             </div>
         </div>
-        <% }) %>
+        <% }); %>
     </div>
 </div>
 <% } %>
@@ -132,56 +106,77 @@
 
     mapboxgl.accessToken = mapToken;
 
+    // Initialize the map
     const map = new mapboxgl.Map({
         container: "map",
         style: "mapbox://styles/mapbox/navigation-night-v1",
         center: [100, 15], // Default center (Thailand)
-        zoom: 5, // Default zoom
+        zoom: 5, // Default zoom level
     });
 
-    // Add navigation controls
+    // Add navigation controls (zoom and rotate)
     map.addControl(new mapboxgl.NavigationControl());
 
-    // Add the projects as a GeoJSON source
+    // Add GeoJSON data as a source
     map.on("load", () => {
+        if (geoJsonProjects.features.length === 0) {
+            console.warn("No project locations to display on the map.");
+            return;
+        }
+
+        // Add GeoJSON source for project points
         map.addSource("projects", {
             type: "geojson",
-            data: geoJsonProjects,
+            data: geoJsonProjects, // The GeoJSON data from the server
         });
 
-        // Add a layer for the project points
+        // Add a circle layer to represent project points
         map.addLayer({
             id: "project-points",
             type: "circle",
             source: "projects",
             paint: {
-                "circle-color": "#11b4da",
-                "circle-radius": 6,
-                "circle-stroke-width": 2,
+                "circle-color": "#007cbf", // Blue color for points
+                "circle-radius": 8, // Size of the circles
+                "circle-stroke-width": 1,
                 "circle-stroke-color": "#fff",
             },
         });
 
-        // Add popups on click
+        // Add click event to show a popup with project details
         map.on("click", "project-points", (e) => {
-            const { title, description, popUpMarkup } = e.features[0].properties;
+            const { title, description, popUpMarkup } = e.features[0].properties; // Properties from GeoJSON
             const coordinates = e.features[0].geometry.coordinates.slice();
 
+            // Adjust map view for better popup placement
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+
+            // Create and display the popup
             new mapboxgl.Popup()
                 .setLngLat(coordinates)
-                .setHTML(popUpMarkup)
+                .setHTML(popUpMarkup) // HTML content for the popup
                 .addTo(map);
         });
 
-        // Change cursor to pointer when hovering over points
+        // Change cursor style to pointer when hovering over points
         map.on("mouseenter", "project-points", () => {
             map.getCanvas().style.cursor = "pointer";
         });
+
+        // Reset cursor style when not hovering over points
         map.on("mouseleave", "project-points", () => {
             map.getCanvas().style.cursor = "";
         });
     });
-</script>
 
-<!-- Include ClusterMap JavaScript -->
-<script src="/javascripts/clusterMap.js"></script>
+    // Optional: Zoom to fit all points on the map
+    if (geoJsonProjects.features.length > 0) {
+        const bounds = new mapboxgl.LngLatBounds();
+        geoJsonProjects.features.forEach((feature) => {
+            bounds.extend(feature.geometry.coordinates);
+        });
+        map.fitBounds(bounds, { padding: 50 });
+    }
+</script>

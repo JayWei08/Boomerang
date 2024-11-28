@@ -182,16 +182,32 @@
     },
     "projectSearch": {
         "heading": "ค้นหาโปรเจ็กต์",
+        "showMeLabel": "แสดงให้ฉันดู",
         "searchPlaceholder": "ค้นหาโปรเจ็กต์...",
         "searchButton": "ค้นหา",
         "resultsFound": "แสดงผลลัพธ์ <strong>{{count}}</strong> รายการสำหรับ \"<strong>{{keyword}}</strong>\"",
         "noResults": "ไม่พบโปรเจ็กต์สำหรับ \"<strong>{{keyword}}</strong>\" กรุณาลองใช้คำค้นหาอื่น",
-        "welcomeMessage": "ยินดีต้อนรับสู่การค้นหาโปรเจ็กต์",
-        "instructions": "ใส่คำค้นหาด้านบนเพื่อค้นหาโปรเจ็กต์",
         "daysLeft": "วันคงเหลือ",
         "deadlinePassed": "หมดเขตแล้ว",
         "viewButton": "ดู",
-        "errorToggleSave": "เกิดข้อผิดพลาดในการเปลี่ยนสถานะการบันทึกโปรเจ็กต์"
+        "errorToggleSave": "เกิดข้อผิดพลาดในการเปลี่ยนสถานะการบันทึกโปรเจ็กต์",
+        "locationPlaceholder": "ค้นหาตำแหน่งที่ตั้ง...",
+        "allCategories": "หมวดหมู่ทั้งหมด",
+        "categories": {
+            "technology": "เทคโนโลยี",
+            "artDesign": "ศิลปะและการออกแบบ",
+            "filmVideo": "ภาพยนตร์และวิดีโอ",
+            "music": "ดนตรี",
+            "cookingFood": "อาหาร",
+            "writingPublishing": "งานเขียน",
+            "gaming": "เกมและอีสปอร์ต",
+            "healthWellness": "สุขภาพและความงาม",
+            "education": "การศึกษา",
+            "socialImpact": "การพัฒนาสังคม"
+        },
+        "sortedBy": "จัดเรียงตาม",
+        "sortMostRecent": "ล่าสุด",
+        "sortDeadline": "กำหนดเส้นตาย"
     },
     "show": {
         "imageAlt": "ภาพโปรเจ็กต์",

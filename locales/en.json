@@ -185,12 +185,11 @@
     },
     "projectSearch": {
         "heading": "Project Search",
+        "showMeLabel": "Show Me",
         "searchPlaceholder": "Search for a project...",
         "searchButton": "Search",
         "resultsFound": "Displaying <strong>{{count}}</strong> results for \"<strong>{{keyword}}</strong>\".",
         "noResults": "No projects found for \"<strong>{{keyword}}</strong>\". Please try a different keyword.",
-        "welcomeMessage": "Welcome to Project Search",
-        "instructions": "Enter a keyword above to search for projects.",
         "daysLeft": "days left",
         "deadlinePassed": "Deadline passed",
         "viewButton": "View",
@@ -209,6 +208,7 @@
             "education": "Education",
             "socialImpact": "Social Impact"
         },
+        "sortedBy": "sorted by",
         "sortMostRecent": "Most Recent",
         "sortDeadline": "Deadline"
     },

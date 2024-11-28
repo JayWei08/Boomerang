@@ -7,22 +7,54 @@ exports.searchProjects = async (req, res) => {
 
     try {
         const filters = {};
+
+        // Keyword Search
         if (keyword && keyword.trim()) {
-            // Use computed property syntax for dynamic keys
+            const keywordRegex = new RegExp(keyword, "i");
+
+            // Match projects where the keyword matches title, description, keywords, or location
             filters.$or = [
-                { [`title.${language}`]: new RegExp(keyword, "i") },
-                { [`description.${language}`]: new RegExp(keyword, "i") },
-                { keywords: new RegExp(keyword, "i") },
-                { location: new RegExp(keyword, "i") },
+                { [`title.${language}`]: keywordRegex },
+                { [`description.${language}`]: keywordRegex },
+                { keywords: keywordRegex },
+                { location: keywordRegex },
             ];
+
+            // Check if the keyword matches a category or subcategory
+            const categoryKeys = Object.keys(categories);
+            const matchingCategories = categoryKeys.filter((catKey) =>
+                catKey.toLowerCase().includes(keyword.toLowerCase())
+            );
+
+            // Add subcategories to matching categories
+            categoryKeys.forEach((catKey) => {
+                const subcategories = categories[catKey];
+                if (
+                    subcategories.some((sub) =>
+                        sub.toLowerCase().includes(keyword.toLowerCase())
+                    )
+                ) {
+                    matchingCategories.push(catKey);
+                }
+            });
+
+            // If we have matching categories, add them to the filter
+            if (matchingCategories.length > 0) {
+                filters.$or.push({ categories: { $in: matchingCategories } });
+            }
         }
+
+        // Category Filter
         if (category) {
             filters.categories = { $in: [category] };
         }
+
+        // Location Filter
         if (location) {
             filters.location = new RegExp(location, "i");
         }
 
+        // Sort Projects
         let query = Project.find(filters);
         if (sort === "mostRecent") {
             query = query.sort({ createdAt: -1 });
@@ -30,8 +62,10 @@ exports.searchProjects = async (req, res) => {
             query = query.sort({ deadline: 1 });
         }
 
+        // Execute Query
         const projects = await query.exec();
 
+        // Transform Projects for GeoJSON
         const transformedProjects = projects.map((project) => ({
             _id: project._id,
             titleText: project.title.get(language) || project.title.get("en"),
@@ -45,6 +79,7 @@ exports.searchProjects = async (req, res) => {
             geometry: project.geometry, // Include geometry for map display
         }));
 
+        // Prepare GeoJSON for the map
         const geoJsonProjects = {
             type: "FeatureCollection",
             features: transformedProjects
@@ -66,16 +101,19 @@ exports.searchProjects = async (req, res) => {
                 })),
         };
 
+        // Convert categories for dropdown
         const categoryList = Object.keys(categories).map((key) => ({
             key,
             value: key,
         }));
 
+        // Render the search page with results
         res.render("projects/search", {
             projects: transformedProjects,
             geoJsonProjects,
             keyword,
-            category,
+            category, // For searching
+            selectedCategory: category, // For keeping the selected category
             location,
             sort,
             categories: categoryList,

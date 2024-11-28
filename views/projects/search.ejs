@@ -1,45 +1,41 @@
 <% layout('layouts/boilerplate') %>
-
-<div id="map" style="width: 100%; height: 500px;"></div>
 <h1 class="mt-4 text-center"><%= __('projectSearch.heading') %></h1>
 
 <!-- Search Form -->
 <div class="container mt-4 mb-3">
-    <form action="/search" method="GET" class="d-flex flex-wrap justify-content-center">
-        <!-- Keyword Input -->
-        <input
-            type="text"
-            name="keyword"
-            class="form-control mr-2 mb-2"
-            placeholder="<%= __('projectSearch.searchPlaceholder') %>"
-            value="<%= keyword || '' %>"
-            aria-label="Search Keyword"
-        />
+    <form action="/search" method="GET" class="d-flex align-items-center justify-content-center flex-wrap">
+        <!-- "Show me" label -->
+        <label class="mr-2"><%= __('projectSearch.showMeLabel') || "Show me" %></label>
 
-        <select name="category" class="form-control mr-2 mb-2" aria-label="Category">
+        <!-- Categories Dropdown -->
+        <select name="category" class="form-control form-control-sm mr-2" style="width: auto;" aria-label="Category">
             <option value=""><%= __('projectSearch.allCategories') %></option>
             <% categories.forEach((category) => { %>
-                <option value="<%= category.key %>" <%= category.key === category ? "selected" : "" %>>
-                    <%= category.value %> <!-- Display name for the dropdown -->
+                <option value="<%= category.key %>" <%= category.key === selectedCategory ? "selected" : "" %>>
+                    <%= category.value %>
                 </option>
             <% }); %>
         </select>
-        
-        
-        
+
+        <!-- "Projects on" label -->
+        <span class="mr-2">projects on</span>
 
         <!-- Location Input -->
         <input
             type="text"
             name="location"
-            class="form-control mr-2 mb-2"
+            class="form-control form-control-sm mr-2"
+            style="width: auto;"
             placeholder="<%= __('projectSearch.locationPlaceholder') %>"
             value="<%= location || '' %>"
             aria-label="Location"
         />
 
+        <!-- "Sorted by" label -->
+        <span class="mr-2">sorted by</span>
+
         <!-- Sort Dropdown -->
-        <select name="sort" class="form-control mr-2 mb-2" aria-label="Sort By">
+        <select name="sort" class="form-control form-control-sm mr-2" style="width: auto;" aria-label="Sort By">
             <option value="mostRecent" <%= sort === "mostRecent" ? "selected" : "" %>>
                 <%= __('projectSearch.sortMostRecent') %>
             </option>
@@ -49,12 +45,14 @@
         </select>
 
         <!-- Search Button -->
-        <button type="submit" class="btn btn-primary mb-2">
+        <button type="submit" class="btn btn-primary btn-sm">
             <%= __('projectSearch.searchButton') %>
         </button>
     </form>
 </div>
 
+
+<div id="map" style="width: 100%; height: 500px;"></div>
 <!-- Search Results -->
 <% if (keyword || category || location || sort) { %>
 <div class="container text-center mt-4 mb-5">
@@ -72,6 +70,7 @@
     <p><%= __('projectSearch.instructions') %></p>
 </div>
 <% } %>
+
 
 <!-- Display Projects -->
 <% if (projects && projects.length > 0) { %>

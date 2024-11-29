@@ -186,6 +186,7 @@
     "projectSearch": {
         "heading": "Project Search",
         "showMeLabel": "Show Me",
+        "projectsIn": "projects in",
         "searchPlaceholder": "Search for a project...",
         "searchButton": "Search",
         "resultsFound": "Displaying <strong>{{count}}</strong> results for \"<strong>{{keyword}}</strong>\".",

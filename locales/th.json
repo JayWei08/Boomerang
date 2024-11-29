@@ -183,6 +183,7 @@
     "projectSearch": {
         "heading": "ค้นหาโปรเจ็กต์",
         "showMeLabel": "แสดงให้ฉันดู",
+        "projectsIn": "โครงการใน",
         "searchPlaceholder": "ค้นหาโปรเจ็กต์...",
         "searchButton": "ค้นหา",
         "resultsFound": "แสดงผลลัพธ์ <strong>{{count}}</strong> รายการสำหรับ \"<strong>{{keyword}}</strong>\"",

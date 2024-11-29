@@ -368,5 +368,34 @@
             "question": "What kinds of projects can I launch on Boomerang?",
             "answer": "Boomerang supports creative projects across categories like art, design, technology, music, and film. We also support non-profit fundraisers and charitable causes in a dedicated section."
         }
+    },
+    "Rules": {
+        "heading": "Our Rules",
+        "intro": "At Boomerang, we believe in the power of creativity to transform ideas into reality. We welcome projects across a wide range of categories: Art, Comics, Crafts, Dance, Design, Fashion, Film & Video, Food, Games, Journalism, Music, Photography, Publishing, Technology, Theater, and more. We also offer a dedicated space for fundraisers and ",
+        "introNonProfitLink": "non-profit initiatives.",
+        "guidelines": "Boomerang Project Guidelines",
+        "fivePrinciples": "Every Boomerang project must adhere to these five essential principles:",
+        "principle1": {
+            "title": "Create Something Meaningful",
+            "principle": "Your project should aim to bring something new and valuable into the world. Whether it's a product, a piece of art, an event, or an experience, the goal is to create and share it with others. At the end of your journey, you should be able to say: \"Here's what we've made. It’s for the public now!\""
+        },
+        "principle2": {
+            "title": "Honesty Is Paramount",
+            "principle": "Our community thrives on trust. Be transparent about your project's goals, your plan to achieve them, and any challenges you might face. Present information clearly and truthfully. If your project involves complex development, provide realistic demonstrations without using misleading visuals or exaggerated claims."
+        },
+        "principle3": {
+            "title": "Focused Fundraising",
+            "principle": "While we support non-profit and charitable initiatives, your project should have a specific goal that funds are directed towards. Funds raised on Boomerang should be used to bring your outlined project to life, not solely for donation purposes."
+        },
+        "principle4": {
+            "title": "No Equity Incentives",
+            "principle": "Boomerang is about creativity and innovation, not financial returns. Projects cannot offer equity, profit sharing, or any form of financial incentive to backers."
+        },
+        "principle5": {
+            "title": "Adhere to Our Prohibited Content Guidelines",
+            "principleIntro": "Certain content is not permitted on Boomerang. Please review our ",
+            "principleLink": "Prohibited Content Guidelines ",
+            "principleEnd": "to ensure your project aligns with our standards."
+        }
     }
 }

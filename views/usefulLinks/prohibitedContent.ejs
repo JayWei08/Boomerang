@@ -1,92 +1,89 @@
 <% layout('layouts/boilerplate') %>
 
 <div class="container mb-5 mt-3">
-    <h1 class="text-center mb-4">Prohibited Content Guidelines</h1>
-    <p class="lead text-center">
-        At Boomerang, we're committed to fostering a creative and safe
-        environment for our community. To maintain this standard, we prohibit
-        projects and rewards that involve illegal activities, are heavily
-        regulated, potentially harmful to backers, or violate our community
-        principles.
-    </p>
+    <h1 class="text-center mb-4"><%= __('prohibitedContent.heading') %></h1>
+    <p class="lead text-center"><%= __('prohibitedContent.description') %></p>
     <hr class="my-5" />
 
-    <h2 class="mb-4">Prohibited Projects and Content</h2>
+    <h2 class="mb-4"><%= __('prohibitedContent.prohibitedItemHeader') %></h2>
     <ul class="list-group list-group-flush">
         <li class="list-group-item">
-            <strong>Medical Claims:</strong> Items or projects claiming to
-            diagnose, cure, treat, or prevent an illness or condition.
+            <strong><%= __('prohibitedContent.item1.item') %></strong><%=
+            __('prohibitedContent.item1.description') %>
         </li>
         <li class="list-group-item">
-            <strong>Contests and Gambling:</strong> Contests, raffles, gambling,
-            lotteries, or coupon-based projects.
+            <strong><%= __('prohibitedContent.item2.item') %></strong><%=
+            __('prohibitedContent.item2.description') %>
         </li>
         <li class="list-group-item">
-            <strong>Energy Consumables:</strong> Offering energy foods and
-            drinks as rewards.
+            <strong><%= __('prohibitedContent.item3.item') %></strong><%=
+            __('prohibitedContent.item3.description') %>
         </li>
         <li class="list-group-item">
-            <strong>Offensive Material:</strong> Hate speech, content
-            encouraging violence, or promoting intolerance.
+            <strong><%= __('prohibitedContent.item4.item') %></strong><%=
+            __('prohibitedContent.item4.description') %>
         </li>
         <li class="list-group-item">
-            <strong>Genetically Modified Organisms:</strong> Offering GMOs as
-            rewards.
+            <strong><%= __('prohibitedContent.item5.item') %></strong><%=
+            __('prohibitedContent.item5.description') %>
         </li>
         <li class="list-group-item">
-            <strong>Live Animals:</strong> Including live animals as rewards.
+            <strong><%= __('prohibitedContent.item6.item') %></strong><%=
+            __('prohibitedContent.item6.description') %>
         </li>
         <li class="list-group-item">
-            <strong>Alcohol:</strong> Offering alcohol as a reward is
-            prohibited.
+            <strong><%= __('prohibitedContent.item7.item') %></strong><%=
+            __('prohibitedContent.item7.description') %>.
         </li>
         <li class="list-group-item">
-            <strong>Financial Services:</strong> Offering financial or
-            money-processing services or instruments.
+            <strong><%= __('prohibitedContent.item8.item') %></strong><%=
+            __('prohibitedContent.item8.description') %>
         </li>
         <li class="list-group-item">
-            <strong>Political Fundraising:</strong> Fundraising for political
-            campaigns or initiatives.
+            <strong><%= __('prohibitedContent.item9.item') %></strong><%=
+            __('prohibitedContent.item9.description') %>
         </li>
         <li class="list-group-item">
-            <strong>Explicit Content:</strong> Pornographic or explicit adult
-            content.
+            <strong><%= __('prohibitedContent.item10.item') %></strong><%=
+            __('prohibitedContent.item10.description') %>
+        </li>
+
+        <li class="list-group-item">
+            <strong><%= __('prohibitedContent.item11.item') %></strong><%=
+            __('prohibitedContent.item11.description') %>
         </li>
         <li class="list-group-item">
-            <strong>Discriminatory Content:</strong> Promoting discrimination,
-            bigotry, or intolerance.
+            <strong><%= __('prohibitedContent.item12.item') %></strong><%=
+            __('prohibitedContent.item12.description') %>
         </li>
         <li class="list-group-item">
-            <strong>Unoriginal Projects:</strong> Projects sharing or
-            repackaging existing products without new value.
+            <strong><%= __('prohibitedContent.item13.item') %></strong><%=
+            __('prohibitedContent.item13.description') %>
         </li>
         <li class="list-group-item">
-            <strong>Resale of Items:</strong> Rewards must be produced or
-            designed by the project creator—reselling is prohibited.
+            <strong><%= __('prohibitedContent.item14.item') %></strong><%=
+            __('prohibitedContent.item14.description') %>
         </li>
         <li class="list-group-item">
-            <strong>Drugs and Paraphernalia:</strong> Projects involving drugs,
-            nicotine, tobacco, or related items.
-        </li>
-        <li class="list-group-item">
-            <strong>Weapons:</strong> Weapons, replicas, and weapon accessories
-            are prohibited.
+            <strong><%= __('prohibitedContent.item15.item') %></strong><%=
+            __('prohibitedContent.item15.description') %>
         </li>
     </ul>
 
     <hr class="my-5" />
 
-    <h2 class="mb-4">Need Clarification?</h2>
+    <h2 class="mb-4"><%= __('prohibitedContent.clarify') %></h2>
     <p class="text-center">
-        If your project involves something illegal, heavily regulated, or
-        potentially dangerous that isn’t listed here, please
-        <a href="#" class="text-primary">contact us</a> before starting your
-        project.
+        <%= __('prohibitedContent.contact.contactIntro') %><a
+            href="mailto:junhuawei08@gmail.com"
+            class="text-primary"
+            ><%= __('prohibitedContent.contact.contactLink') %></a
+        ><%= __('prohibitedContent.contact.contactEnd') %>
     </p>
 
     <div class="text-center mt-5">
         <a href="/projects/new" class="btn btn-primary btn-lg"
-            >Start Your Project</a
+            ><%= __('prohibitedContent.startProject') %></a
         >
     </div>
 </div>

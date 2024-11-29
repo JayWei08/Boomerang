@@ -397,5 +397,77 @@
             "principleLink": "Prohibited Content Guidelines ",
             "principleEnd": "to ensure your project aligns with our standards."
         }
+    },
+    "prohibitedContent": {
+        "heading": "Prohibited Content Guidelines",
+        "description": "At Boomerang, we're dedicated to fostering a creative and safe environment for our community. To maintain this standard, we prohibit projects and rewards that involve illegal activities, are heavily regulated, potentially harmful to backers, or violate our community principles. We also disallow rewards that the creators did not produce or design themselves.",
+        "prohibitedItemHeader": "Prohibited Projects and Content Include:",
+        "item1": {
+            "item": "Medical Claims: ",
+            "description": "Any item or project claiming to diagnose, cure, treat, or prevent an illness or condition—whether via a device, app, book, nutritional supplement, or other means."
+        },
+        "item2": {
+            "item": "Contests and Gambling: ",
+            "description": "Projects involving contests, coupons, gambling, raffles, or lotteries."
+        },
+        "item3": {
+            "item": "Energy Consumables: ",
+            "description": "Offering energy foods and drinks."
+        },
+        "item4": {
+            "item": "Offensive Material: ",
+            "description": "Content that includes hate speech, encourages violence, or promotes intolerance against any individual or group."
+        },
+        "item5": {
+            "item": "Genetically Modified Organisms: ",
+            "description": "Offering genetically modified organisms as rewards."
+        },
+        "item6": {
+            "item": "Live Animals: ",
+            "description": "Projects cannot include live animals as rewards."
+        },
+        "item7": {
+            "item": "Alcohol: ",
+            "description": "Offering alcohol as a reward is prohibited."
+        },
+        "item8": {
+            "item": "Financial Services: ",
+            "description": "Projects offering financial, money-processing, or credit services; financial intermediaries or cash-equivalent instruments; travel services (e.g., vacation packages); phone services (e.g., prepaid phone services, premium numbers); and business marketing services."
+        },
+        "item9": {
+            "item": "Political Fundraising: ",
+            "description": "Projects that involve fundraising for political campaigns or initiatives."
+        },
+        "item10": {
+            "item": "Explicit Content: ",
+            "description": "Pornographic material or projects involving explicit adult content."
+        },
+        "item11": {
+            "item": "Discriminatory Content: ",
+            "description": "Projects that promote discrimination, bigotry, or intolerance towards any group or individual."
+        },
+        "item12": {
+            "item": "Unoriginal Projects: ",
+            "description": "Projects that merely share existing products or repackage previously created items without adding new value or innovation."
+        },
+        "item13": {
+            "item": "Resale of Items: ",
+            "description": "All rewards must be produced or designed by the project creator—reselling items from elsewhere is not allowed."
+        },
+        "item14": {
+            "item": "Drugs and Paraphernalia: ",
+            "description": "Projects involving drugs, nicotine, tobacco, vaporizers, or related paraphernalia."
+        },
+        "item15": {
+            "item": "Weapons: ",
+            "description": "Weapons, replicas of weapons, and weapon accessories are prohibited."
+        },
+        "clarify": "Need Clarification?",
+        "contact": {
+            "contactIntro": "If your project involves something illegal, heavily regulated, or potentially dangerous for backers and it's not listed here, please ",
+            "contactLink": "contact us",
+            "contactEnd": " before starting your project."
+        },
+        "startProject": "Start Your Project"
     }
 }

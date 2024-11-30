@@ -1,23 +1,18 @@
 <% layout('layouts/boilerplate') %>
 
 <div class="container mt-3 mb-5">
-    <h1 class="text-center mb-4">Non-Profit Initiatives</h1>
-    <p class="lead text-center">
-        At Boomerang, we believe in the power of collective goodwill to spark
-        meaningful change. Whether you're advancing education, supporting
-        community development, or driving social impact, Boomerang provides the
-        platform to bring your vision to life.
-    </p>
+    <h1 class="text-center mb-4"><%= __('nonProfit.heading') %></h1>
+    <p class="lead text-center"><%= __('nonProfit.intro') %></p>
 
     <div class="row mt-5">
-        <div class="col-lg-6">
-            <h3>Your Cause, Our Support</h3>
-            <p>
-                We empower individuals and organizations to raise funds for
-                causes that matter. With flexible funding options tailored for
-                non-profit endeavors, you can focus on making a difference
-                without the constraints of all-or-nothing goals.
-            </p>
+        <div
+            class="col-lg-6 text-center d-flex flex-column justify-content-center align-items-center mx-auto"
+            style="max-width: 500px"
+        >
+            <h3 class="mb-3">
+                <%= __('nonProfit.sections.yourCauseOurSupport.title') %>
+            </h3>
+            <p><%= __('nonProfit.sections.yourCauseOurSupport.content') %></p>
         </div>
         <div class="col-lg-6">
             <img
@@ -29,18 +24,18 @@
     </div>
 
     <div class="row mt-5">
-        <div class="col-lg-6 order-lg-2">
-            <h3>Engage and Inspire</h3>
-            <p>
-                Share your mission with a community that cares. Craft a
-                compelling narrative, outline your objectives, and connect with
-                backers who are passionate about making a positive impact. Your
-                story has the power to inspire action.
-            </p>
+        <div
+            class="col-lg-6 order-lg-2 text-center d-flex flex-column justify-content-center align-items-center mx-auto"
+            style="max-width: 500px"
+        >
+            <h3 class="mb-3">
+                <%= __('nonProfit.sections.engageAndInspire.title') %>
+            </h3>
+            <p><%= __('nonProfit.sections.engageAndInspire.content') %></p>
         </div>
         <div class="col-lg-6 order-lg-1">
             <img
-                src="https://images.unsplash.com/photo-1732147145548-0c245396a268?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyMnx8fGVufDB8fHx8fA%3D%3D"
+                src="https://plus.unsplash.com/premium_photo-1732736768075-4738ba4ccf1a?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D"
                 alt="Engage and Inspire"
                 class="img-fluid rounded shadow"
             />
@@ -48,18 +43,20 @@
     </div>
 
     <div class="row mt-5">
-        <div class="col-lg-6">
-            <h3>Transparency Builds Trust</h3>
+        <div
+            class="col-lg-6 text-center d-flex flex-column justify-content-center align-items-center mx-auto"
+            style="max-width: 500px"
+        >
+            <h3 class="mb-3">
+                <%= __('nonProfit.sections.transparencyBuildsTrust.title') %>
+            </h3>
             <p>
-                Honesty is the cornerstone of successful fundraising. Clearly
-                communicate how the funds will be used and the difference they
-                will make. Our platform fosters trust between organizers and
-                supporters, ensuring contributions lead to real-world results.
+                <%= __('nonProfit.sections.transparencyBuildsTrust.content') %>
             </p>
         </div>
         <div class="col-lg-6">
             <img
-                src="https://images.unsplash.com/photo-1732147145548-0c245396a268?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyMnx8fGVufDB8fHx8fA%3D%3D"
+                src="https://plus.unsplash.com/premium_photo-1731860726887-6b1cb8129b0f?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2fHx8ZW58MHx8fHx8"
                 alt="Transparency Builds Trust"
                 class="img-fluid rounded shadow"
             />
@@ -68,27 +65,31 @@
 
     <hr class="my-5" />
 
-    <h2 class="text-center mb-4">Guidelines for Non-Profit Projects</h2>
+    <h2 class="text-center mb-4"><%= __('nonProfit.guidelines.heading') %></h2>
     <ul class="list-group list-group-flush">
         <li class="list-group-item">
-            <strong>Purpose-Driven Funding:</strong> Funds raised should
-            directly support the non-profit initiative you've outlined. Every
-            contribution should move your mission forward.
+            <strong
+                ><%= __('nonProfit.guidelines.purposeDrivenFunding.title')
+                %></strong
+            >
+            <%= __('nonProfit.guidelines.purposeDrivenFunding.content') %>
         </li>
         <li class="list-group-item">
-            <strong>Legal Compliance:</strong> Ensure your project adheres to
-            all legal requirements and regulations related to charitable
-            fundraising within Thailand.
+            <strong
+                ><%= __('nonProfit.guidelines.legalCompliance.title') %></strong
+            ><%= __('nonProfit.guidelines.legalCompliance.content') %>
         </li>
         <li class="list-group-item">
-            <strong>Optional Rewards:</strong> While offering rewards is not
-            mandatory for non-profit projects, you may choose to provide updates
-            or tokens of appreciation to acknowledge your supporters'
-            generosity.
+            <strong
+                ><%= __('nonProfit.guidelines.optionalRewards.title') %></strong
+            ><%= __('nonProfit.guidelines.optionalRewards.content') %>
         </li>
     </ul>
 
     <div class="text-center mt-5">
-        <a href="#" class="btn btn-primary btn-lg">Begin Your Journey</a>
+        <p class="mb-4"><%= __('nonProfit.beginYourJourney.content') %></p>
+        <a href="/projects/new" class="btn btn-primary btn-lg"
+            ><%= __('nonProfit.beginYourJourney.heading') %></a
+        >
     </div>
 </div>

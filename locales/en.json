@@ -469,5 +469,42 @@
             "contactEnd": " before starting your project."
         },
         "startProject": "Start Your Project"
+    },
+    "nonProfit": {
+        "heading": "Non-Profit Initiatives",
+        "intro": "At Boomerang, we believe in the power of collective goodwill to spark meaningful change. That's why we've created a dedicated space for non-profit initiatives and charitable causes. Whether you're supporting community development, advancing education, or driving social impact, Boomerang provides the platform to bring your vision to life.",
+        "sections": {
+            "yourCauseOurSupport": {
+                "title": "Your Cause, Our Support",
+                "content": "We empower individuals and organizations to raise funds for causes that matter. With flexible funding options tailored for non-profit endeavors, you can focus on making a difference without the constraints of all-or-nothing goals."
+            },
+            "engageAndInspire": {
+                "title": "Engage and Inspire",
+                "content": "Share your mission with a community that cares. Craft a compelling narrative, outline your objectives, and connect with backers who are passionate about making a positive impact. Your story has the power to inspire action."
+            },
+            "transparencyBuildsTrust": {
+                "title": "Transparency Builds Trust",
+                "content": "Honesty is the cornerstone of successful fundraising. Clearly communicate how the funds will be used and the difference they will make. Our platform fosters trust between organizers and supporters, ensuring contributions lead to real-world results."
+            }
+        },
+        "guidelines": {
+            "heading": "Guidelines for Non-Profit Projects",
+            "purposeDrivenFunding": {
+                "title": "Purpose-Driven Funding: ",
+                "content": "Funds raised should directly support the non-profit initiative you've outlined. Every contribution should move your mission forward."
+            },
+            "legalCompliance": {
+                "title": "Legal Compliance: ",
+                "content": "Ensure your project adheres to all legal requirements and regulations related to charitable fundraising within Thailand."
+            },
+            "optionalRewards": {
+                "title": "Optional Rewards: ",
+                "content": "While offering rewards is not mandatory for non-profit projects, you may choose to provide updates or tokens of appreciation to acknowledge your supporters' generosity."
+            }
+        },
+        "beginYourJourney": {
+            "heading": "Begin Your Journey",
+            "content": "Your commitment to making a difference deserves a platform that shares your passion. Start your non-profit initiative on Boomerang and join a community dedicated to launching ideas into reality."
+        }
     }
 }

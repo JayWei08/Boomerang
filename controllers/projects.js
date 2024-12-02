@@ -387,15 +387,17 @@ async function add_user_keywords(req, project, Users) {
             ? project.keywords
             : [];
         userKeywords.add_list(projectKeywords);
-        
-        let max = 0;
-        for (keyword of userKeywords) {
-            if (userKeywords.get(keyword) > max) {
-                max = userKeywords.get(keyword);
+
+        let topN = [];
+        const maxAtN = 3;
+        for (const [key, value] of userKeywords) {
+            topN.push(value);
+            topN.sort((a, b) => b - a);
+            if (topN.length > maxAtN) {
+                topN.pop();
             }
         }
-        
-        userKeywords.set('max', max);
+        userKeywords.set('max', topN[-1 + Math.min(maxAtN, topN.length)];
         
         user.keywords = userKeywords.export();
         await user.save();

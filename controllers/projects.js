@@ -397,7 +397,7 @@ async function add_user_keywords(req, project, Users) {
                 topN.pop();
             }
         }
-        userKeywords.set('max', topN[-1 + Math.min(maxAtN, topN.length)];
+        userKeywords.add('max', topN[-1 + Math.min(maxAtN, topN.length)];
         
         user.keywords = userKeywords.export();
         await user.save();

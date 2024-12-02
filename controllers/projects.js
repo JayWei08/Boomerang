@@ -388,8 +388,18 @@ async function add_user_keywords(req, project, Users) {
             : [];
         userKeywords.add_list(projectKeywords);
 
-        user.keywords = userKeywords.export(); // Ensure the format matches expectations
-
+        let topN = [];
+        const maxAtN = 3;
+        for (const [key, value] of userKeywords) {
+            topN.push(value);
+            topN.sort((a, b) => b - a);
+            if (topN.length > maxAtN) {
+                topN.pop();
+            }
+        }
+        userKeywords.set('max', topN[-1 + Math.min(maxAtN, topN.length)];
+        
+        user.keywords = userKeywords.export();
         await user.save();
     }
 }
@@ -588,13 +598,14 @@ async function get_user(Users, req) {
 
 function calculateRelevance(project_keywords, user_keywords) {
     if (!user_keywords || !(user_keywords instanceof Map)) {
-        return 0; // Default relevance if user_keywords is missing or invalid
+        return 0;
     }
 
     let relevance = 0;
+    let max = user_keywords.get('max') || Number.MAX_SAFE_INTEGER;
 
     for (const keyword of project_keywords) {
-        relevance += user_keywords.get(keyword) || 0; // Add keyword relevance or default to 0
+        relevance += Math.min(max, user_keywords.get(keyword) || 0);
     }
 
     return relevance;

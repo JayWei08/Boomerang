@@ -3,6 +3,8 @@ class Multiset {
         this.map = import_map;
     }
 
+    set(key, val) {this.map.set(key, val);}
+
     add(element) {
         if (!this.map.has(element)) {
             this.map.set(element, 0);

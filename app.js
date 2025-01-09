@@ -144,27 +144,39 @@ app.use(async (req, res, next) => {
     try {
         let language = req.query.language || req.session.language || "th";
         let currency = req.query.language || req.session.currency || "THB";
+        let cookies = req.query.cookies || req.session.cookies || false;
 
         if (req.isAuthenticated()) {
             // Fetch the language from the database for authenticated users
             const user = await User.findById(req.user._id);
-            if (user && user.language) {
-                language = user.language;
-            }
-            if (user && user.currency) {
-                currency = user.currency;
+            if (user && user.cookies) {
+                cookies = user.cookies;
+                if (user.language) {
+                    language = user.language;
+                }
+                if (user.currency) {
+                    currency = user.currency;
+                }
             }
         }
     
-        req.setLocale(language);
+        // Session
+        req.session.cookies = cookies;
         req.session.language = language;
-        res.locals.selectedLanguage = language;
-        res.locals.availableLanguages = availableLanguages;
-        
-        req.currency = currency;
         req.session.currency = currency;
-        res.locals.selectedCurrency = currency;
+        
+        // Constant Things
+        req.setLocale(language);
+        res.locals.availableLanguages = availableLanguages;
         res.locals.availableCurrencies = availableCurrencies;
+        
+        // Cookies???
+        if (cookies) {
+            res.locals.selectedLanguage = language; // Are these used?
+
+            req.currency = currency; /// Are these used?
+            res.locals.selectedCurrency = currency; // Are these used?
+        }
 
         next();
     } catch (error) {

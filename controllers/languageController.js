@@ -17,8 +17,10 @@ exports.setLanguage = async (req, res) => {
 
     if (req.isAuthenticated()) {
         const user = await User.findById(req.user._id);
-        user.language = language;
-        await user.save();
+        if (user.cookies) {
+            user.language = language;
+            await user.save();
+        }
     }
 
     req.session.language = language;

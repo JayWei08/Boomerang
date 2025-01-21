@@ -11,8 +11,7 @@ const { categories } = require("../utils/categories.js"); // Import the categori
 
 const { Translate } = require('@google-cloud/translate').v2;
 
-const translate = new Translate({keyFilename: 'path/to/service-account-key.json'});
-const translate = new Translate({key: 'YOUR_API_KEY'}); // TODO
+const translate = new Translate({key: 'AIzaSyCcs5hfRXwMdNelZiq12TuBH63dem5Gvdg'});
 const { Translate } = require('@google-cloud/translate').v2;
 
 module.exports.index = async (req, res) => {
@@ -138,10 +137,10 @@ module.exports.createProject = async (req, res, next) => {
         let project;
 
         if (req.body.project.titleText && typeof req.body.project.titleText === "string") {
-            req.body.project.title = new Map([["en", req.body.project.title]]);
+            req.body.project.title = translateText(req.body.project.titleText, res.locals.availableLangauges);
         }
         if (req.body.project.descriptionText && typeof req.body.project.descriptionText === "string") {
-            req.body.project.description = new Map([["en", req.body.project.descriptionText],]);
+            req.body.project.description = translateText(req.body.project.descriptionText, res.locals.availableLanguages);
         }
 
         const selectedKeywords = req.body.project.keywords || [];

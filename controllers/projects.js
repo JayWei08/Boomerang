@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const Project = require("../models/project");
 const Users = require("../models/user");
 const ApiFetch = require("../models/apiFetch");
@@ -10,9 +12,7 @@ const currencyToken = process.env.CURRENCY_TOKEN;
 const { categories } = require("../utils/categories.js"); // Import the categories data
 
 const { Translate } = require('@google-cloud/translate').v2;
-
-const translate = new Translate({key: 'AIzaSyCcs5hfRXwMdNelZiq12TuBH63dem5Gvdg'});
-const { Translate } = require('@google-cloud/translate').v2;
+const translate = new Translate({key: process.env.TRANSLATE_API_KEY});
 
 module.exports.index = async (req, res) => {
     const language = req.session.language || "th"; // Default to 'en' if no language is set

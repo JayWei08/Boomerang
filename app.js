@@ -169,14 +169,6 @@ app.use(async (req, res, next) => {
         req.setLocale(language);
         res.locals.availableLanguages = availableLanguages;
         res.locals.availableCurrencies = availableCurrencies;
-        
-        // Cookies???
-        if (cookies) {
-            res.locals.selectedLanguage = language; // Are these used?
-
-            req.currency = currency; /// Are these used?
-            res.locals.selectedCurrency = currency; // Are these used?
-        }
 
         next();
     } catch (error) {

@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 const Project = require("../models/project");
 const Users = require("../models/user");
 const ApiFetch = require("../models/apiFetch");
@@ -12,7 +10,10 @@ const currencyToken = process.env.CURRENCY_TOKEN;
 const { categories } = require("../utils/categories.js"); // Import the categories data
 
 const { Translate } = require('@google-cloud/translate').v2;
-const translate = new Translate({key: process.env.TRANSLATE_API_KEY});
+
+const translate = new Translate({keyFilename: 'path/to/service-account-key.json'});
+const translate = new Translate({key: 'YOUR_API_KEY'}); // TODO
+const { Translate } = require('@google-cloud/translate').v2;
 
 module.exports.index = async (req, res) => {
     const language = req.session.language || "th"; // Default to 'en' if no language is set
@@ -137,10 +138,10 @@ module.exports.createProject = async (req, res, next) => {
         let project;
 
         if (req.body.project.titleText && typeof req.body.project.titleText === "string") {
-            req.body.project.title = translateText(req.body.project.titleText, res.locals.availableLangauges);
+            req.body.project.title = new Map([["en", req.body.project.title]]);
         }
         if (req.body.project.descriptionText && typeof req.body.project.descriptionText === "string") {
-            req.body.project.description = translateText(req.body.project.descriptionText, res.locals.availableLanguages);
+            req.body.project.description = new Map([["en", req.body.project.descriptionText],]);
         }
 
         const selectedKeywords = req.body.project.keywords || [];

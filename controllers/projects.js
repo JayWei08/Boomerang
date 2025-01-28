@@ -21,26 +21,8 @@ module.exports.index = async (req, res) => {
 
     // Fetch all projects
     const allProjects = await Project.find({});
-    const projects = allProjects.map((project) => ({
-        _id: project._id,
-        titleText: project.title.get(language),
-        descriptionText: project.description.get(language),
-        images: project.images,
-        geometry: project.geometry,
-        currency: project.currency,
-        fundingGoal: project.fundingGoal,
-        location: project.location,
-        deadline: project.deadline,
-        createdAt: project.createdAt,
-        updatedAt: project.updatedAt,
-        author: project.author,
-        status: project.status,
-        comments: project.comments,
-        keywords: project.keywords,
-        isDraft: project.isDraft,
-        lastSavedAt: project.lastSavedAt,
-    }));
-
+    const projects = mapTitleAndDescription(allProjects, {title, description, ...rest});
+    
     // Sort projects by relevance
     if (user && user.keywords instanceof Map) {
         const keywords = user.keywords;
@@ -65,15 +47,7 @@ module.exports.index = async (req, res) => {
             author: req.user._id,
             isDraft: false, // Exclude drafts
         });
-        myProjects = userProjects.map((project) => ({
-            _id: project._id,
-            titleText: project.title.get(language),
-            descriptionText: project.description.get(language),
-            images: project.images,
-            geometry: project.geometry,
-            location: project.location,
-            deadline: project.deadline,
-        }));
+        myProject = mapTitleAndDescription(userProjects, {title, description, ...rest});
     }
 
     // Convert projects to GeoJSON format
@@ -83,21 +57,7 @@ module.exports.index = async (req, res) => {
             (project) => !project.isDraft
         );
 
-        const geoJsonProjects = {
-            type: "FeatureCollection",
-            features: publishedProjects.map((project) => ({
-                type: "Feature",
-                geometry: project.geometry || {
-                    type: "Point",
-                    coordinates: [0, 0], // Default coordinates
-                },
-                properties: {
-                    title: project.titleText,
-                    description: project.descriptionText,
-                    popUpMarkup: `<a href="/projects/${project._id}">${project.titleText}</a>`,
-                },
-            })),
-        };
+        const geoJsonProjects = mapGeoJSON(publishedProjects);
 
         // Render the projects/index template
         res.render("projects/index", {
@@ -111,6 +71,34 @@ module.exports.index = async (req, res) => {
         res.redirect("/");
     }
 };
+
+function mapTitleAndDescription(projects, dict) {
+    const ret = projects.map((dict) => ({
+            ...rest,
+            titleText: project.title.get(language),
+            descriptionText: project.description.get(language),
+        }));
+    return ret;
+}
+
+function mapGeoJSON(projects) {
+    const ret = {
+            type: "FeatureCollection",
+            features: projects.map((project) => ({
+                type: "Feature",
+                geometry: project.geometry || {
+                    type: "Point",
+                    coordinates: [0, 0], // Default coordinates
+                },
+                properties: {
+                    title: project.titleText,
+                    description: project.descriptionText,
+                    popUpMarkup: `<a href="/projects/${project._id}">${project.titleText}</a>`,
+                },
+            })),
+        };
+    return ret;
+}
 
 module.exports.renderNewForm = async (req, res) => {
     const { draftId } = req.query;

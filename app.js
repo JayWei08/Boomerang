@@ -142,21 +142,18 @@ app.use(i18n.init);
 
 app.use(async (req, res, next) => {
     try {
-        let language = req.query.language || req.session.language || "th";
-        let currency = req.query.language || req.session.currency || "THB";
-        let cookies = req.query.cookies || req.session.cookies || false;
+        //  req.session.__ is a quick reference for language, currency, and cookies (Use for calls that don't update)
+        // User.__ is the actualy variable (User for calls that also update)
+        let language = req.session.language || "th";
+        let currency = req.session.currency || "THB";
+        let cookies = req.session.cookies || false;
 
         if (req.isAuthenticated()) {
-            // Fetch the language from the database for authenticated users
             const user = await User.findById(req.user._id);
             if (user && user.cookies) {
                 cookies = user.cookies;
-                if (user.language) {
-                    language = user.language;
-                }
-                if (user.currency) {
-                    currency = user.currency;
-                }
+                if (user.language) {language = user.language;} // User.language overrides session
+                if (user.currency) {currency = user.currency;} // User.currency overrides session
             }
         }
     

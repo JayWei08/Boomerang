@@ -5,7 +5,7 @@ const availableLanguages = ['th', 'en']; // Add more as needed
 
 // Render language selection page
 exports.renderLanguageSelectionPage = (req, res) => {
-    res.render('yourView', { availableLanguages, selectedLanguage: req.session.language || 'th' });
+    res.render('yourView', { availableLanguages, selectedLanguage: (req.session.cookies) ? req.session.language : 'th' });
 };
 
 // Handle language selection

@@ -1,17 +1,14 @@
 const User = require('../models/user'); // adjust path as needed
 
-// Language options available
-const availableCurrencies = ['THB', 'USD']; // Add more as needed
-
 // Render language selection page
 exports.renderLanguageSelectionPage = (req, res) => {
-    res.render('yourView', { availableCurrencies, selectedCurrency: req.session.currency || 'THB' });
+    res.render('yourView', { res.locals.availableCurrencies, selectedCurrency: req.session.currency || 'THB' });
 };
 
 // Handle language selection
 exports.setCurrency = async (req, res) => {
     const { currency } = req.body;
-    if (!availableCurrencies.includes(currency)) {
+    if (!res.locals.availableCurrencies.includes(currency)) {
         return res.status(400).send('Invalid currency');
     }
 

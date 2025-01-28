@@ -154,13 +154,12 @@ app.use(async (req, res, next) => {
                 cookies = user.cookies;
                 if (user.language) {language = user.language;} // User.language overrides session
                 if (user.currency) {currency = user.currency;} // User.currency overrides session
+
+                req.session.cookies = cookies;
+                req.session.language = language;
+                req.session.currency = currency;
             }
         }
-    
-        // Session
-        req.session.cookies = cookies;
-        req.session.language = language;
-        req.session.currency = currency;
         
         // Constant Things
         req.setLocale(language);

@@ -17,13 +17,15 @@ exports.setLanguage = async (req, res) => {
 
     if (req.isAuthenticated()) {
         const user = await User.findById(req.user._id);
-        if (user.cookiesBool) {
+        if (user.cookiesBool || req.sessionn.cookiesBool) {
             user.language = language;
             await user.save();
 
             req.session.language = language;
+            req.setLocale(language); // Sets i18n or static-multilanguage language
         }
     }
+
     
     // console.log(language);
     res.redirect('back');

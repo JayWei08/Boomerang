@@ -27,7 +27,7 @@ const dbUrl = process.env.DB_URL;
 const languageRoutes = require("./routes/languageRoutes");
 const currencyRoutes = require("./routes/currencyRoutes");
 const i18n = require("i18n");
-
+console.log("Imports Completed");
 
 mongoose
     //  .connect("mongodb://localhost:27017/boomerang") // Ensure the connection string is correct
@@ -39,6 +39,7 @@ mongoose
         console.log("OH NO MONGO CONNECTION ERROR");
         console.log(err);
     });
+console.log("mongoose Connection Completed");
 
 
 const app = express();
@@ -58,7 +59,7 @@ const store = MongoStore.create({
     mongoUrl: dbUrl,
     touchAfter: 24 * 60 * 60,
     crypto: {
-        secret: process.env.STORE_CRYPTO,
+        secret: "tobereplaced", // process.env.STORE_CRYPTO
     },
 });
 
@@ -68,7 +69,7 @@ store.on("error", function (e) {
 
 const sessionConfig = {
     store: store,
-    secret: process.env.SESSION_SECRET,
+    secret: "toberemoved", // replace that w/ this: process.env.SESSION_SECRET
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -78,6 +79,7 @@ const sessionConfig = {
         maxAge: 1000 * 60 * 60 * 24 * 7,
     },
 };
+
 app.use(session(sessionConfig));
 app.use(flash());
 
@@ -134,16 +136,16 @@ i18n.configure({
     locales: availableLanguages,
     defaultLocale: "th",
     cookie: "language",
-    autoReload: true,
-    updateFiles: true,
-    syncFiles: true,
+    autoReload: false,
+    updateFiles: false,
+    syncFiles: false,
     objectNotation: true,
 });
 
 app.use(i18n.init);
 
 // Passes the function that i18n is called from to the front end using res.locals
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   res.locals.__ = res.__;
   next();
 });
@@ -155,20 +157,20 @@ app.use(async (req, res, next) => {
         // user.__ is what is actually saved, user.__ writes to req.session.__
         let language = req.session.language || "th";
         let currency = req.session.currency || "THB";
-        let cookiesBool = req.session.cookiesBool || false;
+        let cookiesBool = req.session.cookiesBool || true;
 
         if (req.isAuthenticated()) {
             const user = await User.findById(req.user._id);
-            if (user && user.cookiesBool) {
-                cookies = user.cookiesBool;
+            if (user && (user.cookiesBool || cookiesBool)) {
+                cookiesBool = user.cookiesBool;
                 if (user.language) {language = user.language;} // User.language overrides session
                 if (user.currency) {currency = user.currency;} // User.currency overrides session
 
-                req.session.cookiesBool = cookies;
+                req.session.cookiesBool = cookiesBool;
                 req.session.language = language;
                 req.session.currency = currency;
             } else {
-                req.session.cookies.expires = false; // Prevents cookies from saving (I think)
+                req.session.destroy() // Prevents any data from being saved
             }
         }
         
@@ -177,6 +179,8 @@ app.use(async (req, res, next) => {
         // Defines variables for global acces (including frontend)
         res.locals.availableLanguages = availableLanguages;
         res.locals.availableCurrencies = availableCurrencies;
+        res.locals.selectedLanguage = language;
+        res.locals.selectedCurrency = currency;
         
         next();
     } catch (error) {

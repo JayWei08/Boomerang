@@ -11,7 +11,6 @@ const { categories } = require("../utils/categories.js"); // Import the categori
 
 const { Translate } = require('@google-cloud/translate').v2;
 
-const translate = new Translate({keyFilename: 'path/to/service-account-key.json'});
 const translate = new Translate({key: 'YOUR_API_KEY'}); // TODO
 const { Translate } = require('@google-cloud/translate').v2;
 

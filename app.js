@@ -81,6 +81,7 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
+
 passport.use(new LocalStrategy(User.authenticate()));
 
 passport.use(
@@ -124,6 +125,7 @@ passport.use(
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// Language Stuff
 const availableLanguages = ["en", "th"];
 const availableCurrencies = ["USD", "THB"];
 
@@ -167,6 +169,7 @@ app.use(async (req, res, next) => {
     }
 });
 
+
 i18n.configure({
     locales: ["en", "th"],
     directory: path.join(__dirname, "utils/language"),
@@ -180,6 +183,7 @@ i18n.configure({
 });
 
 app.use(i18n.init);
+
 
 app.use(async (req, res, next) => {
     try {

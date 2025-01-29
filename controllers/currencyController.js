@@ -17,11 +17,14 @@ exports.setCurrency = async (req, res) => {
 
     if (req.isAuthenticated()) {
         const user = await User.findById(req.user._id);
-        user.currency = currency;
-        await user.save();
+        if (user.cookiesBool) {
+            user.currency = currency;
+            await user.save();
+            
+            req.session.currency = currency;
+        }
     }
 
-    req.session.currency = currency;
     // console.log(currency);
     res.redirect('back');
 };

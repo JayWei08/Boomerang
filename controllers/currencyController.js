@@ -5,7 +5,7 @@ const availableCurrencies = ['THB', 'USD']; // Add more as needed
 
 // Render language selection page
 exports.renderLanguageSelectionPage = (req, res) => {
-    res.render('yourView', { availableCurrencies, selectedCurrency: (req.session.cookies) ? req.session.currency : 'THB' });
+    res.render('yourView', { availableCurrencies, selectedCurrency: (req.session.cookiesBool) ? req.session.currency : 'THB' });
 };
 
 // Handle language selection

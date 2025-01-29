@@ -5,7 +5,7 @@ const availableLanguages = ['th', 'en']; // Add more as needed
 
 // Render language selection page
 exports.renderLanguageSelectionPage = (req, res) => {
-    res.render('yourView', { availableLanguages, selectedLanguage: (req.session.cookies) ? req.session.language : 'th' });
+    res.render('yourView', { availableLanguages, selectedLanguage: (req.session.cookiesBool) ? req.session.language : 'th' });
 };
 
 // Handle language selection
@@ -17,13 +17,14 @@ exports.setLanguage = async (req, res) => {
 
     if (req.isAuthenticated()) {
         const user = await User.findById(req.user._id);
-        if (user.cookies) {
+        if (user.cookiesBool) {
             user.language = language;
             await user.save();
+
+            req.session.language = language;
         }
     }
-
-    req.session.language = language;
+    
     // console.log(language);
     res.redirect('back');
 };

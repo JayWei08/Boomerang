@@ -28,6 +28,7 @@ const languageRoutes = require("./routes/languageRoutes");
 const currencyRoutes = require("./routes/currencyRoutes");
 const i18n = require("i18n");
 
+
 mongoose
     //  .connect("mongodb://localhost:27017/boomerang") // Ensure the connection string is correct
     .connect(dbUrl)
@@ -38,6 +39,7 @@ mongoose
         console.log("OH NO MONGO CONNECTION ERROR");
         console.log(err);
     });
+
 
 const app = express();
 
@@ -50,6 +52,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
+
+// Where sessions are saved
 const store = MongoStore.create({
     mongoUrl: dbUrl,
     touchAfter: 24 * 60 * 60,
@@ -77,6 +81,7 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 app.use(flash());
 
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -103,16 +108,13 @@ passport.use(
                         googleId: profile.id,
                     });
                     await user.save();
-                    isNewUser = true; // Mark this as a new user
+                    isNewUser = true;
 
-                    // Send a welcome email to the new user
                     await sendWelcomeEmail(user.email, user.username);
                 }
 
-                // Set the isNewUser flag for use in routes
                 user.isNewUser = isNewUser;
 
-                // Pass the user to the done function
                 done(null, user);
             } catch (err) {
                 done(err, null);
@@ -123,26 +125,34 @@ passport.use(
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+
 const availableLanguages = ['en', 'th'];
 const availableCurrencies = ["USD", "THB"];
 
 i18n.configure({
-    locales: ['en', 'th'],
-    directory: path.join(__dirname, "locales"),
+    directory: path.join (__dirname, "locales"),
+    locales: availableLanguages,
     defaultLocale: "th",
     cookie: "language",
     autoReload: true,
-    updateFiles: false,
-    syncFiles: false,
+    updateFiles: true,
+    syncFiles: true,
     objectNotation: true,
 });
 
 app.use(i18n.init);
 
+// Passes the function that i18n is called from to the front end using res.locals
+app.use((req, res, next) => {
+  res.locals.__ = res.__;
+  next();
+});
+
+
 app.use(async (req, res, next) => {
     try {
-        //  req.session.__ is a quick reference for language, currency, and cookies (Use for calls that don't update)
-        // User.__ is the actualy variable (User for calls that also update)
+        // req.session.__ is a quick reference for language, currency, and cookies to reduce calls to User.find()
+        // user.__ is what is actually saved, user.__ writes to req.session.__
         let language = req.session.language || "th";
         let currency = req.session.currency || "THB";
         let cookiesBool = req.session.cookiesBool || false;
@@ -158,16 +168,15 @@ app.use(async (req, res, next) => {
                 req.session.language = language;
                 req.session.currency = currency;
             } else {
-                req.session.cookies.expires = false;
+                req.session.cookies.expires = false; // Prevents cookies from saving (I think)
             }
         }
         
-        // Constant Things
-        req.setLocale(language);
+        req.setLocale(language); // Sets i18n or static-multilanguage language
+
+        // Defines variables for global acces (including frontend)
         res.locals.availableLanguages = availableLanguages;
         res.locals.availableCurrencies = availableCurrencies;
-
-        session(sessionConfig)(req, res, next);
         
         next();
     } catch (error) {
@@ -175,6 +184,7 @@ app.use(async (req, res, next) => {
         next(error);
     }
 });
+
 
 app.use((req, res, next) => {
     console.log(req.session);
@@ -184,6 +194,8 @@ app.use((req, res, next) => {
     next();
 });
 
+
+
 app.use("/", usersRoutes);
 app.use("/projects", projectsRoutes);
 app.use("/projects/:id/comments", commentsRoutes);
@@ -192,10 +204,8 @@ app.use(currencyRoutes);
 
 app.use("/", authRoutes);
 
-// Register the search route
 app.use("/", searchRoute);
 
-// Redirects user to /projects page if they go to /
 app.get("/", (req, res) => {
     res.redirect("/projects");
 });

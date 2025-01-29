@@ -159,6 +159,7 @@ app.use(async (req, res, next) => {
                 req.session.currency = currency;
             } else {
                 req.session.cookies.expires = false;
+            }
         }
         
         // Constant Things

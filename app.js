@@ -54,7 +54,7 @@ const store = MongoStore.create({
     mongoUrl: dbUrl,
     touchAfter: 24 * 60 * 60,
     crypto: {
-        secret: "thisshouldbeasecret!",
+        secret: process.env.STORE_CRYPTO,
     },
 });
 
@@ -63,16 +63,15 @@ store.on("error", function (e) {
 });
 
 const sessionConfig = {
-    store,
-    secret: "thisshouldbeasecret",
+    store: store,
+    secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
         httpOnly: true,
-        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        secure: true,
+        sameSite: 'lax',
         maxAge: 1000 * 60 * 60 * 24 * 7,
-        // expires: Date.now() + 1000 * 10,
-        // maxAge: 1000 * 10,
     },
 };
 app.use(session(sessionConfig));
@@ -146,19 +145,20 @@ app.use(async (req, res, next) => {
         // User.__ is the actualy variable (User for calls that also update)
         let language = req.session.language || "th";
         let currency = req.session.currency || "THB";
-        let cookies = req.session.cookies || false;
+        let cookiesBool = req.session.cookiesBool || false;
 
         if (req.isAuthenticated()) {
             const user = await User.findById(req.user._id);
-            if (user && user.cookies) {
-                cookies = user.cookies;
+            if (user && user.cookiesBool) {
+                cookies = user.cookiesBool;
                 if (user.language) {language = user.language;} // User.language overrides session
                 if (user.currency) {currency = user.currency;} // User.currency overrides session
 
-                req.session.cookies = cookies;
+                req.session.cookiesBool = cookies;
                 req.session.language = language;
                 req.session.currency = currency;
-            }
+            } else {
+                req.session.cookies.expires = false;
         }
         
         // Constant Things
@@ -166,6 +166,8 @@ app.use(async (req, res, next) => {
         res.locals.availableLanguages = availableLanguages;
         res.locals.availableCurrencies = availableCurrencies;
 
+        session(sessionConfig)(req, res, next);
+        
         next();
     } catch (error) {
         console.error("Error syncing", error);

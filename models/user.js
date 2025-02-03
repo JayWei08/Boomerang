@@ -21,7 +21,7 @@ const UserSchema = new Schema({
 
     language: { type: String, default: 'en' },
     currency: {type: String, default: "USD"},
-    cookies: {type: Boolean, default: false}
+    cookiesBool: {type: Boolean, default: false}
 });
 
 UserSchema.plugin(passportLocalMongoose);

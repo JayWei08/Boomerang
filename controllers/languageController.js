@@ -12,21 +12,39 @@ exports.renderLanguageSelectionPage = (req, res) => {
 exports.setLanguage = async (req, res) => {
     const { language } = req.body;
     if (!availableLanguages.includes(language)) {
-        return res.status(400).send('Invalid language');
+        return res.status(400).json({error: "Invalid language"});
     }
 
-    if (req.isAuthenticated()) {
-        const user = await User.findById(req.user._id);
-        if (user.cookiesBool || req.sessionn.cookiesBool) {
-            user.language = language;
-            await user.save();
+    try {
+        // Updating User's prefence & session language
+        if (req.isAuthenticated()) {
+            const user = await User.findById(req.user._id);
+            if (!user) {return res.status(404).json({ error: "User not found" });}
 
-            req.session.language = language;
-            req.setLocale(language); // Sets i18n or static-multilanguage language
+            if (user.cookiesBool) {
+                user.language = language; // Sets the user language
+                await user.save();
+
+                req.session.cookiesBool = user.cookiesBool;
+            }
         }
-    }
 
-    
-    // console.log(language);
-    res.redirect('back');
+        // Reading from session to update language
+        if (req.session && req.session.cookiesBool) {
+            req.setLocale(language); // Sets i18n or static-multilanguage language
+
+            req.session.language = language; // Sets the session language
+            req.session.save((err) => {
+                if (err) {
+                    console.error("Error saving session:", err);
+                    return res.status(500).json({ message: "Internal Server Error" });
+                }
+            });
+        }
+
+        return res.status(200).json({ message: "Language set"});
+    } catch (err) {
+        console.error("Error updating language:", err);
+        return res.status(500).json({ error: "Internal server error" });
+    }
 };

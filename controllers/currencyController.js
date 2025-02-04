@@ -31,6 +31,8 @@ exports.setCurrency = async (req, res) => {
     
         // Reading from session to update currency
         if (req.session && req.session.cookiesBool) {
+            res.locals.selectedCurrency = currency;
+
             req.session.currency = currency; // Sets the session currency
             req.session.save((err) => {
                 if (err) {

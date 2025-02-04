@@ -32,6 +32,7 @@ exports.setLanguage = async (req, res) => {
         // Reading from session to update language
         if (req.session && req.session.cookiesBool) {
             req.setLocale(language); // Sets i18n or static-multilanguage language
+            res.locals.selectedLanguage = language;
 
             req.session.language = language; // Sets the session language
             req.session.save((err) => {

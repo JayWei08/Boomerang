@@ -1,18 +1,14 @@
 const User = require('../models/user'); // adjust path as needed
 
-// Language options available
-const availableLanguages = ['th', 'en']; // Add more as needed
-
 // Render language selection page
 exports.renderLanguageSelectionPage = (req, res) => {
-    res.render('yourView', { availableLanguages, selectedLanguage: (req.session.cookiesBool) ? req.session.language : 'th' });
-};
+    res.render('yourView', { res.locals.availableLanguages, selectedLanguage: req.session.language || 'th' });
 
 // Handle language selection
 exports.setLanguage = async (req, res) => {
     const { language } = req.body;
-    if (!availableLanguages.includes(language)) {
-        return res.status(400).json({error: "Invalid language"});
+    if (!res.locals.availableLanguages.includes(language)) {
+        return res.status(400).send('Invalid language');
     }
 
     try {

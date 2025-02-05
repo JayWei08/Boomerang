@@ -207,7 +207,6 @@ app.use(async (req, res, next) => {
 
 app.use((req, res, next) => {
     console.log(req.session);
-    console.log(req.session.cookiesBool);
     res.locals.currentUser = req.user;
     res.locals.success = req.flash("success");
     error = req.flash("error");

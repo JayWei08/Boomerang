@@ -2,7 +2,7 @@ const User = require('../models/user');
 
 // Render language selection page
 exports.renderLanguageSelectionPage = (req, res) => {
-    res.render('yourView', { res.locals.availableCurrencies, selectedCurrency: req.session.currency || 'THB' });
+    res.render('yourView', { availableCurrencies: res.locals.availableCurrencies, selectedCurrency: req.session.currency || 'THB' });
 };
 
 // Handle currency selection

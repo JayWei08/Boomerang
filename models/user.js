@@ -20,7 +20,8 @@ const UserSchema = new Schema({
     savedProjects: [{ type: Schema.Types.ObjectId, ref: "Project" }],
 
     language: { type: String, default: 'en' },
-    currency: {type: String, default: "USD"}
+    currency: {type: String, default: "USD"},
+    cookiesBool: {type: Boolean, default: false}
 });
 
 UserSchema.plugin(passportLocalMongoose);

@@ -433,17 +433,39 @@
 
 <script>
     function setLanguage(language) {
-        // Set the selected language in the hidden input field
-        document.getElementById("languageInput").value = language;
-
-        // Submit the hidden form
-        document.getElementById("languageForm").submit();
+        // Sends the POST method without reloading the page
+        fetch("/set-language", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ language })
+        })
+        .then(response => response.json())
+        // .then(data => console.log("Language set:", data.message))
+        .catch(error => console.error("Error setting language:", error));
     }
     function setCurrency(currency) {
-        // Set the selected currency in the hidden input field
-        document.getElementById("currencyInput").value = currency;
+        // Sends the POST method without reloading the page
+        fetch("/set-currency", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ currency })
+        })
+        .then(response => response.json())
+        // .then(data => console.log("Currency set:", data.message))
+        .catch(error => console.error("Error setting language:", error));
+    }
+</script>
 
-        // Submit the hidden form
-        document.getElementById("currencyForm").submit();
+
+<script>
+    function setCookies(cookiesBool) {
+        fetch("/set-cookies", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ cookiesBool })
+        })
+        .then(response => response.json())
+        // .then(data => console.log("Cookies set:", data.message))
+        .catch(error => console.error("Error setting cookies:", error));
     }
 </script>

@@ -19,8 +19,8 @@ const UserSchema = new Schema({
     },
     savedProjects: [{ type: Schema.Types.ObjectId, ref: "Project" }],
 
-    language: { type: String, default: 'en' },
-    currency: {type: String, default: "USD"},
+    language: { type: String, default: 'th' },
+    currency: {type: String, default: "THB"},
     cookiesBool: {type: Boolean, default: false}
 });
 

@@ -156,6 +156,7 @@ app.use(async (req, res, next) => {
 });
 
 app.use(async (req, res, next) => {
+    req.session
     try {
         // res.lcoals.__ is a FRONT END reference for any data put in it
         // req.session.__ is a BACK END quick reference for any data put in it (Only refernce this)
@@ -176,16 +177,12 @@ app.use(async (req, res, next) => {
             if (user && user.cookiesBool) {
                 req.session.cookiesBool = user.cookiesBool;
 
-                if (user.language) {
-                    language = user.language;
-                } // User data overrides session data
-                if (user.currency) {
-                    currency = user.currency;
-                } // User data overrides session data
+                if (user.language) {language = user.language;} // User data overrides session data
+                if (user.currency) {currency = user.currency;} // User data overrides session data
 
                 req.session.language = language;
                 req.session.currency = currency;
-            } else {
+            } else if (!req.session.cookiesBool) {
                 req.session.destroy();
             }
         }

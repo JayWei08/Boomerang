@@ -19,6 +19,7 @@ module.exports.setCookies = async (req, res) => {
     }
 
     try {
+        // If there is a user, save data to user
         if (req.isAuthenticated()) {
             const user = await User.findById(req.user._id);
             if (!user) {return res.status(404).json({ error: "User not found" });}
@@ -27,6 +28,7 @@ module.exports.setCookies = async (req, res) => {
             await user.save();
         }
 
+        // No matter what save data to session
         req.session.cookiesBool = cookiesBool;
         req.session.save((err) => {
             if (err) {

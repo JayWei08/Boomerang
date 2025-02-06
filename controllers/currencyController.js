@@ -1,10 +1,5 @@
 const User = require('../models/user');
 
-// Render language selection page
-exports.renderLanguageSelectionPage = (req, res) => {
-    res.render('yourView', { availableCurrencies: res.locals.availableCurrencies, selectedCurrency: req.session.currency || 'THB' });
-};
-
 // Handle currency selection
 exports.setCurrency = async (req, res) => {
     const { currency } = req.body;
